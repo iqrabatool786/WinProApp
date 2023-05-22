@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WinProApp.DataModels.DataBase
+{
+    public partial class RequestForPurchases
+    {
+        [Key]
+        public long Id { get; set; }
+        public long Rfqid { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime? RequireDate { get; set; }
+        public string Requester { get; set; } = null!;
+        public string? Department { get; set; }
+        public string? Note { get; set; }
+        public bool Approved { get; set; }
+        public DateTime? ApprovedDate { get; set; }
+        public string? ApprovedBy { get; set; }
+        public string CreatedBy { get; set; } = null!;
+        public DateTime CratedDate { get; set; }
+        public string UpdatedBy { get; set; } = null!;
+        public DateTime UpdatedDate { get; set; }
+    }
+}

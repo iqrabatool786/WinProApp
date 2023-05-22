@@ -1,0 +1,307 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.PurchaseOrder.EditViewModel;
+@{
+    ViewData["Title"] = @WebResource.PurchaseOrder + " " + @WebResource.Edit;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="createForm" method="post" asp-action="EditPurchaseOrder" asp-controller="Purchase" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label for="Date">@WebResource.Date</label>
+                    <input type="text" name="Date" id="Date" class="form-control datefield" aria-required="true" autocomplete="off" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="ShippingAddress">@WebResource.ShippingAddress</label>
+                    <textarea asp-for="ShippingAddress" class="form-control"></textarea>
+                    <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="ShippingMethod">@WebResource.ShippingMethod</label>
+                    <input asp-for="ShippingMethod" class="form-control" />
+                    <span asp-validation-for="ShippingMethod" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="ShippingAmount">@WebResource.ShippingAmount</label>
+                    <input asp-for="ShippingAmount" class="form-control" />
+                    <span asp-validation-for="ShippingAmount" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="DeliveryDate">@WebResource.DeliveryDate</label>
+                    <input type="text" name="DeliveryDate" id="DeliveryDate" class="form-control datefield" aria-required="true" autocomplete="off" />
+                    <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-6">
+                    <label asp-for="Remarks">@WebResource.Remarks</label>
+                    <textarea asp-for="Remarks" class="form-control"></textarea>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Approved">@WebResource.Approved</label>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Purchase") || User.IsInRole("Manager"))
+                    {
+                    <select name="Approved" id="Approved" class="form-control">
+                        <option value="false">@WebResource.No</option>
+                        <option value="true">@WebResource.Yes</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <select name="Approved" id="Approved" class="form-control" readonly>
+                            <option value="false">@WebResource.No</option>
+                            <option value="true">@WebResource.Yes</option>
+                        </select>
+                    }
+                    <span asp-validation-for="Approved" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-12">
+                    <h4>@WebResource.Items</h4>
+                </div>
+
+                <table id="tblItems" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">@WebResource.PartNo</th>
+                            <th class="col-md-2">@WebResource.Description</th>
+                            <th class="col-md-2">@WebResource.Unit</th>
+                            <th class="col-md-1">@WebResource.Qty</th>
+                            <th class="col-md-1">@WebResource.Price</th>
+                            <th class="col-md-1">@WebResource.Tax</th>
+                            <th class="col-md-2">@WebResource.Total</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th><input type="text" id="txPartNo" name="txPartNo" class="form-control" /></th>
+                            <th><textarea id="txtDesc" name="txtDesc" class="form-control"></textarea></th>
+                            <th><select id="txUnit" name="txUnit" class="form-control" asp-items="@ViewBag.Units"></select></th>
+                            <th><input type="number" id="txtQty" name="txtQty" class="form-control numbersOnly" /></th>
+                            <th><input type="number" id="txtPrice" name="txtPrice" class="form-control" /></th>
+                            <th><input type="number" id="txtTax" name="txtTax" class="form-control" /></th>
+                            <th><input type="number" id="txtTotal" name="txtTotal" class="form-control" /></th>
+                            <th><input type="button" id="btnAddItem" name="btnAddItem" value="@WebResource.Add" class="btn btn-flat btn-sm btn-secondary" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in Model.Items)
+                        {
+                         <tr>
+                            <td>@item.PartNo</td>
+                            <td>@item.Description</td>
+                            <td>@item.Unit</td>
+                            <td>@item.Qty</td>
+                            <td>@item.Price</td>
+                            <td>@item.Tax</td>
+                            <td>@item.Total</td>
+                            <td><a class="removeRow" data-id="@item.Id" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Purchase/PurchaseOrders");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $("#Date").val("@Model.Date.ToString("yyyy-MM-dd")");
+        let deliveryDate = "@Model.DeliveryDate";
+        if (deliveryDate != null && deliveryDate !=""){
+            $("#DeliveryDate").val("@Model.DeliveryDate.Value.ToString("yyyy-MM-dd")");
+        }
+        
+
+        var vatx = "@ViewBag.VatPercentage";
+
+        $("#txtQty").keyup(function () {
+            CalculateRowTot();
+        });
+
+        $("#txtPrice").keyup(function () {
+            CalculateRowTot();
+        });
+
+        $("#txtTax").keyup(function () {
+            let tax = $.trim($(this).val());
+            if (tax == null || tax == "") {
+                tax = 0;
+            }
+            let qty = $("#txtQty").val();
+            let price = $("#txtPrice").val();
+            if (parseFloat(qty) > 0 && parseFloat(price) > 0) {
+                let itemtot = parseFloat(qty) * parseFloat(price);
+                let tot = parseFloat(itemtot) + parseFloat(tax);
+                $("#txtTotal").val(tot.toFixed(2));
+            }
+            else {
+                $("#txtTotal").val('');
+            }
+        });
+
+        function CalculateRowTot() {
+            let qty = $("#txtQty").val();
+            let price = $("#txtPrice").val();
+            if (parseFloat(qty) > 0 && parseFloat(price) > 0) {
+                let itemtot = parseFloat(qty) * parseFloat(price);
+                let tax = parseFloat(vatx / 100) * parseFloat(itemtot);
+                let tot = parseFloat(itemtot) + parseFloat(tax);
+                $("#txtTax").val(tax.toFixed(2));
+                $("#txtTotal").val(tot.toFixed(2));
+
+            }
+            else {
+                $("#txtTotal").val('');
+            }
+        }
+
+        function AddItemRows() {
+            let partNo = $("#txPartNo").val();
+            let desc = $("#txtDesc").val();
+            let unit = $("#txUnit").val();
+            let qty = $("#txtQty").val();
+            let price = $("#txtPrice").val();
+            let tax = $("#txtTax").val();
+            let total = $("#txtTotal").val();
+            let unitItems = "@ViewBag.Units";
+
+
+            if ($.trim(desc) != "") {
+
+                let itemPartNo = '<input type="hidden" name="PartNo" value="' + partNo + '" />' + partNo;
+                let itemDesc = '<input type="hidden" name="Description" value="' + desc + '" />' + desc;
+                let itemUnit = '<input type="hidden" name="Unit" value="' + unit + '" />' + unit;
+                let itemQty = '<input type="hidden" name="Qty" value="' + qty + '" />' + qty;
+                let itemPrice = '<input type="hidden" name="Price" value="' + price + '" />' + price;
+                let itemTax = '<input type="hidden" name="Tax" value="' + tax + '" />' + tax;
+                let itemTotal = '<input type="hidden" name="Total" value="' + total + '" />' + total;
+                let btn = '<a class="removeRow" data-id="0" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a>';
+
+                let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                var itemRow = "<tr id='" + rowId + "'></tr>";
+                $('#tblItems tbody').append(itemRow);
+
+                var itemCell = '<td><input type="hidden" name="ItemId" value="0"/>' + itemPartNo + '</td>';
+                itemCell += '<td>' + itemDesc + '</td>';
+                itemCell += '<td>' + itemUnit + '</td>';
+                itemCell += '<td>' + itemQty + '</td>';
+                itemCell += '<td>' + itemPrice + '</td>';
+                itemCell += '<td>' + itemTax + '</td>';
+                itemCell += '<td>' + itemTotal + '</td>';
+                itemCell += '<td>' + btn + '</td>';
+
+                $('#tblItems #' + rowId).append(itemCell);
+
+                $("#txPartNo").val('');
+                $("#txtDesc").val('');
+                $("#txUnit").prop("selectedIndex", 0).val();
+                $("#txtQty").val('');
+                $("#txtPrice").val('');
+                $("#txtTax").val('');
+                $("#txtTotal").val('');
+
+                $("#txPartNo").focus();
+            }
+        }
+
+        $("#btnAddItem").click(function () {
+            AddItemRows();
+        });
+
+        $(document).on("click", ".removeRow", function () {
+            var itemId = $(this).attr("data-id");
+
+            if (parseInt(itemId) > 0){
+                swal({
+                    title: "@Html.Raw(WebResource.Confirm)",
+                    text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                    cancelButtonText: " @Html.Raw(WebResource.No) ",
+                });
+
+                $(".swal2-confirm").on("click", function () {
+                    $.ajax({
+                        url: "/Purchase/DeletePurchaseOrderItem/" + itemId,
+                        type: "POST",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (data) {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            HandleResponse(data);
+                        }
+                    });
+                });
+
+            }
+            else{
+                $(this).parent().parent().remove();
+            }
+        })
+
+    </script>
+}

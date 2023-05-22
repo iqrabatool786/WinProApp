@@ -1,0 +1,644 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Localization;
+@inject IHttpContextAccessor Accessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WinPro</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/template/dist/css/jquery-ui.css">
+    <link rel="stylesheet" href="~/template/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="~/template/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/template/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="~/template/plugins/jqvmap/jqvmap.min.css">
+    <!--Datatables-->
+
+  <!-- DataTables -->
+    <link rel="stylesheet" href="~/template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="~/template/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <link rel="stylesheet" href="~/template/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+
+    <!-- Theme style -->
+    @if (Accessor.HttpContext.Session.GetString("currentCulture") == "en" || Accessor.HttpContext.Session.GetString("currentCulture") ==null)
+    {
+        Accessor.HttpContext.Session.SetString("currentCulture", "en");
+        <link rel="stylesheet" href="~/template/dist/css/adminlte.min.css">
+    }
+    @if (Accessor.HttpContext.Session.GetString("currentCulture") == "ar")
+    {
+        <link rel="stylesheet" href="~/template/dist/css/adminlte_rtl.min.css">
+    }
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/template/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/template/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/template/plugins/summernote/summernote-bs4.min.css">
+    <link rel ='stylesheet' href='~/template/dist/css/sweetalert2.min.css' />
+    
+    @if (Accessor.HttpContext.Session.GetString("currentCulture") == "ar")
+    {
+        <link rel="stylesheet" href="~/css/site_rtl.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/template/dist/css/custom_rtl.css">
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    }
+
+    <link rel="stylesheet" href="~/css/print.min.css" asp-append-version="true" />
+    <link href="~/css/imagepopup.css" rel="stylesheet" />
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="~/template/dist/img/winpro_logo.png" alt="WinPro" height="60" width="60">
+        </div>
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Contact</a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Navbar Search -->
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <div class="navbar-search-block">
+                        <form class="form-inline">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    <button id="btnChatClose" class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+
+                <!-- Messages Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments"></i>
+                        <span class="badge badge-danger navbar-badge">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="~/template/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Brad Diesel
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">Call me whenever you can...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="~/template/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        John Pierce
+                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">I got your message bro</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="~/template/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Nora Silvester
+                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">The subject goes here</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                    </div>
+                </li>
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge">15</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> 4 new messages
+                            <span class="float-right text-muted text-sm">3 mins</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> 8 friend requests
+                            <span class="float-right text-muted text-sm">12 hours</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i> 3 new reports
+                            <span class="float-right text-muted text-sm">2 days</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                        <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                    </form>
+                    }
+                    
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link">
+                <img src="~/template/dist/img/winpro_logo.png" alt="WinPro Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">WinPro</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/template/dist/img/user6-128x128.jpg" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">@User.Identity.Name</a>
+                    </div>
+                </div>
+
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    string urlPath = Context.Request.Path;
+                }
+                <!-- Sidebar Menu -->
+                @if (urlPath.Contains("Administrator"))
+                {
+                    <partial name="_LeftMenuAdmin" />
+                }
+                @if (urlPath.Contains("CRM"))
+                {
+                    <partial name="_LeftMenuCRM" />
+                }
+                @if (urlPath.Contains("HRMS"))
+                {
+                    <partial name="_LeftMenuHRMS" />
+                }
+                @if (urlPath.Contains("Finance"))
+                {
+                    <partial name="_LeftMenuFinance" />
+                }
+                @if (urlPath.Contains("POS"))
+                {
+                    <partial name="_LeftMenuPOS" />
+                }
+                @if (urlPath.Contains("Warehouse"))
+                {
+                    <partial name="_LeftMenuWarehouse" />
+                }
+                @if (urlPath.Contains("Purchase") || urlPath.Contains("Shipping") || urlPath.Contains("Sales"))
+                {
+                    <partial name="_LeftMenuPurcahse" />
+                }
+                @if (urlPath.Contains("Woocommerce"))
+                {
+                    <partial name="_LeftMenuEcommerce" />
+                }
+                @if (urlPath.Contains("Merchant"))
+                {
+                    <partial name="_LeftMenuMerchant" />
+                }
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" style="background-color:#fff;">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">@ViewData["Title"] </h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active">@ViewData["Title"] </li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                    <!-- Small boxes (Stat box) -->
+
+                </div><!-- /.container-fluid -->
+<div id="ChatBlock" class="bottomright" style="width:100px;display:none">
+                    
+                    <div class="card card-blue direct-chat direct-chat-danger">
+  <div id="chatHeader" class="card-header">
+    <h3 class="card-title"> Chat</h3>
+    <div class="card-tools">
+      @*<button type="button" class="btn btn-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle">
+        <i class="fas fa-comments"></i>
+      </button>*@
+      <button type="button" id="closeChatWindow" class="btn btn-tool" data-widget="remove"><i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <!-- /.card-header -->
+                        <div id="chatBody" class="card-body">
+    <!-- Conversations are loaded here -->
+    <div class="direct-chat-messages">
+      <!-- Message. Default to the left -->
+      <div class="direct-chat-msg">
+        <div class="direct-chat-infos clearfix">
+          <span class="direct-chat-name float-left">Alexander Pierce</span>
+          <span class="direct-chat-timestamp float-right">23 Jan 2:00 pm</span>
+        </div>
+        <!-- /.direct-chat-infos -->
+        <img class="direct-chat-img" src="~/template/dist/img/user1-128x128.jpg" alt="message user image">
+        <!-- /.direct-chat-img -->
+        <div class="direct-chat-text">
+          Is this template really for free? That's unbelievable!
+        </div>
+        <!-- /.direct-chat-text -->
+      </div>
+      <!-- /.direct-chat-msg -->
+      <!-- Message to the right -->
+      <div class="direct-chat-msg right">
+        <div class="direct-chat-infos clearfix">
+          <span class="direct-chat-name float-right">Sarah Bullock</span>
+          <span class="direct-chat-timestamp float-left">23 Jan 2:05 pm</span>
+        </div>
+        <!-- /.direct-chat-infos -->
+                                    <img class="direct-chat-img" src="~/template/dist/img/user3-128x128.jpg" alt="message user image">
+        <!-- /.direct-chat-img -->
+        <div class="direct-chat-text">
+          You better believe it!
+        </div>
+        <!-- /.direct-chat-text -->
+      </div>
+      <!-- /.direct-chat-msg -->
+      <!-- Message. Default to the left -->
+      <div class="direct-chat-msg">
+        <div class="direct-chat-infos clearfix">
+          <span class="direct-chat-name float-left">Alexander Pierce</span>
+          <span class="direct-chat-timestamp float-right">23 Jan 5:37 pm</span>
+        </div>
+        <!-- /.direct-chat-infos -->
+                                    <img class="direct-chat-img" src="~/template/dist/img/user1-128x128.jpg" alt="message user image">
+        <!-- /.direct-chat-img -->
+        <div class="direct-chat-text">
+          Working with AdminLTE on a great new app! Wanna join?
+        </div>
+        <!-- /.direct-chat-text -->
+      </div>
+      <!-- /.direct-chat-msg -->
+      <!-- Message to the right -->
+      <div class="direct-chat-msg right">
+        <div class="direct-chat-infos clearfix">
+          <span class="direct-chat-name float-right">Sarah Bullock</span>
+          <span class="direct-chat-timestamp float-left">23 Jan 6:10 pm</span>
+        </div>
+        <!-- /.direct-chat-infos -->
+                                    <img class="direct-chat-img" src="~/template/dist/img/user3-128x128.jpg" alt="message user image">
+        <!-- /.direct-chat-img -->
+        <div class="direct-chat-text">
+          I would love to.
+        </div>
+        <!-- /.direct-chat-text -->
+      </div>
+      <!-- /.direct-chat-msg -->
+    </div>
+    <!--/.direct-chat-messages-->
+    <!-- Contacts are loaded here -->
+    <div class="direct-chat-contacts">
+      <ul class="contacts-list">
+        <li>
+          <a href="#">
+                                            <img class="contacts-list-img" src="~/template/dist/img/user1-128x128.jpg">
+            <div class="contacts-list-info">
+              <span class="contacts-list-name">
+                Count Dracula
+                <small class="contacts-list-date float-right">2/28/2015</small>
+              </span>
+              <span class="contacts-list-msg">How have you been? I was...</span>
+            </div>
+            <!-- /.contacts-list-info -->
+          </a>
+        </li>
+        <!-- End Contact Item -->
+        <li>
+          <a href="#">
+                                            <img class="contacts-list-img" src="~/template/dist/img/user8-128x128.jpg">
+            <div class="contacts-list-info">
+              <span class="contacts-list-name">
+                Sarah Doe
+                <small class="contacts-list-date float-right">2/23/2015</small>
+              </span>
+              <span class="contacts-list-msg">I will be waiting for...</span>
+            </div>
+            <!-- /.contacts-list-info -->
+          </a>
+        </li>
+        <!-- End Contact Item -->
+        <li>
+          <a href="#">
+             <img class="contacts-list-img" src="~/template/dist/img/user3-128x128.jpg">
+            <div class="contacts-list-info">
+              <span class="contacts-list-name">
+                Nadia Jolie
+                <small class="contacts-list-date float-right">2/20/2015</small>
+              </span>
+              <span class="contacts-list-msg">I'll call you back at...</span>
+            </div>
+            <!-- /.contacts-list-info -->
+          </a>
+        </li>
+        <!-- End Contact Item -->
+        <li>
+          <a href="#">
+                                            <img class="contacts-list-img" src="~/template/dist/img/user5-128x128.jpg">
+            <div class="contacts-list-info">
+              <span class="contacts-list-name">
+                Nora S. Vans
+                <small class="contacts-list-date float-right">2/10/2015</small>
+              </span>
+              <span class="contacts-list-msg">Where is your new...</span>
+            </div>
+            <!-- /.contacts-list-info -->
+          </a>
+        </li>
+        <!-- End Contact Item -->
+        <li>
+          <a href="#">
+                                            <img class="contacts-list-img" src="~/template/dist/img/user6-128x128.jpg">
+            <div class="contacts-list-info">
+              <span class="contacts-list-name">
+                John K.
+                <small class="contacts-list-date float-right">1/27/2015</small>
+              </span>
+              <span class="contacts-list-msg">Can I take a look at...</span>
+            </div>
+            <!-- /.contacts-list-info -->
+          </a>
+        </li>
+        <!-- End Contact Item -->
+        <li>
+          <a href="#">
+                                            <img class="contacts-list-img" src="~/template/dist/img/user8-128x128.jpg">
+            <div class="contacts-list-info">
+              <span class="contacts-list-name">
+                Kenneth M.
+                <small class="contacts-list-date float-right">1/4/2015</small>
+              </span>
+              <span class="contacts-list-msg">Never mind I found...</span>
+            </div>
+            <!-- /.contacts-list-info -->
+          </a>
+        </li>
+        <!-- End Contact Item -->
+      </ul>
+      <!-- /.contacts-list -->
+    </div>
+    <!-- /.direct-chat-pane -->
+  </div>
+  <!-- /.card-body -->
+   <div id="chatFooter" class="card-footer">
+    <form action="#" method="post">
+      <div class="input-group">
+        <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+        <span class="input-group-append">
+          <button type="button" class="btn btn-primary">Send</button>
+        </span>
+      </div>
+    </form>
+  </div>
+  <!-- /.card-footer-->
+</div>
+<!--/.direct-chat -->
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2022-2023 <a href="#">WinPro</a>.</strong>
+            All rights reserved.
+        </footer>
+
+
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/template/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/template/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="~/template/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/template/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/template/dist/js/fSelect.js"></script>
+    
+    <script src="~/template/dist/js/jquery.unobtrusive-ajax.js"></script>
+    <!-- ChartJS -->
+    <script src="~/template/plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="~/template/plugins/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="~/template/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="~/template/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="~/template/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="~/template/plugins/moment/moment.min.js"></script>
+    <script src="~/template/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/template/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="~/template/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="~/template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
+    <script src ="~/template/dist/js/sweetalert2.all.min.js"></script>  
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    
+    <script src="~/template/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/template/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/template/plugins/jszip/jszip.min.js"></script>
+    <script src="~/template/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/template/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/template/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/template/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/template/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/template/dist/js/adminlte.js"></script>
+    <script src="~/js/print.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script type="text/javascript">
+            var url = "@Context.Request.Path";
+            
+            $("#adminMenuBock").addClass('menu-close');
+            $("#hrmsMenuBlock").addClass('menu-close');
+            $("#purcahseMenuBlock").addClass('menu-close');
+            $("#warehouseMenuBock").addClass('menu-close');
+            $("#financeMenuBlock").addClass('menu-close');
+
+            if (url == "/" || url.includes("Administrator")) {
+                $("#adminMenuBock").removeClass('menu-close');
+                $("#adminMenuBock").addClass('menu-open');
+            }
+            
+            if (url.includes("Purchase")) {
+                $("#purcahseMenuBlock").removeClass('menu-close');
+                $("#purcahseMenuBlock").addClass('menu-open');
+            }
+
+            if (url.includes("HRMS")) {
+                $("#hrmsMenuBlock").removeClass('menu-close');
+                $("#hrmsMenuBlock").addClass('menu-open');
+            }
+
+            if (url.includes("HRMS")) {
+                $("#hrmsMenuBlock").removeClass('menu-close');
+                $("#hrmsMenuBlock").addClass('menu-open');
+            }
+
+            if (url.includes("Warehouse")) {
+                $("#warehouseMenuBock").removeClass('menu-close');
+                $("#warehouseMenuBock").addClass('menu-open');
+            }
+
+            if (url.includes("Finance")) {
+                $("#financeMenuBlock").removeClass('menu-close');
+                $("#financeMenuBlock").addClass('menu-open');
+            }
+
+          $(".nav-item a").each(function(){
+              var link = $(this).attr('href');
+                if (url.includes(link)){
+                    $(this).parent().addClass('active');
+                    $(this).addClass('active');
+                    if ($(this).parent().parent().hasClass("nav-treeview")) {
+                        $(this).parent().parent().css('display','block');
+                    }
+
+                    if ($(this).parent().parent().parent().parent().hasClass("nav-treeview")) {
+                        $(this).parent().parent().parent().parent().css('display', 'block');
+                    }
+                }
+          })
+
+            $("#chatBody").css("display", "none");
+            $("#chatFooter").css("display", "none");
+            $("#btnChatClose").css("display", "none");
+
+        $("#closeChatWindow").click(function(){
+            if ($('#chatBody').css('display') == 'none'){
+                $("#chatBody").css("display","");
+                $("#chatFooter").css("display", "");
+            }
+            else{
+                $("#chatBody").css("display","none");
+                $("#chatFooter").css("display", "none");
+                $("#btnChatClose").css("display", "none");
+            }
+        });
+
+    </script>
+</body>
+</html>

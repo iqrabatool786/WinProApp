@@ -1,0 +1,60 @@
+﻿@page "/Administrator/DeleteUser/{id}"
+@model DeleteUserModel
+@{
+    ViewData["Title"] = "User Account Delete";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="editForm" method="post">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">Firstname:</div>
+                    <div class="col-md-5">@ViewData["UserFirstName"]</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">LastName:</div>
+                    <div class="col-md-5">@ViewData["UserLastName"]</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">Uasename:</div>
+                    <div class="col-md-5">@ViewData["UserName"]</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">Email:</div>
+                    <div class="col-md-5">@ViewData["Email"]</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">Phone:</div>
+                    <div class="col-md-5">@ViewData["PhoneNumber"]</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">Role:</div>
+                    <div class="col-md-5">@ViewData["Role"]</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row col-md-10">
+                    <div class="col-md-3">Status:</div>
+                    <div class="col-md-5">@ViewData["Status"]</div>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="updateSubmit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+        </form>
+    </div>
+
+</div>

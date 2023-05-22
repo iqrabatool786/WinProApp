@@ -1,0 +1,664 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@using WinProApp.ViewModels.Warehouse.Products;
+@model AddViewModel;
+
+@{
+    ViewData["Title"] = @WebResource.Manage + " " + @WebResource.ProductInfo;
+
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+
+    string productImagePath = "/Docs/Products/";
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row card card-success" style="margin-top:-15px;padding-top:15px; padding-top:7px; background-color:#e8e9e9;">
+    <div class="row col-md-12">
+        <div id="Block04A" class="form-floating col-md-6">
+            <button id="btnUpdatePriceFromExcel" type="button" class="btn btn-lg btn-success col-md-6">@WebResource.UpdatePriceFromExcel</button>
+             <input type="button" id="btnUDownload" value="@WebResource.Download @WebResource.Sample @WebResource.Format" class="btn btn-outline-success btn-outline-info" />
+        </div>
+        <div id="Block04B" class="form-floating col-md-6" style="text-align:right;">
+            <button id="btnUploadItemsFromExcel" type="button" class="btn btn-lg btn-success col-md-6">@WebResource.UploadItemsFromExcel</button>
+            <input type="button" id="btnUDownloadItems" value="@WebResource.Download @WebResource.Sample @WebResource.Format" class="btn btn-outline-success btn-outline-info" />
+        </div>
+    </div>
+</div>
+
+<div class="row card p-xl-5">
+      <div class="col-sm-12">
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Product @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.CompanyName
+                    </th>
+                    <th>
+                        @WebResource.Category
+                    </th>
+                    <th>
+                        @WebResource.Department
+                    </th>
+                    <th>
+                        @WebResource.Seasson
+                    </th>
+                    <th>
+                        @WebResource.Description
+                    </th>
+                    <th>
+                        @WebResource.Color
+                    </th>
+                    <th>
+                        @WebResource.Size
+                    </th>
+                    <th>
+                        @WebResource.Model_SKU
+                    </th>
+                    <th>
+                        @WebResource.Unit
+                    </th>
+                    <th>
+                        @WebResource.Brand
+                    </th>
+                    <th>
+                        @WebResource.Vendor
+                    </th>
+                    <th>
+                        @WebResource.Group
+                    </th>
+                    <th>
+                        @WebResource.Product @WebResource.NameEng
+                    </th>
+                     <th>
+                        @WebResource.Product @WebResource.Arabic
+                    </th>
+                     <th>
+                        @WebResource.Manufacture @WebResource.Date
+                    </th>
+                     <th>
+                        @WebResource.ExpireDate
+                    </th>
+                     <th>
+                        @WebResource.Product @WebResource.Initial @WebResource.Price
+                    </th>
+                     <th>
+                        @WebResource.Cost @WebResource.Price
+                    </th>
+                    <th>
+                        @WebResource.Sale @WebResource.Price
+                    </th>
+                     <th>
+                        @WebResource.Discount
+                    </th>
+                     <th>
+                        @WebResource.Unit @WebResource.Barcode
+                    </th>
+                     <th>
+                        @WebResource.Unit @WebResource.Description
+                    </th>
+                     <th>
+                        @WebResource.QtyPerUnit
+                    </th>
+                    <th>
+                        @WebResource.Unit  @WebResource.Sale @WebResource.Price
+                    </th>
+                    <th>
+                        @WebResource.Unit @WebResource.Cost
+                    </th>
+                     <th>
+                        @WebResource.Box @WebResource.No
+                    </th>
+                     <th>
+                        @WebResource.Min @WebResource.Qty
+                    </th>
+                    <th>
+                        @WebResource.Pack @WebResource.Barcode
+                    </th>
+                    <th>
+                        @WebResource.Pack @WebResource.Description
+                    </th>
+                    <th>
+                        @WebResource.QtyPerPack
+                    </th>
+                    <th>
+                        @WebResource.Pack @WebResource.Price
+                    </th>
+                     <th>
+                        @WebResource.Pack @WebResource.Cost
+                    </th>
+                     <th>
+                        @WebResource.Original @WebResource.Price
+                    </th>
+                    <th>
+                        @WebResource.VAT
+                    </th>
+                    <th>
+                        @WebResource.WarrantyPeriod
+                    </th>
+                    <th>
+                        @WebResource.Current @WebResource.Stock
+                    </th>
+                    <th>
+                        @WebResource.Status
+                    </th>
+                    <th>
+                        @WebResource.CratedDate
+                    </th>
+                    <th>
+                        @WebResource.UpdatedDate
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+
+    <div id="ProductImageView" title="Product Image">
+    </div>
+</div>
+
+<div class="modal fade" id="uploadModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top:45%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="float:right;position:absolute; right:5px;">&times;</button>
+                <h4 class="modal-title">@WebResource.UpdatePriceFromExcel</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-8">
+                        <label for="UploadItems">@WebResource.Upload</label>
+                        <input type="file" id="UploadItems" name="UploadItems" class="form-control" accept=".xlsx" />
+                        <span id="ImportMsgBlock" style="padding:10px; margin-top:20px; text-align:center; font-weight:bold; color:darkgreen; display:none;">Processing... wait..</span>
+                    </div>
+                    <div class="form-floating col-md-4">
+                        <div class="form-floating col-md-12" style="height:30px;">&nbsp;</div>
+                        <input type="button" id="btnItemsUpload" class="btn btn-outline-success" value="Upload" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="uploadModalForItemsFromExcel" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top:45%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="float:right;position:absolute; right:5px;">&times;</button>
+                <h4 class="modal-title">@WebResource.UploadItemsFromExcel</h4>
+                
+            </div>
+            <span style="margin-top:15px; text-align:center; font-weight:bold; color:red;">Columns with Red color are mandatory. Otherwie that item will not be uploaded (Download Sample to see)</span>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-8">
+                        <label for="UploadItemsFromExcel">@WebResource.Upload</label>
+                        <input type="file" id="UploadItemsFromExcel" name="UploadItemsFromExcel" class="form-control" accept=".xlsx" />
+                        <span id="ImportMsgBlockItems" style="padding:10px; margin-top:20px; text-align:center; font-weight:bold; color:darkgreen; display:none;">Processing... wait..</span>
+                    </div>
+                    <div class="form-floating col-md-4">
+                        <div class="form-floating col-md-12" style="height:30px;">&nbsp;</div>
+                        <input type="button" id="btnItemsUploadItemsFromExcel" class="btn btn-outline-success" value="Upload" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+
+        $("#btnUpdatePriceFromExcel").click(function () {
+            $("#uploadModal").modal();
+        });
+
+        $("#btnUploadItemsFromExcel").click(function () {
+            $("#uploadModalForItemsFromExcel").modal();
+        });
+
+        $("#btnUDownload").click(function(){
+            window.location.href="/Warehouse/DownloadSampleForUpdatePrice";
+        });
+
+        $("#btnUDownloadItems").click(function () {
+            window.location.href = "/Warehouse/DownloadSampleForUploadItems";
+        });
+
+        $("#btnItemsUpload").click(function () {
+            let fileData = new FormData();
+            var fileUpload = $("#UploadItems").get(0);
+            var upload = fileUpload.files[0];
+            fileData.append("upload", upload);
+
+            if ($("#UploadItems").get(0).files.length > 0) {
+                $("#ImportMsgBlock").css('display', '');
+                $(this).prop('disabled', true);
+
+                $.ajax({
+                    url: "/Warehouse/ItemUpload",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: fileData,
+                    success: function (data) {
+                        if (data != null) {
+                            console.log(data);
+                            window.location.reload();
+                            //for (i = 0; i < data.length; i++) {
+                            //    $('#tblDataTable tr').each(function () {
+                            //        if ($(this).find(".barCodeX").text() == data[i].ProductId) {
+                            //              $(this).css('background-color', 'yellow');
+                            //        }
+                            //    });
+                            //}
+                        }
+                        $("#ImportMsgBlock").css('display', 'none');
+                        $("#btnItemsUpload").prop('disabled', false);
+                        $(".close").trigger('click');
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        $("#ImportMsgBlock").css('display', 'none');
+                        $("#btnItemsUpload").prop('disabled', false);
+                    }
+                });
+            }
+        });
+
+        $("#btnItemsUploadItemsFromExcel").click(function () {
+            let fileData = new FormData();
+            var fileUpload = $("#UploadItemsFromExcel").get(0);
+            var upload = fileUpload.files[0];
+            fileData.append("upload", upload);
+
+            if ($("#UploadItemsFromExcel").get(0).files.length > 0) {
+                $("#ImportMsgBlockItems").css('display', '');
+                $(this).prop('disabled', true);
+
+                $.ajax({
+                    url: "/Warehouse/UploadItemsFromExcel",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: fileData,
+                    success: function (data) {
+                        if (data != null) {
+                            console.log(data);
+                            window.location.reload();
+                        }
+                        $("#ImportMsgBlock").css('display', 'none');
+                        $("#btnItemsUpload").prop('disabled', false);
+                        $(".close").trigger('click');
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        $("#ImportMsgBlock").css('display', 'none');
+                        $("#btnItemsUpload").prop('disabled', false);
+                    }
+                });
+            }
+        });
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        var allowed = "@allowed";
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 20,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Warehouse/ProductList",
+                    sServerMethod: "POST",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ProductId",
+                            searchable: true,
+                            class: "dtr-control barCodeX"
+                        },
+                        {
+                            data: "CompanyName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "CategoryName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "DepartmentName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "SessionName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Description",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ColorName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "SizeName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "SkuName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "UnitName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "BrandName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "VendorName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "GroupName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ProductNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ProductNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "MfgDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ExpDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ProductInitialPrice",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "CostPrice",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "SalePrice",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Discount",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "UnitBarcode",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "UnitDescription",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "QtyPerUnit",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "UnitSalePrice",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "UnitCost",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "BoxNo",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "MinQty",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "PackBarcode",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "PackDescription",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "QtyPerPack",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "PackPrice",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "PackCost",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "OreginalPrice",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Vat",
+                            searchable: true,
+                            class: "dtr-control"
+                        },                        
+                        {
+                            data: "WarrantyPeriod",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Currentstock",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Status",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "CratedDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "UpdatedDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Id",
+                            searchable: false,
+                            orderable: false,
+                            class: "dtr-control",
+                            render: function (data, type, row) {
+                                var content = '<div style="display:flex">'
+                                if (row.AttachedDoc != "")
+                                {
+                                content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="View Image" data-flag="Status" data-Id="' + data + '" data-val="' + row.Image + '" class="btn btn-primary btn-sm action viewDoc"><i class="fa fa-image"></i></a>&nbsp;';
+                                }
+                                if (allowed == "Yes") {
+                                    if (parseFloat(row.Currentstock) == 0)
+                                    {
+                                        content += '&nbsp;<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" title="@WebResource.Delete" data-Id="' + data + '" class="btn btn-danger btn-sm action removeInfo"><i class="fa fa-times"></i></a>';
+                                    }
+                                }
+                                content += '&nbsp;</div>';
+
+                                return content;
+                            }
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+        $(document).on("click", ".removeInfo", function () {
+            var Id = $(this).attr("data-id");
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Warehouse/DeleteProduct/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        });
+
+        
+
+        $(document).on('click', '.viewDoc', function () {
+            var docPath = "@productImagePath" + $(this).attr('data-val');
+
+            $("#ProductImageView").dialog({
+                modal: true,
+                title: 'Product Image',
+                width: 540,
+                height: 450,
+                buttons: {
+                    Close: function () {
+                        $(this).dialog('close');
+                    }
+                },
+                open: function () {
+                    var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+                    object += "</object>";
+                    object = object.replace(/{FileName}/g, docPath);
+                    $("#ProductImageView").html(object);
+                    $(".ui-dialog-titlebar-close").html("<span style='position: absolute;top: -2px;left: 3px;'>X</span>");
+                }
+            });
+        });
+
+    </script>
+}
+

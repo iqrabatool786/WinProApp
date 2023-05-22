@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "Customer Point Balance";
+    Layout = "~/Views/Shared/_DashBoardLayout.cshtml";
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Customer @WebResource.Name
+                    </th>
+                    <th>
+                        @WebResource.Customer @WebResource.Address
+                    </th>
+                    <th>
+                        @WebResource.Customer @WebResource.Email
+                    </th>
+                    <th>
+                        @WebResource.Customer @WebResource.MobileNumber
+                    </th>
+                    <th>@WebResource.Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 20,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Merchant/GetCustomersPointBalanceList",
+                    sServerMethod: "POST",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "FullName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Address",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Email",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "MobileNumber",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Balance",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+    </script>
+}
+

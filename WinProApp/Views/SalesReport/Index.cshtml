@@ -1,0 +1,440 @@
+﻿@{
+    ViewData["Title"] = "Sales Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string ReportType = ViewBag.Type;
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+</style>
+
+@if (ReportType == "supplier")
+{
+    <div class="row card card-success">
+        <div class="card-header"><h3 class="card-title">@WebResource.SalesReport</h3></div>
+        <div class="card-body row">
+            <div class="col-md12" id="printSupplier">
+                <div class="row col-md12" style="margin-top:20px;">
+                    <div class="col-md-4">
+                        <label for="RecordType">Report Criteria</label>
+                        <select name="RecordType" id="RecordType" class="form-control">
+                            <option value="all">All</option>
+                            <option value="equal">Only equal balance</option>
+                            <option value="less">Less than or equal balance</option>
+                            <option value="greter">Greter than or equal balance</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Balance">Balance</label>
+                        <input type="number" class="form-control" id="txtBalance" name="txtBalance" value="" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Orientation">Orientation</label>
+                        <select name="pageType" id="pageType" class="form-control">
+                            <option value="Portrait">Portrait</option>
+                            <option value="Landscape">Landscape</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-12">
+                        <h4>Report Columns</h4>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-2">
+                            <input type="checkbox" name="CompanyName" id="CompanyName" value="Company Name" class="chPrint" checked disabled />
+                            <label for="CompanyName" style="font-weight:400;">CompanyName</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="DescriptionEn" id="DescriptionEn" value="BPcode" class="chPrint" checked />
+                            <label for="BPcode" style="font-weight:400;">BPcode</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="Address" id="Address" value="Address" class="chPrint" checked />
+                            <label for="Address" style="font-weight:400;">Address</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="Phone" id="Phone" value="Phone" class="chPrint" />
+                            <label for="Phone" style="font-weight:400;">Phone</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="Fax" id="Fax" value="Fax" class="chPrint" />
+                            <label for="Fax" style="font-weight:400;">Fax</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="Email" id="Email" value="Email" class="chPrint" />
+                            <label for="Email" style="font-weight:400;">Email</label>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-2">
+                            <input type="checkbox" name="Website" id="Website" value="Website" class="chPrint" />
+                            <label for="Website" style="font-weight:400;">Website</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="VatNo" id="VatNo" value="VatNo" class="chPrint" />
+                            <label for="VatNo" style="font-weight:400;">VatNo</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="Bank" id="Bank" value="Bank" class="chPrint" />
+                            <label for="Bank" style="font-weight:400;">Bank</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="AccountNo" id="AccountNo" value="Account No" class="chPrint" />
+                            <label for="AccountNo" style="font-weight:400;">AccountNo</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="CRNumber" id="CRNumber" value="CR Number" class="chPrint" />
+                            <label for="CRNumber" style="font-weight:400;">CR Number</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="OpeningBalance" id="OpeningBalance" value="Opening Balance" class="chPrint" checked />
+                            <label for="OpeningBalance" style="font-weight:400;">Opening Balance</label>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Balance" id="Balance" value="Balance" class="chPrint" checked />
+                            <label for="Balance" style="font-weight:400;">Balance</label>
+                        </div>
+                    </div>
+                </div>
+                <form id="frmSupplierPrint" action="">
+                    <input type="hidden" name="PrintColumns" id="PrintColumns" value="Company Name,BPcode,Address,Opening Balance,Balance" />
+                </form>
+            </div>
+            <div class="row col-md-12">
+                <div class="col-md-3">
+                    <button id="btnSupplierReportGen" type="button" class="form-control btn btn-primary">Print</button>
+                </div>
+                <div class="col-md-3">
+                    <button id="btnSupplierReportGenExcel" type="button" class="form-control btn btn-success">@WebResource.ExportToExcel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+
+        $("#RecordType").change(function () {
+            $("#txtBalance").val('');
+
+            let t = $(this).val();
+            if (t == "all") {
+                $("#txtBalance").attr('readonly', 'readonly');
+            }
+            else {
+                $("#txtBalance").removeAttr('readonly');
+                $("#txtBalance").focus();
+            }
+
+        });
+
+        $(".chPrint").click(function () {
+            let str = "";
+            $(".chPrint").each(function () {
+                if ($(this).is(':checked')) {
+                    if (str == "") {
+                        str = $(this).val();
+                    }
+                    else {
+                        str += "," + $(this).val();
+                    }
+                }
+            });
+            $("#PrintColumns").val(str);
+
+        });
+
+        function ReportPopup(Doc) {
+            let FileName = "/Reports/" + Doc;
+            printJS(FileName);
+        }
+
+        $("#btnSupplierReportGen").click(function () {
+            let cols = $("#PrintColumns").val();
+            let Rtype = $("#RecordType").val();
+            let balance = $("#txtBalance").val();
+            let type = $("#pageType").val();
+            $.ajax({
+                url: "/Sales/CreateSalesReport",
+                type: "POST",
+                dataType: "json",
+                data: { type: Rtype, amount: balance, colnames: cols, pagetype: type, reportType: "pdf" },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    ReportPopup(result);
+                },
+                error: function (data) {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+
+        $("#btnSupplierReportGenExcel").click(function () {
+            let cols = $("#PrintColumns").val();
+            let Rtype = $("#RecordType").val();
+            let balance = $("#txtBalance").val();
+            let type = $("#pageType").val();
+            $.ajax({
+                url: "/Sales/CreateSalesReport",
+                type: "POST",
+                dataType: "json",
+                data: { type: Rtype, amount: balance, colnames: cols, pagetype: type, reportType: "excel" },
+                success: function (r) {
+                    //var response = JSON.parse(data);
+                    //console.log(response);
+                    //window.location = '/Purchase/DownloadExcel?fileGuid=' + response.FileGuid
+                    //    + '&filename=' + response.FileName;
+
+                    var bytes = Base64ToBytes(r);
+                    var blob = new Blob([bytes], { type: "application/octetstream" });
+
+                    var isIE = false || !!document.documentMode;
+                    if (isIE) {
+                        window.navigator.msSaveBlob(blob, "SupplierList.xlsx");
+                    } else {
+                        var url = window.URL || window.webkitURL;
+                        link = url.createObjectURL(blob);
+                        var a = $("<a />");
+                        a.attr("download", "SupplierList.xlsx");
+                        a.attr("href", link);
+                        $("body").append(a);
+                        a[0].click();
+                        $("body").remove(a);
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+
+        function Base64ToBytes(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+    </script>
+}
+}
+
+
+
+@if (ReportType == "invoice")
+{
+    <div class="row" style="padding-left:15px;">
+        <div class="row card card-success col-md-12">
+            <div class="card-header"><h3 class="card-title">@WebResource.SalesReport</h3></div>
+            <div class="row" style="padding-left:15px;">
+                <div class="col-md-12" id="printReport">
+                    <div class="row col-md12" style="margin-top:20px;">
+                        <div class="col-sm-3">
+                            <label for="SupplierId">Stores</label>
+                            <select name="SupplierId" id="SupplierId" class="form-control" asp-items="@ViewBag.Stores">
+                                <option value="0">All Stores</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="Balance">From Date</label>
+                            <input type="text" id="txtDate1" name="txtDate1" class="form-control datefield" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="Balance">To Date</label>
+                            <input type="text" id="txtDate2" name="txtDate2" class="form-control datefield" />
+                        </div>
+                 
+                        <div class="col-md-3">
+                            <label for="Orientation">Orientation</label>
+                            <select name="pageType" id="pageType" class="form-control">
+                                <option value="Portrait">Portrait</option>
+                                <option value="Landscape">Landscape</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="form-floating col-md-12">
+                            <h4>Report Columns</h4>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-2">
+                                <input type="checkbox" name="CompanyName" id="CompanyName" value="Company Name" class="chPrint" checked disabled />
+                                <label for="CompanyName" style="font-weight:400;">CompanyName</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="InvoiceDate" id="InvoiceDate" value="Invoice Date" class="chPrint" checked />
+                                <label for="InvoiceDate" style="font-weight:400;">Invoice Date</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="InvoiceNo" id="InvoiceNo" value="Invoice No" class="chPrint" checked />
+                                <label for="InvoiceNo" style="font-weight:400;">Invoice No</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="ItemPrice" id="ItemPrice" value="Item Price" class="chPrint" checked />
+                                <label for="ItemPrice" style="font-weight:400;">Item Price</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="Qty" id="Qty" value="Qty" class="chPrint" checked />
+                                <label for="Qty" style="font-weight:400;">Qty</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="SaleAmount" id="SaleAmount" value="Sale Amount" class="chPrint" checked />
+                                <label for="SaleAmount" style="font-weight:400;">Sale Amount</label>
+                            </div>
+                            
+                            
+                      
+                          
+                        </div>
+
+                        <div class="row col-md-12">
+                    
+                            <div class="col-md-2">
+                                <input type="checkbox" name="Discount" id="Discount" value="Discount" class="chPrint" checked />
+                                <label for="Discount" style="font-weight:400;">Discount</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="SalesAfterDiscount" id="SalesAfterDiscount" value="Sales After Discount" class="chPrint" checked />
+                                <label for="SalesAfterDiscount" style="font-weight:400;">Sales After Discount</label>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="checkbox" name="Tax" id="Tax" value="Tax" class="chPrint" checked />
+                                <label for="Tax" style="font-weight:400;">Tax</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="Return" id="Return" value="Return" class="chPrint" checked />
+                                <label for="Return" style="font-weight:400;">Return</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="Cash" id="Cash" value="Cash" class="chPrint" checked />
+                                <label for="Cash" style="font-weight:400;">Cash</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="checkbox" name="Bank" id="Bank" value="Bank" class="chPrint" checked />
+                                <label for="Bank" style="font-weight:400;">Bank</label>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <form id="frmPrint" action="">
+                        <input type="hidden" name="PrintColumns" id="PrintColumns" value="Company Name,Invoice No,Date,Other Charges,Discount,Vat,Total" />
+                    </form>
+                </div>
+                <div class="row col-md-12">
+                    <button id="btnSupplierReportGen" type="button" class="btn btn-primary col-md-2">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $("#SupplierId").select2();
+
+        $("#RecordType").change(function () {
+            $("#txtBalance").val('');
+
+            let t = $(this).val();
+            if (t == "all") {
+                $("#txtBalance").attr('readonly', 'readonly');
+            }
+            else {
+                $("#txtBalance").removeAttr('readonly');
+                $("#txtBalance").focus();
+            }
+
+        });
+
+        $(".chPrint").click(function () {
+            let str = "";
+            $(".chPrint").each(function () {
+                if ($(this).is(':checked')) {
+                    if (str == "") {
+                        str = $(this).val();
+                    }
+                    else {
+                        str += "," + $(this).val();
+                    }
+                }
+            });
+            $("#PrintColumns").val(str);
+
+        });
+
+        function ReportPopup(Doc) {
+            let FileName = "/Reports/" + Doc;
+            printJS(FileName);
+        }
+
+        $("#btnSupplierReportGen").click(function () {
+            let cols = $("#PrintColumns").val();
+            let supplierId = $("#SupplierId").val();
+            let date1 = $("#txtDate1").val();
+            let date2 = $("#txtDate2").val();
+            let status = $("#Status").val();
+            let type = $("#pageType").val();
+            $.ajax({
+                url: "/Sales/CreateSalesReport",
+                type: "POST",
+                dataType: "json",
+                data: { supplierId: supplierId, fromDt: date1, toDt: date2, status: status, colnames: cols, pagetype: type },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    ReportPopup(result);
+                },
+                error: function (data) {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+    </script>
+}
+}
+
+
+
+
+
+
+

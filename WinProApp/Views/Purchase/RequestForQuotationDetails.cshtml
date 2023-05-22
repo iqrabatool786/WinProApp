@@ -1,0 +1,99 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.RequestForQuotation.DetailsRequestForQuotationViewModel;
+@{
+    ViewData["Title"] = @WebResource.RequisitionforQuotation + " " + @WebResource.Details;
+}
+
+<div class="row">
+    <div class="col-md-12">
+            <hr />
+            <div class="row">
+                <div class="form-floating col-md-1">
+                    <label for="Date">@WebResource.RFIId</label>
+                    : @Model.Rfiid
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="Date">@WebResource.Date</label>
+                    : @Model.Date
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Requester">@WebResource.Requester</label>
+                    : @Model.Requester
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Department">@WebResource.Department</label>
+                    : @Model.Department
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="RequireDate">@WebResource.RequireDate</label>
+                    : @Model.RequireDate
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-8">
+                    <label asp-for="Note">@WebResource.Note</label>
+                    : @Model.Note
+                </div>
+            </div>
+        <div class="row">
+            <div class="form-floating col-md-2">
+                <label asp-for="Approved">@WebResource.Approved</label>
+                : @Model.Approved
+            </div>
+            <div class="form-floating col-md-2">
+                <label asp-for="CratedDate">@WebResource.CratedDate</label>
+                : @Model.CratedDate
+            </div>
+            <div class="form-floating col-md-3">
+                <label asp-for="CreatedBy">@WebResource.CreatedBy</label>
+                : @Model.CreatedBy
+            </div>
+            <div class="form-floating col-md-2">
+                <label asp-for="UpdatedDate">@WebResource.UpdatedDate</label>
+                : @Model.UpdatedDate
+            </div>
+            <div class="form-floating col-md-3">
+                <label asp-for="UpdatedBy">@WebResource.UpdatedBy</label>
+                : @Model.UpdatedBy
+            </div>
+        </div>
+            <div class="row">
+                <div class="form-floating col-md-12">
+                    <h4>@WebResource.Items</h4>
+                </div>
+
+                <table id="tblItems" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">@WebResource.Description</th>
+                            <th class="col-md-3">@WebResource.Reason</th>
+                            <th class="col-md-2">@WebResource.Qty</th>
+                            <th class="col-md-3">@WebResource.MFCompany</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td><input type="hidden" name="ItemId" value="@item.Id" /><input type="hidden" name="Description" value="@item.Description" />@item.Description</td>
+                                <td><input type="hidden" name="Reason" value="@item.Reason" />@item.Reason</td>
+                                <td><input type="hidden" name="Qty" value="@item.Qty" />@item.Qty</td>
+                                <td><input type="hidden" name="MFCompany" value="@item.Mfcompany" />@item.Mfcompany</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+       
+    </script>
+}

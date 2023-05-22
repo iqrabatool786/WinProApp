@@ -1,0 +1,512 @@
+﻿<nav class="mt-2">
+<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li id="warehouseMenuBock" class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+                <i class="nav-icon fas fa-warehouse"></i>
+                <p>
+                    @WebResource.WarehouseAndInventory
+                </p>
+                <i class="fas fa-angle-left right"></i>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="/Warehouse/Store" class="nav-link">
+                        <i class="nav-icon fas fa-truck"></i>
+                        <p>@WebResource.Addstore</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Warehouse/Register" class="nav-link">
+                        <i class="nav-icon fas fa-link"></i>
+                        <p>
+                            @WebResource.AddRegister
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-chevron-circle-right nav-icon"></i>
+                        <p>@WebResource.CreateDefination</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/Departments" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Department</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Categories" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Category</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/Warehouse/Styles" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Model_SKU</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Brands" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Brand</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Colors" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Color</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Sizes" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Size</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Seassons" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Seasson</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Groups" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Group</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Descriptions" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Description</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Vendors" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Vendor</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Units" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Unit</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Years" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Year</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/Warehouse/PurchaseReceipts" class="nav-link">
+                        <i class="fas fa-file-invoice nav-icon"></i>
+                        <p>@WebResource.ReceiveInvoice</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/Warehouse/ReceiveShipment" class="nav-link">
+                        <i class="fas fa-file-invoice nav-icon"></i>
+                        <p>@WebResource.Receive @WebResource.Shipment</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-reply nav-icon"></i>
+                        <p>@WebResource.ReturnGoods</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/CreateReturn" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Create</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Returns" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Manage</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-weight nav-icon"></i>
+                        <p>@WebResource.DamageDiclare</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/DamageReturnCreate" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Create</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/DamageReturns" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Manage</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-chevron-circle-right nav-icon"></i>
+                        <p>@WebResource.IBT</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/CreateIBT" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Create</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/IBT" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Manage</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-chevron-circle-right nav-icon"></i>
+                        <p>@WebResource.GRN</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/CreateGRN" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Create</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/GRN" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Manage</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-shopping-cart nav-icon"></i>
+                        <p>@WebResource.ProductInfo</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/CreateProduct" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Manage @WebResource.Product</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Products" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Product @WebResource.List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.PrintBarcode</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.BarcodeAdjustandPrint</p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.PrintWithoutVat</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.RetailBarcodePrint</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.SuperMarketBarcode</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.AddShortKeys</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.QuickSaleIcon</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-cube nav-icon"></i>
+                        <p>@WebResource.Other</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-cube nav-icon"></i>
+                                <p>@WebResource.Rawmaterialinfo</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-bullseye nav-icon"></i>
+                                <p>@WebResource.PreSales</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-chevron-circle-right nav-icon"></i>
+                                <p>@WebResource.GoodsDispatch</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-bolt nav-icon"></i>
+                                <p>@WebResource.PreSalesOrderUpdate</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-cogs nav-icon"></i>
+                                <p>@WebResource.TecnicianItems</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-bars"></i>
+                                <p>
+                                    @WebResource.Telecom
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.ManageSupplier</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step1_Purchase</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step2_PurchaseReceipt</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step3_SupplierPayment</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step4_IssuetoProduction</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step5_ProductionReceipt</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step6_ProductCombination</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step7_RecievedFromProduction</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@WebResource.Step8_ReturnTosupplier</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-check nav-icon"></i>
+                        <p>@WebResource.Inventory</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Physcalinventory</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Iteminventory</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Inventorydeliveryvoucher</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Internaldeliverynote</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Inventorylossandadjustment</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Stockview</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Stockadjsutment</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Stockmovment</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Shipmentview</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Reportofphyscalinventory</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-building nav-icon"></i>
+                        <p>@WebResource.UpdateAssets</p>
+                        <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Warehouse/AssetTypes" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Asset @WebResource.Type</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/AssetDepartments" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Add @WebResource.Asset @WebResource.Department</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/Warehouse/AssetLocations" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Add @WebResource.Asset @WebResource.Location</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/Assets" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Asset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/AssetAsigns" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Asset @WebResource.Assign</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/AssetsReLocated" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Relocated @WebResource.Asset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Warehouse/AssetReports" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@WebResource.Assetsreports</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+
+</ul>
+</nav>

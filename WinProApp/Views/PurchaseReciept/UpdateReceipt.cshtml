@@ -1,0 +1,1023 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.PurchaseReciept.EditViewModel;
+@{
+    ViewData["Title"] = @WebResource.ReceiveInvoice;
+    string invoicePath = "/Docs/SupplierInvoice/" + Model.InvoiceDoc;
+    string receiptPath = "/Docs/SupplierInvoice/" + Model.AttachedDoc;
+    string barcodeImgPath = "/Images/ProductBarcodes/";
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="editForm" enctype="multipart/form-data" asp-action="UpdateReceipt" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="InvoiceId" />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Supplier @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="SupplierId">@WebResource.Supplier</label>
+                    <select asp-for="SupplierId" class="form-control" asp-items="@ViewBag.Suppliers" readonly>
+                        <option value="0">@WebResource.Select @WebResource.Supplier</option>
+                    </select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-2">
+                        <label for="BpCode">@WebResource.Bpcode</label>
+                        <input id="BpCode" name="BpCode" class="form-control" readonly />
+                </div>
+                
+                <div class="form-floating col-md-3">
+                    <label for="Address">@WebResource.Address</label>
+                    <input type="text" id="Address" name="Address" class="form-control" readonly/>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="VatNo">@WebResource.VatNo</label>
+                        <input id="VatNo" name="VatNo" class="form-control" readonly />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="Balance">@WebResource.Balance</label>
+                    <input id="Balance" name="Balance" class="form-control" readonly />
+                </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Invoice @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="InvoiceNo">@WebResource.InvoiceNo</label>
+                        <input asp-for="InvoiceNo" class="form-control" aria-required="true" autocomplete="off" readonly />
+                    <span asp-validation-for="InvoiceNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="Date">@WebResource.Date</label>
+                        <input type="text" name="Date" id="Date" class="form-control" aria-required="true" autocomplete="off" readonly />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                 <div class="form-floating col-md-3">
+                        <label for="InvoiceDoc">@WebResource.AttachedDoc</label>
+                        <input type="file" name="InvoiceDoc" id="InvoiceDoc" class="form-control" />
+                </div>
+                </div>
+            </div>
+
+           
+            <div class="row card card-success" style="margin-top:20px;">
+                <div class="card-header"><h3 class="card-title">@WebResource.Invoice @WebResource.Items</h3></div>
+                <div class="card-body col-md-12 row">
+                <table id="tblItems" class="table table-striped table-bordered table-responsive" style="height:550px">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">@WebResource.Barcode</th>
+                            <th class="col-md-2">@WebResource.Description</th>
+                            <th class="col-md-1">@WebResource.QtyDozen</th>
+                            <th class="col-md-1">@WebResource.QtyPices</th>
+                            <th class="col-md-1">@WebResource.Price</th>
+                            <th class="col-md-1">@WebResource.Receive @WebResource.QtyDozen</th>
+                            <th class="col-md-1">@WebResource.Receive @WebResource.QtyPices</th>
+                            <th class="col-md-1">@WebResource.Cost</th>
+                            <th class="col-md-1">%</th>
+                            <th class="col-md-1">@WebResource.Retail</th>
+                            <th class="col-md-1">@WebResource.Org_Price</th>
+                            <th class="col-md-1">@WebResource.VAT @WebResource.Sale</th>
+                            <th class="col-md-1">@WebResource.DiffQty - @WebResource.QtyDozen</th>
+                            <th style="display:none;"></th>
+                                <th>@WebResource.DiffQty - @WebResource.QtyPices</th>
+                                <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+
+            <div class="row card card-success" style="margin-top:20px; padding-top:7px;">
+                <div class="row col-md-12">
+                     <div class="row col-md-6">
+                         <div class="form-floating col-md-8" style="text-align:right;">
+                             <label for="totDzn" style="margin-left:7px;">@WebResource.Total @WebResource.QtyDozen </label>
+                         </div>
+                         <div class="form-floating col-md-4">
+                            <input type="text" readonly name="totDzn" id="totDzn" class="form-control" value="" data-val="0" style="text-align:right;" />
+                         </div>
+                     </div>
+
+                     <div class="row col-md-6">
+                         <div class="form-floating col-md-8" style="text-align:right;">
+                             <label for="InvoiceVatTotbef" style="margin-left:7px;">@WebResource.Total before @WebResource.VAT </label>
+                         </div>
+                         <div class="form-floating col-md-4">
+                             <input type="text" readonly name="VatAmountbef" id="VatAmountbef" class="form-control" value="" data-val="0" style="text-align:right;" />
+                         </div>
+                     </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                             <label for="totPcs" style="margin-left:7px;">@WebResource.Total @WebResource.QtyPices </label>
+                         </div>
+                         <div class="form-floating col-md-4">
+                             <input type="text" readonly name="totPcs" id="totPcs" class="form-control" value="" data-val="0" style="text-align:right;" />
+                         </div>
+                    </div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="InvoiceVatTot" style="margin-left:7px;">@WebResource.VAT @WebResource.Total</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input readonly type="text" name="VatAmount" id="VatAmount" class="form-control" value="@Model.VatAmount" data-val="@Model.VatAmount" style="text-align:right;" />
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6"></div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="Discount" style="margin-left:7px;">@WebResource.Discount</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input readonly type="text" name="Discount" id="Discount" class="form-control" value="@Model.Discount" data-val="@Model.Discount" style="text-align:right;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                             <label for="ChargesDescription" style="margin-left:7px;">@WebResource.ChargesDescription </label>
+                         </div>
+                         <div class="form-floating col-md-4">
+                              <input type="text" name="ChargesDescription" id="ChargesDescription" class="form-control" value="@Model.ChargesDescription" data-val="0" />
+                         </div>
+                    </div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="OtherCharges" style="margin-left:7px;">@WebResource.Charges</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input readonly type="number" name="OtherCharges" id="OtherCharges" class="form-control decimalTwoDigits" value="@Model.OtherCharges" data-val="@Model.OtherCharges" style="text-align:right;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6"></div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="Total" style="margin-left:7px;">@WebResource.Total</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input readonly type="text" name="Total" id="Total" class="form-control" value="@Model.Total" style="text-align:right;" />
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+             <div class="row col-md-12">
+                 <div class="form-floating col-md-2">
+                    <label asp-for="Status">@WebResource.Status</label>
+                    <select asp-for="Status" class="form-control">
+                        @if(Model.Status == true)
+                        {
+                            <option value="true">@WebResource.Approved</option>
+                            <option value="false">@WebResource.OnHold</option>
+                        }
+                        else
+                        {
+                            <option value="false">@WebResource.OnHold</option>
+                            <option value="true">@WebResource.Approved</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+             </div>
+
+             <input type="hidden" asp-for="IsReturn" />
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <input id="saveBtn" type="button" class="w-100 btn btn-lg btn-primary col-md-3" value="@WebResource.Save" />
+        </form>
+    </div>
+    <hr/>
+    <div class="row col-md-12" style="margin-top:30px; margin-bottom:30px;">
+        <div class="form-floating col-md-6">
+            <h3>@WebResource.Invoice @WebResource.Document</h3>
+            <div id="CurrentInvoiceDoc"></div>
+        </div>
+        <div id="CurrentInvoiceDoc" class="form-floating col-md-6">
+            <h3>@WebResource.Receipt @WebResource.Document</h3>
+            <div id="CurrentReceiptDoc"></div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/PurchaseReceipts");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(document).on('keypress', '.numberonly', function (e) {
+            var charCode = (e.which) ? e.which : event.keyCode
+            if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                return false;
+        });
+
+        $(document).on('keypress', '.decimalTwoDigits', function () {
+            if (this.value.includes('.')) {
+                if (this.value.split('.')[1].length > 1) {
+                    return false;
+                }
+            };
+        });
+
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $("#Date").val('@Model.Date.ToString("yyyy-MM-dd")');
+        var vatx = "@ViewBag.VatPercentage";
+        getSupplierInfo("@Model.SupplierId");
+
+       function getSupplierInfo(Id) {
+            if(parseInt(Id) > 0){
+            $.ajax({
+                url: "/Purchase/GetSupplierInfo/" + Id,
+                type: "GET",
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                        $("#BpCode").val(result.Bpcode);
+                    $("#Address").val(result.Address);
+                    $("#VatNo").val(result.VatNo);
+                    $('#Balance').val(result.Balance);
+                },
+                error: function () {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+            }
+            else{
+                $("#Address").val('');
+                $("#VatNo").val('');
+                $('#Balance').val('');
+            }
+        }
+
+        GetPurchaseReceiptDetails("@Model.Id");
+       
+        function EnterPressedOnQtyDozen(e, thistr) {
+            if (e.keyCode == 13) {
+                $(thistr).closest('tr').next('tr').find('.RQtyD').select();
+            }
+        }
+
+        function EnterPressedOnQtyPcs(e, thistr) {
+            if (e.keyCode == 13) {
+                $(thistr).closest('tr').next('tr').find('.RQtyP').select();
+            }
+        }
+
+        function GetPurchaseReceiptDetails(Id){
+            if(parseInt(Id) > 0){
+                $.ajax({
+                    url: "/Warehouse/GetReceiptDetails/" + Id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                     var result = JSON.parse(JSON.stringify(data));
+                     for(i=0; i< result.length; i++){
+                            let itemId =  result[i].Id;
+                            let code = result[i].Barcode;
+                            let productId =  parseInt(result[i].ProductId)>0?result[i].ProductId:0;
+                            let desc = result[i].DescriptionEng;
+                            let descab = result[i].DescriptionArabic;
+                            let descriptionId= result[i].DescriptionId;
+                            let org = result[i].Price;
+                            let qtyd = result[i].QtyDozen;
+                            let qtyp = result[i].QtyPices;
+                            let cost = result[i].CostPrice;
+                            let sell = result[i].SalePrice;
+                            let reciveQtyD = parseFloat(result[i].ReceiveQtyDozen) > 0?result[i].ReceiveQtyDozen:'0';
+                            let reciveQtyP = parseFloat(result[i].ReceiveQtyPices) > 0?result[i].ReceiveQtyPices:'0';
+                            let recivePrice = parseFloat(result[i].ReceivePrice) > 0 ? result[i].ReceivePrice : '';
+                            let sellVat = result[i].Vat;
+                            let productVat = result[i].PVat;
+                            let sku = result[i].SkuCode;
+                            let vattot = 0;
+                            let total = 0;
+
+                            if(parseFloat(sell) > 0){sell=sell;}else{sell=0;}
+
+                            if (parseFloat(sellVat) > 0) {
+                                sellVat = parseFloat(sellVat);
+                            }
+                            else{
+                                sellVat = 0;
+                            }
+
+                            let orgProductPrice = (parseFloat(sell) - parseFloat(sellVat));
+
+                            if (parseFloat(productVat) > 0) {
+                                productVat = parseFloat(productVat);
+                            }
+                            else{
+                                productVat = 0;
+                            }
+
+                            if (parseFloat(qtyd) > 0) {
+                                qtyd = parseFloat(qtyd);
+                            }
+                            else{
+                                qtyd = 0;
+                            }
+
+                            if (parseFloat(qtyp) > 0) {
+                                qtyp = parseFloat(qtyp);
+                            }
+                            else{
+                                qtyp = 0;
+                            }
+
+                            if (parseFloat(recivePrice) > 0){
+                                recivePrice = recivePrice;
+                            }
+                            else{
+                                recivePrice = org;
+                            }
+
+                            if(parseFloat(qtyd) > 0 && parseFloat(qtyp) > 0){
+                                let totQty = ((parseFloat(qtyd) * 12) + parseFloat(qtyp));
+                                total = (parseFloat(totQty) * parseFloat(cost));
+                                 vattot = (parseFloat(sellVat) * parseFloat(totQty));
+                            }
+                            if(parseFloat(qtyd) > 0 && parseFloat(qtyp) == 0){
+                                let totQty = parseFloat(qtyd);
+                                total = (parseFloat(totQty) * parseFloat(cost));
+                                 vattot = (parseFloat(sellVat) * parseFloat(totQty));
+                            }
+                            if (parseFloat(qtyd) == 0 && parseFloat(qtyp) > 0) {
+                                let totQty = parseFloat(qtyp);
+                                total = (parseFloat(totQty) * parseFloat(cost));
+                                vattot = (parseFloat(sellVat) * parseFloat(totQty));
+                            }
+                           
+                           // let vattot = $result[i].Vat;
+                           // let total = $("#txtTotal").val();
+
+                           let cssD = "D_" + itemId;
+                           let cssP = "P_" + itemId;
+                           let cssRD = "RD_" + itemId;
+                           let cssRP = "RP_" + itemId;
+                           let cssOPrice = "OPrice_" + itemId;
+                           let cssNPrice = "NPrice_" + itemId;
+                           let cssRetail = "Retail_" + itemId;
+                           let cssPrecent = "Precent_" + itemId;
+                           let cssOrgTot = "OrgTot_" + itemId;
+                           let cssNewTot = "NewTot_" + itemId;
+                           let cssNewOrgPrice = "NewOrgPrice_" + itemId;
+                           let cssVat = "Vat_" + itemId;
+                           let cssOrgVat = "OrgVat_" + itemId;
+                           let cssDiffD = "DiffD_" + itemId;
+                           let cssDiffP = "DiffP_" + itemId;
+
+                           let disableflag1 = '';
+                            let disableflag2 = '';
+
+                            if(parseFloat(qtyd) > 0){
+                                disableflag1 = '';
+                            }
+                            else{
+                                //disableflag1 = 'readonly';
+                            }
+
+                            if (parseFloat(qtyp) > 0) {
+                                disableflag2 = '';
+                            }
+                            else {
+                                //disableflag2 = 'readonly';
+                            }
+
+                            let itemCode = '<input type="hidden" name="ItemProductId" value="' + productId + '" /><input type="hidden" name="Barcode" class="itemBarcodeX" value="' + code + '" /><input type="hidden" name="ItemId" value="' + itemId + '" />' + code;
+                            let itemDesc = '<input type="hidden" name="ItemDescription" value="' + desc + '" class="descEn" /><input type="hidden" name="ItemDescriptionAb" value="' + descab + '" class="descAb" /><input type="hidden" name="ItemSkuText" value="' + sku + '" class="itemSkuTextX" />' + desc + "/ " + descab;
+                            let itemQtyD = '<input id="' + cssD + '" type="hidden" name="QtyDozen" data-id="' + itemId + '" value="' + qtyd + '" />' + qtyd;
+                            let itemQtyP = '<input id="' + cssP + '" type="hidden" name="QtyPices" data-id="' + itemId + '" value="' + qtyp + '" />' + qtyp;
+                            let itemOrgPrice = '<input id="' + cssOPrice + '" type="text" name="itemOrgPrice" data-id="' + itemId + '" class="OrgP" style="max-width:100px; text-align:right;" value="' + sell.toFixed(2) + '" readonly />';
+                            let itemRQtyD = '<input id="' + cssRD + '" type="number" onkeypress="javascript: EnterPressedOnQtyDozen(event, this);" name="itemRQtyD" data-id="' + itemId + '" class="RQtyD decimalTwoDigits" style="max-width:100px; text-align:right;" value="' + reciveQtyD + '" ' + disableflag1 + ' />';
+                            let itemRQtyP = '<input id="' + cssRP + '" type="text" onkeypress="javascript: EnterPressedOnQtyPcs(event, this);" name="itemRQtyP" data-id="' + itemId + '" class="RQtyP numberonly" style="max-width:100px; text-align:right;" value="' + reciveQtyP + '" ' + disableflag2 + ' />'
+                            let itemCost = '<input id="' + cssNPrice + '" type="text" name="itemCost" data-id="' + itemId + '" class="itemcostx" style="max-width:100px; text-align:right;" value="' + recivePrice + '" readonly />';
+                            let itemPrecent = '<input readonly id="' + cssPrecent + '" type="text" name="itemPrecentage" data-id="' + itemId + '" class="Precent" style="width:50px; text-align:right;" value="" />';
+                            let itemRetail = '<input id="' + cssRetail + '" type="text" name="itemRetails" data-id="' + itemId + '" class="Retails" style="width:100px; text-align:right;" value="' + sell.toFixed(2) + '" readonly />';
+                            let itemOrgPrice2 = '<input id="' + cssNewOrgPrice + '" type="text" name="itemOrgPrice2" data-id="' + itemId + '" style="width:100px; text-align:right;" value="' + orgProductPrice.toFixed(2) + '" readonly />';
+                            let itemSellingVat = '<input id="' + cssOrgVat + '" type="hidden" name="OrgSellingVat" data-id="' + itemId + '" value="' + productVat + '" /><input id="' + cssVat + '" type="hidden" name="SellingVat" class="itemvattotalx" data-id="' + itemId + '" value="' + sellVat.toFixed(2) + '" /><input id="' + cssVat + '" type="hidden" name="ItemSellingVat" data-id="' + itemId + '" value="' + sellVat.toFixed(2) + '" />' + sellVat.toFixed(2);
+                            let itemDiffD = '<input id="' + cssDiffD + '" type="text" name="itemDiffD" class="DiffD" data-id="' + itemId + '" style="width:100px; text-align:right;" value="" readonly />';
+                            let itemDiffP = '<input id="' + cssDiffP + '" type="text" name="itemDiffP" class="DiffP" data-id="' + itemId + '" style="width:100px; text-align:right;" value="" readonly /><input type="hidden" name="itemOrgTot" data-id="' + itemId + '" class="itemOrgTotx" value="' + total + '" /><input id="' + cssNewTot + '" type="hidden" name="itemNewTot" data-id="' + itemId + '" class="itemNewTotx" value="' + total + '" />';
+                            let btnBarcode = '<input type="button" class="printBarcode" name="btnPrintBarcode" value="Print Barcode" />';
+                           // let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;" data-id="' + itemId + '"><i class="fa fa-times"></i></a>';
+
+                            let rowId = "";
+                            rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                            var itemCell = "<tr id='" + rowId + "'>";
+                           // $('#tblItems tbody').append(itemRow);
+
+                            itemCell += '<td>' + itemCode + '</td>';
+                            itemCell += '<td>' + itemDesc + '</td>';
+                            itemCell += '<td class="itemTotDzn">' + itemQtyD + '</td>';
+                            itemCell += '<td class="itemTotPcs">' + itemQtyP + '</td>';
+                            itemCell += '<td>' + itemOrgPrice + '</td>';
+                            itemCell += '<td>' + itemRQtyD + '</td>';
+                            itemCell += '<td>' + itemRQtyP + '</td>';
+                            itemCell += '<td>' + itemCost + '</td>';
+                            itemCell += '<td>' + itemPrecent + '</td>';
+                            itemCell += '<td>' + itemRetail + '</td>';
+                            itemCell += '<td>' + itemOrgPrice2 + '</td>';
+                            itemCell += '<td style="text-align:right;">' + itemSellingVat + '</td>';
+                            itemCell += '<td>' + itemDiffD + '</td>';
+                            itemCell += '<td>' + itemDiffP + '</td>';
+                            itemCell += '<td>' + btnBarcode + '</td>';
+                            itemCell += '</tr>';
+
+                            $('#tblItems tbody').append(itemCell);
+
+                     }
+                        CalculateTotal();
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+            }
+        }
+
+        $(document).on("click", ".printBarcode", function () {
+          let storeId = 0;// $("#ToStoreId").val();
+          let curBarcode = $(this).parent().parent().find('td').find(".itemBarcodeX").val();
+          let desc1 = $(this).parent().parent().find('td').find(".descEn").val();
+          let desc2 = $(this).parent().parent().find('td').find(".descAb").val();
+          let curPrice = $(this).parent().parent().find('td').find(".Retails").val();
+          let refno = $("#InvoiceNo").val();
+          let style = $(this).parent().parent().find('td').find(".itemSkuTextX").val();
+
+            
+            if (parseInt(storeId) >= 0) {
+                $.ajax({
+                    url: "/Shipping/CreateBarcode/" + storeId + "?barcode=" + curBarcode + "&price=" + curPrice + "&desc1=" + desc1 + "&desc2=" + desc2 + "&refno=" + refno + "&style=" + style,
+                    type: "POST",
+                    dataType: "json",
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        BarcodePopup(data);
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+
+        });
+
+        function BarcodePopup(Doc)
+        {
+            let FileName = "@barcodeImgPath" + Doc;
+            printJS(FileName);
+        }
+
+        $(document).on("keyup", ".itemcostx", function(){
+            let itemId = $(this).attr('data-id');
+            let objCurDId = "#D_" + itemId;
+            let objCurPId = "#P_" + itemId;
+            let objRDId = "#RD_" + itemId;
+            let objRPId = "#RP_" + itemId;
+            let objPId = "Precent_" + itemId;
+            let objRetail = "Retail_" + itemId;
+            let objProductVat = "#OrgVat_" + itemId;
+            let curVal = $(this).val();
+            let curP = $("#" + objPId).val();
+
+
+           let vatamoutX =(parseFloat(vatx)/parseFloat(100));
+
+           if(parseFloat(curVal) > 0){
+               curVal = curVal;
+           }
+           else{
+               curVal=0;
+           }
+
+           let curVat = (parseFloat(curVal) * parseFloat(vatamoutX));
+          
+           $(objProductVat).val(curVat.toFixed(2));
+      
+
+           // let curR = $("#" + objRetail).val();
+           
+            //if (parseFloat(curVal) > 0){
+            //    let retail = (parseFloat(curVal) + parseFloat(parseFloat(curVal) * parseFloat(parseFloat(curP)/100)));
+            //    $("#" + objRetail).val(retail.toFixed(2));
+            //}
+            //else{
+            //    $("#" + objRetail).val('');
+            //}
+
+            //if(parseFloat(curP) > 0) {
+            //    let retail = (parseFloat(parseFloat(curVal) * parseFloat(parseFloat(curP)/100)));
+            //    $("#" + objRetail).val(retail.toFixed(2));
+            //}
+            //else{
+            //    $("#" + objRetail).val('');
+            //}
+            CalculateTotal();
+        });
+
+        $(document).on("keyup", ".Precent", function () {
+            let itemId = $(this).attr('data-id');
+            let objPId = "NPrice_" + itemId;
+            let objRetail = "Retail_" + itemId;
+            let curVal = $(this).val();
+            let curP = $("#" + objPId).val();
+            // let curR = $("#" + objRetail).val();
+           
+
+            //if (parseFloat(curVal) > 0 && parseFloat(curP) > 0) {
+            //    let retail = (parseFloat(curP) + parseFloat(parseFloat(curP) * parseFloat(parseFloat(curVal) / 100)));
+            //    $("#" + objRetail).val(retail.toFixed(2));
+            //}
+            //else {
+            //    $("#" + objRetail).val('');
+            //}
+        });
+
+        $(document).on("keyup", ".RQtyD", function () {
+            let itemId = $(this).attr('data-id');
+            let objQdId = "D_" + itemId;
+            let curRQD = $(this).val();
+            let curQD = $("#" + objQdId).val();
+            let objDiffD = "DiffD_" + itemId;
+
+
+            if (parseFloat(curQD) > 0 && parseFloat(curRQD) > 0) {
+                let diff = (parseFloat(curQD) - parseFloat(curRQD));
+                $("#" + objDiffD).val(diff);
+            }
+            else {
+                $("#" + objDiffD).val('');
+            }
+            CalculateTotal();
+        });
+
+        $(document).on("keyup", ".RQtyP", function () {
+            let itemId = $(this).attr('data-id');
+            let objQpId = "P_" + itemId;
+            let curRQP = $(this).val();
+            let curQP = $("#" + objQpId).val();
+            let objDiffP = "DiffP_" + itemId;
+
+
+            if (parseFloat(curQP) > 0 && parseFloat(curRQP) > 0) {
+                let diff = (parseFloat(curRQP) - parseFloat(curQP));
+                $("#" + objDiffP).val(diff);
+            }
+            else {
+                $("#" + objDiffP).val('');
+            }
+            CalculateTotal();
+        });
+
+        $(document).on("keyup", ".itemCost", function () {
+            let curCost = $(this).val();
+            let itemId = $(this).attr('data-id');
+
+            let orgPObjId = "NewOrgPrice_" + itemId;
+
+            $("#" + orgPObjId).val(curCost);
+
+            CalculateTotal();
+        });
+        
+       function CalculateTotal(){
+            var total = 0;
+            var vattotal = 0;
+            var totalDzns = 0;
+            var totalPcss = 0;
+
+            $(".itemcostx").each(function () {
+                let itemId = $(this).attr('data-id');
+                let objQtyDId = "D_" + itemId;
+                let objQtyPId = "P_" + itemId;
+                let objQtyDRId = "RD_" + itemId;
+                let objQtyPRId = "RP_" + itemId;
+                let objPriceId = "OPrice_" + itemId;
+
+                let curVaObjId = "OrgVat_" + itemId;
+                let totVaObjId = "Vat_" + itemId;
+                let curTotObjId = "NewTot_" + itemId;
+
+                let qtyd = $("#" + objQtyDId).val();
+                let qtyp = $("#" + objQtyPId).val();
+                let qtyd1 = $("#" + objQtyDRId).val();
+                let qtyp1 = $("#" + objQtyPRId).val();
+
+                let curVat = $("#" + curVaObjId).val();
+                let orgPrice = $("#" + objPriceId).val();
+
+                let curCost = $(this).val();
+
+                if (parseFloat(curCost) > 0) {
+                    curCost = parseFloat(curCost);
+                }
+                else {
+                    if (parseFloat(orgPrice) > 0) {
+                        curCost = orgPrice;
+                    }
+                    else{
+                        curCost = 0;
+                    }
+                    
+                }
+
+                if(parseFloat(qtyd) > 0){
+                    qtyd = parseFloat(qtyd);
+                }
+                else{
+                    qtyd = 0;
+                }
+
+                if(parseFloat(qtyp) > 0){
+                    qtyp = parseFloat(qtyp);
+                }
+                else{
+                    qtyp = 0;
+                }
+
+                if(parseFloat(qtyd1) > 0){
+                    qtyd1 = parseFloat(qtyd1);
+                }
+                else{
+                    if (parseFloat(qtyd) > 0) {
+                        qtyd1 = qtyd;
+                    }
+                    else {
+                        qtyd1 = 0;
+                    }
+                }
+
+                if (parseFloat(qtyp1) > 0) {
+                    qtyp1 = parseFloat(qtyp1);
+                }
+                else{
+                    if (parseFloat(qtyp) > 0){
+                        qtyp1 = qtyp;
+                    }
+                    else{
+                        qtyp1 = 0;
+                    }
+                }
+
+                let qtyTot = 0;
+
+                if (parseFloat(qtyd1) > 0 && parseFloat(qtyp1) > 0) {
+                    qtyTot = (parseFloat(qtyd1) * 12) + parseFloat(qtyp1);
+                }
+                else{
+                    if (parseFloat(qtyd1) > 0){
+                        qtyTot = qtyd1;
+                    }
+                    if (parseFloat(qtyp1) > 0){
+                        qtyTot = qtyp1;
+                    }
+                }
+
+                if (parseFloat(curVat) > 0){
+                    curVat = curVat;
+                }
+                else{
+                    curVat = 0;
+                }
+
+                let totPrice = (parseFloat(qtyTot) * parseFloat(curCost));
+                let totVatx = (parseFloat(qtyTot) * parseFloat(curVat));
+
+                $("#" + totVaObjId).val(totVatx.toFixed(2));
+                $("#" + curTotObjId).val(totPrice.toFixed(2));
+
+
+                if (parseFloat(totPrice) > 0) {
+                    total = (parseFloat(total) + parseFloat(totPrice));
+                }
+
+                if (parseFloat(totVatx) > 0) {
+                    vattotal = (parseFloat(vattotal) + parseFloat(totVatx));
+                }
+            });
+
+            let discount = $("#Discount").val();
+            let charges = $("#OtherCharges").val();
+
+            if(parseFloat(discount) > 0){
+                discount = parseFloat(discount);
+            }
+            else{
+                discount = 0;
+            }
+
+            if(parseFloat(charges) > 0){
+                charges = parseFloat(charges);
+            }
+            else{
+                charges = 0;
+            }
+
+            $(".itemTotDzn").each(function () {
+               var valDzn = $(this).text();
+                if (parseFloat(valDzn) > 0){
+                    totalDzns = parseFloat(totalDzns) + parseFloat(valDzn);
+                }
+            });
+
+            $(".itemTotPcs").each(function () {
+               var valPcs = $(this).text();
+                if (parseFloat(valPcs) > 0){
+                    totalPcss = parseFloat(totalPcss) + parseFloat(valPcs);
+                }
+            });
+
+            $("#totDzn").val(totalDzns.toFixed(2));
+            $("#totDzn").attr('data-val', totalDzns.toFixed(2));
+
+            $("#totPcs").val(totalPcss.toFixed(2));
+            $("#totPcs").attr('data-val', totalPcss.toFixed(2));
+
+            $("#VatAmountbef").val(total.toFixed(2));
+            $("#VatAmountbef").attr('data-val', total.toFixed(2));
+
+            vattotal = (parseFloat(total) * (parseFloat(vatx) / parseFloat(100)));
+
+            total = ((parseFloat(total) + parseFloat(vattotal) + parseFloat(charges)) - parseFloat(discount));
+
+            $("#VatAmount").val(vattotal.toFixed(2));
+            $("#VatAmount").attr('data-val',vattotal.toFixed(2));
+
+            $("#Total").val(total.toFixed(2));
+        }
+
+       $("#VatAmount").keyup(function () {
+           let prev = $(this).attr('data-val');
+            let curVat = $(this).val();
+            let tot = $("#Total").val();
+
+            if(parseFloat(prev) > 0){
+                prev = prev;
+            }
+            else{
+                prev=0;
+            }
+
+            if(parseFloat(curVat) > 0){
+                curVat = curVat;
+            }
+            else{
+                curVat=0;
+            }
+
+            if(parseFloat(tot) > 0){
+                tot = tot;
+            }
+            else{
+                tot=0;
+            }
+
+            if(parseFloat(tot) > 0){
+                tot = (parseFloat(parseFloat(tot) - parseFloat(prev)) + parseFloat(curVat));
+                 $("#Total").val(tot.toFixed(2));
+                 $(this).attr('data-val', curVat);
+            }
+
+       });
+
+        $("#Discount").keyup(function(){
+            let prev = $(this).attr('data-val');
+            let discount = $(this).val();
+            let tot = $("#Total").val();
+
+            if(parseFloat(prev) > 0){
+                prev = prev;
+            }
+            else{
+                prev=0;
+            }
+
+            if(parseFloat(discount) > 0){
+                discount = discount;
+            }
+            else{
+                discount = 0;
+            }
+
+            if(parseFloat(tot) > 0){
+                tot = tot;
+            }
+            else{
+                tot = 0;
+            }
+
+            tot = (parseFloat(parseFloat(tot) + parseFloat(prev)) - parseFloat(discount));
+
+            $("#Total").val(tot.toFixed(2));
+            $(this).attr('data-val', discount);
+        });
+
+        $("#OtherCharges").keyup(function(){
+            let prev = $(this).attr('data-val');
+            let charges = $(this).val();
+            let tot = $("#Total").val();
+
+            if(parseFloat(prev) > 0){
+                prev = prev;
+            }
+            else{
+                prev=0;
+            }
+
+            if(parseFloat(charges) > 0){
+                charges = charges;
+            }
+            else{
+                charges = 0;
+            }
+
+            if(parseFloat(tot) > 0){
+                tot = tot;
+            }
+            else{
+                tot = 0;
+            }
+
+            tot = (parseFloat(parseFloat(tot) - parseFloat(prev)) + parseFloat(charges));
+
+            $("#Total").val(tot.toFixed(2));
+            $(this).attr('data-val', charges);
+        });
+
+        function ShowCurrentInvoiceDoc() {
+            var docPath = "@invoicePath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#CurrentInvoiceDoc").html(object);
+        }
+
+        function ShowCurrentReceiptDoc() {
+            var docPath = "@receiptPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#CurrentReceiptDoc").html(object);
+        }
+
+        ShowCurrentInvoiceDoc();
+        ShowCurrentReceiptDoc();
+
+        $("#saveBtn").click(function(){
+            let status = $("#Status").val();
+            let returnFlag = false;
+
+
+                if(status == 'true')
+                {
+                    $(".DiffP").each(function () {
+                    
+                        let idx = $(this).attr('data-id');
+                        let d1 = $("#D_" + idx).val();
+                        let d2 = $("#RD_" + idx).val();
+                        let p1 = $("#P_" + idx).val();
+                        let p2 = $("#RP_" + idx).val();
+
+                        if(parseFloat(d1)>0){d1=d1}else{d1=0;}
+                        if(parseFloat(d2)>0){d2=d2}else{d2=0;}
+                        if(parseFloat(p1)>0){p1=p1}else{p1=0;}
+                        if(parseFloat(p2)>0){p2=p2}else{p2=0;}
+
+                       // let diff1 = (parseFloat(d1) - parseFloat(d2));
+                       // let diff2 = (parseFloat(p1) - parseFloat(p2));
+
+                        let diff = (parseFloat((parseFloat(d1) * 12) + parseFloat(p1)) - parseFloat((parseFloat(d2) * 12) + parseFloat(p2)));
+                   
+
+                        if (parseFloat(diff) > 0) {
+                            returnFlag = true;
+                        }
+                    });
+
+                    if(returnFlag == true)
+                    {
+                        $("#IsReturn").val('false');
+                        swal({
+                            title: "@Html.Raw(WebResource.Confirm)",
+                            text: "@Html.Raw(WebResource.CreateReturnNoteConfermation)",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-success",
+                            confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                            cancelButtonText: " @Html.Raw(WebResource.No) ",
+                        });
+                        $(".swal2-confirm").on("click", function () {
+                            $("#IsReturn").val('true');
+                            sleep();
+                            $("#editForm").submit();
+                        });
+                        $(".swal2-cancel").on("click", function () {
+                            $("#IsReturn").val('false');
+                            sleep();
+                            $("#editForm").submit();
+                        });
+                    }
+                    else{
+                         $("#IsReturn").val('false');
+                        $("#editForm").submit();
+                    }
+                }
+                else{
+                    $("#IsReturn").val('false');
+                    $("#editForm").submit();
+                }
+        });
+
+        $("#Status").change(function () {
+            let str = $(this).val();
+            if (str == "true") {
+                $(".RQtyP").each(function () {
+                    $(this).attr('required', 'required');
+                });
+            }
+            else {
+                $(".RQtyP").each(function () {
+                    $(this).removeAttr('required');
+                });
+            }
+        });
+
+         const delay = (delayInms) => {
+              return new Promise(resolve => setTimeout(resolve, delayInms));
+            }
+
+    const sleep = async () => {
+      let delayres = await delay(1000);
+    }
+
+    </script>
+}

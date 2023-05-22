@@ -1,0 +1,1447 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Warehouse.Products.AddViewModel;
+@{
+    ViewData["Title"] = @WebResource.Manage + " " + @WebResource.ProductInfo;
+    string barcodeImgPath = "/Images/ProductBarcodes/";
+    string productImgPath = "/Docs/Products/";
+}
+<style>
+    label{
+       background-color:#eeefef;
+       font-weight:500!important;
+       padding-left:5px;
+       margin-bottom:0px;
+       margin-top:10px;
+       width:100%;
+    }
+
+    .modal-body  {
+        width:600px;
+        margin:0 auto;
+    }
+
+    #pdfbox  {
+        width:700px;
+        height:700px;
+        border:5px solid #ccc;
+    }
+
+    
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <form id="createForm" enctype="multipart/form-data" asp-action="CreateProduct" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="ProductId">@WebResource.Product @WebResource.ID</label>
+                    <input asp-for="ProductId" class="form-control" autocomplete="CompanyName" aria-required="true" />
+                    <span asp-validation-for="ProductId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CompanyId">@WebResource.CompanyName</label>
+                    <select asp-for="CompanyId" class="form-control lst2" asp-items="@ViewBag.Suppliers">
+                        <option value="">@WebResource.CompanyName</option>
+                    </select>
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="VendorId">@WebResource.Vendor</label>
+                    <select asp-for="VendorId" class="form-control lst2" asp-items="@ViewBag.Vendores">
+                        <option value="">@WebResource.Vendor</option>
+                    </select>
+                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="DepartmentId">@WebResource.Department</label>
+                    <select asp-for="DepartmentId" class="form-control lst2" asp-items="@ViewBag.Departments">
+                        <option value="">@WebResource.Department</option>
+                    </select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+
+                 <div class="form-floating col-md-4">
+                    <label asp-for="CategoryId">@WebResource.Category</label>
+                    <select asp-for="CategoryId" class="form-control lst2" asp-items="@ViewBag.Categories">
+                        <option value="">@WebResource.Category</option>
+                    </select>
+                    <input type="hidden" name="ParentCategoryId" id="ParentCategoryId" value="0" />
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                
+                <div class="form-floating col-md-2">
+                    <label asp-for="SeasonId">@WebResource.Seasson</label>
+                    <select asp-for="SeasonId" class="form-control lst2" asp-items="@ViewBag.Seassons">
+                        <option value="">@WebResource.Seasson</option>
+                    </select>
+                    <span asp-validation-for="SeasonId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="SkuId">@WebResource.Model_SKU</label>
+                    <input name="Sku" id="Sku" class="form-control" autocomplete="Style" aria-required="true" />
+                    <input asp-for="SkuId" type="hidden" value="" />
+                    <span asp-validation-for="SkuId" class="text-danger"></span>
+                </div>
+                 <div class="form-floating col-md-4">
+                    <label asp-for="DescriptionId">@WebResource.Description</label>
+                    <select asp-for="DescriptionId" class="form-control lst2" asp-items="@ViewBag.Descriptions">
+                        <option value="">@WebResource.Description</option>
+                    </select>
+                    <span asp-validation-for="DescriptionId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="ColorId">@WebResource.Color</label>
+                    <select asp-for="ColorId" class="form-control lst2" asp-items="@ViewBag.Colors">
+                        <option value="">@WebResource.Color</option>
+                    </select>
+                    <span asp-validation-for="ColorId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="SizeId">@WebResource.Size</label>
+                    <select asp-for="SizeId" class="form-control lst2" asp-items="@ViewBag.Sizes">
+                        <option value="">@WebResource.Size</option>
+                    </select>
+                    <span asp-validation-for="SizeId" class="text-danger"></span>
+                </div>
+               
+                <div class="form-floating col-md-2">
+                    <label asp-for="Unitid">@WebResource.Unit</label>
+                    <select asp-for="Unitid" class="form-control lst2" asp-items="@ViewBag.Units">
+                        <option value="">@WebResource.Unit</option>
+                    </select>
+                    <span asp-validation-for="Unitid" class="text-danger"></span>
+                </div>
+               
+                <div class="form-floating col-md-2">
+                    <label asp-for="BrandId">@WebResource.Brand</label>
+                    <select asp-for="BrandId" class="form-control lst2" asp-items="@ViewBag.Brands">
+                        <option value="">@WebResource.Brand</option>
+                    </select>
+                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="GroupId">@WebResource.Group</label>
+                    <select asp-for="GroupId" class="form-control lst2" asp-items="@ViewBag.Groups">
+                        <option value="">@WebResource.Group</option>
+                    </select>
+                    <span asp-validation-for="GroupId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="YearId">@WebResource.Year</label>
+                    <select asp-for="YearId" class="form-control lst2" asp-items="@ViewBag.Years">
+                        <option value="">@WebResource.Year</option>
+                    </select>
+                    <span asp-validation-for="YearId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label asp-for="ProductNameEng">@WebResource.Product @WebResource.NameEng</label>
+                    <input asp-for="ProductNameEng" class="form-control" />
+                    <span asp-validation-for="ProductNameEng" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-4">
+                    <label asp-for="ProductNameArabic">@WebResource.Product @WebResource.NameArabic</label>
+                    <input asp-for="ProductNameArabic" class="form-control" />
+                    <span asp-validation-for="ProductNameArabic" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-1">
+                    <label for="btnBarcode" style="background-color:transparent!important;">&nbsp;</label>
+                    <input type="button" id="btnBarcode" name="btnBarcode" value="@WebResource.Create @WebResource.Barcode" class="btn btn-flat btn-sm btn-secondary" />
+                </div>
+               
+            </div>
+            <hr /> 
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label>@WebResource.Price</label>
+                    <input asp-for="PriceId" type="hidden" value="0" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label>@WebResource.VAT</label>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label>@WebResource.Org_Price</label>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label>@WebResource.Discount</label>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label>@WebResource.Total</label>
+                </div>
+            </div>
+
+                <div class="row" style="margin-top:10px;">
+                <div class="form-floating col-md-2">
+                    <input asp-for="Price1" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Price 1" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <input asp-for="Price1Vat" class="form-control" data-value="" aria-required="true" autocomplete="off" placeholder="@WebResource.Price 1 @WebResource.VAT" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <input asp-for="OrgPrice1" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Org_Price 1" />
+                </div>
+                 <div class="form-floating col-md-2">
+                    <input asp-for="Discount1" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Discount 1" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label id="Price1Tot"></label>
+                </div>
+            </div>
+                <div class="row" style="margin-top:10px;">
+                <div class="form-floating col-md-2">
+                    <input asp-for="Price2" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Price 2" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <input asp-for="Price2Vat" class="form-control" data-value="" aria-required="true" autocomplete="off" placeholder="@WebResource.Price 2 @WebResource.VAT" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <input asp-for="OrgPrice2" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Org_Price 2" />
+                </div>
+                 <div class="form-floating col-md-2">
+                    <input asp-for="Discount2" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Discount 2" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label id="Price2Tot"></label>
+                </div>
+            </div>
+                <div class="row" style="margin-top:10px;">
+                <div class="form-floating col-md-2">
+                    <input asp-for="Price3" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Price 3" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <input asp-for="Price3Vat" class="form-control" data-value="" aria-required="true" autocomplete="off" placeholder="@WebResource.Price 3 @WebResource.VAT" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <input asp-for="OrgPrice3" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Org_Price 3" />
+                </div>
+                 <div class="form-floating col-md-2">
+                    <input asp-for="Discount3" class="form-control" aria-required="true" autocomplete="off" placeholder="@WebResource.Discount 3" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label id="Price3Tot"></label>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row" style="margin-top:20px;">
+                <div class="form-floating col-md-2">
+                    <label asp-for="CostPrice">@WebResource.Cost @WebResource.Price</label>
+                    <input asp-for="CostPrice" class="form-control" />
+                    <span asp-validation-for="CostPrice" class="text-danger"></span>
+                </div>
+                 <div class="form-floating col-md-2">
+                    <label asp-for="MinQty">@WebResource.Min @WebResource.Qty</label>
+                    <input asp-for="MinQty" class="form-control" />
+                    <span asp-validation-for="MinQty" class="text-danger"></span>
+                </div>
+                 <div class="form-floating col-md-2">
+                    <label asp-for="Currentstock">@WebResource.Current @WebResource.Stock</label>
+                    <input asp-for="Currentstock" class="form-control" data-val="0" readonly />
+                    <span asp-validation-for="Currentstock" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="NewStock">@WebResource.Add @WebResource.New @WebResource.Stock</label>
+                    <input asp-for="NewStock" class="form-control" data-val="0" />
+                    <span asp-validation-for="NewStock" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackBarcode">@WebResource.Pack @WebResource.Barcode</label>
+                    <input asp-for="PackBarcode" class="form-control" />
+                    <span asp-validation-for="PackBarcode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="PackDescription">@WebResource.Pack @WebResource.Description</label>
+                    <input asp-for="PackDescription" class="form-control" />
+                    <span asp-validation-for="PackDescription" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="QtyPerPack">@WebResource.QtyPerPack</label>
+                    <input asp-for="QtyPerPack" class="form-control" />
+                    <span asp-validation-for="QtyPerPack" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackPrice">@WebResource.Pack @WebResource.Price</label>
+                    <input asp-for="PackPrice" class="form-control" />
+                    <span asp-validation-for="PackPrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackCost">@WebResource.Pack @WebResource.Cost</label>
+                    <input asp-for="PackCost" class="form-control" />
+                    <span asp-validation-for="PackCost" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="row">
+                
+                 <div class="form-floating col-md-2">
+                    <label asp-for="UnitBarcode">@WebResource.Unit @WebResource.Barcode</label>
+                    <input asp-for="UnitBarcode" class="form-control" />
+                    <span asp-validation-for="UnitBarcode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitDescription">@WebResource.Unit @WebResource.Description</label>
+                    <input asp-for="UnitDescription" class="form-control" />
+                    <span asp-validation-for="UnitDescription" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-2">
+                    <label asp-for="QtyPerUnit">@WebResource.QtyPerUnit</label>
+                    <input asp-for="QtyPerUnit" class="form-control" />
+                    <span asp-validation-for="QtyPerUnit" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitSalePrice">@WebResource.Unit @WebResource.Sale @WebResource.Price</label>
+                    <input asp-for="UnitSalePrice" class="form-control" />
+                    <span asp-validation-for="UnitSalePrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitCost">@WebResource.Unit @WebResource.Cost</label>
+                    <input asp-for="UnitCost" class="form-control" />
+                    <span asp-validation-for="UnitCost" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-1">
+                    <label asp-for="BoxNo">@WebResource.Box @WebResource.No</label>
+                    <input asp-for="BoxNo" class="form-control" />
+                    <span asp-validation-for="BoxNo" class="text-danger"></span>
+                </div>
+
+            </div>
+
+           @* <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField1">@WebResource.Custom @WebResource.Field 1</label>
+                    <input asp-for="CustomField1" class="form-control" />
+                    <span asp-validation-for="CustomField1" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField2">@WebResource.Custom @WebResource.Field 2</label>
+                    <input asp-for="CustomField2" class="form-control" />
+                    <span asp-validation-for="CustomField2" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField3">@WebResource.Custom @WebResource.Field 3</label>
+                    <input asp-for="CustomField3" class="form-control" />
+                    <span asp-validation-for="CustomField3" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField4">@WebResource.Custom @WebResource.Field 4</label>
+                    <input asp-for="CustomField4" class="form-control" />
+                    <span asp-validation-for="CustomField4" class="text-danger"></span>
+                </div>
+            </div>*@
+
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="MfgDate">@WebResource.Manufacture @WebResource.Date</label>
+                    <input type="text" name="MfgDate" id="MfgDate" class="form-control datefield" aria-required="true" autocomplete="off" />
+                    <span asp-validation-for="MfgDate" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-floating col-md-2">
+                    <label asp-for="ExpDate">@WebResource.ExpireDate</label>
+                    <input type="text" name="ExpDate" id="ExpDate" class="form-control datefield" aria-required="true" autocomplete="off" />
+                    <span asp-validation-for="ExpDate" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="WarrantyPeriod">@WebResource.WarrantyPeriod</label>
+                    <input asp-for="WarrantyPeriod" class="form-control" />
+                    <span asp-validation-for="WarrantyPeriod" class="text-danger"></span>
+                </div>
+               
+                <div class="form-floating col-md-4">
+                    <label asp-for="Image">@WebResource.Image</label>
+                    <input type="file" id="AttachedDoc" name="AttachedDoc" class="form-control" accept=".jpg, .jpeg, .png" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                
+
+            </div>
+
+            <div class="row" style="display:none;">
+                <div class="form-floating col-md-4">
+                    <label asp-for="StoreId">@WebResource.Store</label>
+                    <select asp-for="StoreId" class="form-control lst2" asp-items="@ViewBag.Stores">
+                        <option value="">@WebResource.Store</option>
+                    </select>
+                    <span asp-validation-for="StoreId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <div class="row">
+                 <div class="form-floating col-md-3">
+                    <button id="updateSubmit" type="submit" class="w-100 btn btn-lg btn-primary">@WebResource.Create</button>
+                </div>
+                <div class="form-floating col-md-3">
+                    <input id="btnDelete" type="button" class="w-100 btn btn-lg btn-danger" value="@WebResource.Delete" style="display:none;" />
+                </div>
+                <div class="form-floating col-md-3">
+                    <input id="btnPrintBarcode" type="button" class="w-100 btn btn-lg btn-success" value="@WebResource.PrintBarcode" />
+                </div>
+                 <div class="form-floating col-md-3">
+                    <input id="btnPrintBarcode1" type="button" class="w-100 btn btn-lg btn-success" value="@WebResource.Barcode @WebResource.PrintWithoutVat" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row" style="margin-top:30px; margin-bottom:20px;">
+         <div class="form-floating col-md-6"></div>
+         <div class="form-floating col-md-6">
+             <img src="" id="ProductImg" style="max-width:500px;" />
+         </div>
+    </div>
+</div>
+
+<div id="dialog" title="Barcode">
+    
+ </div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+        $(document).ready(function () {
+            $(".datefield").datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                todayHighlight: true,
+                autoclose: true
+            });
+        });
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+        function OnSuccess(data, status, xhr) {
+            let curId = $("#Id").val();
+            if(parseInt(curId) > 0){
+                swal({
+                    type: 'success',
+                    title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                    text: "@Html.Raw(WebResource.RecordUpdated)",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    button: {
+                        className: "btn theme waves-effect waves-light"
+                    }
+                }).then((value) => {
+                    window.location.replace("/Warehouse/Products");
+                });
+            }
+            else{
+                    swal({
+                    type: 'success',
+                    title: "@Html.Raw(WebResource.CreatedSuccessfully)",
+                    text: "@Html.Raw(WebResource.RecordCreated)",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    button: {
+                        className: "btn theme waves-effect waves-light"
+                    }
+                }).then((value) => {
+                    window.location.replace("/Warehouse/Products");
+                });
+            }
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        var vatx = "@ViewBag.VatPercentage";
+
+        $('.lst2').select2();
+
+        $(".form-control").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                var inputs = $(".form-control");
+                var curIndex = inputs.index(this);
+                var nextIndex = (parseInt(curIndex) + 1);
+                inputs[nextIndex].focus();
+            }
+        });
+
+        $("#DescriptionId").change(function(){
+            $("#ProductNameEng").val('');
+            $("#ProductNameArabic").val('');
+            var Id = $(this).val();
+            if(parseInt(Id) > 0){
+                GetDescriptionInfo(Id);
+            }
+        });
+
+
+         $("#ProductId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Purchase/GetBarcodes",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.ProductId, value: item.ProductId, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#Id").val('');
+                ResetFields();
+                $("#ProductId").val(ui.item.value);
+                $("#Id").val(ui.item.title);
+                GetProductInfoById(ui.item.title);
+                GetPriceInfo(ui.item.title);
+
+                if(parseInt(ui.item.title) > 0){
+                    $("#updateSubmit").text("@WebResource.Save");
+                }
+                else{
+                    $("#updateSubmit").text("@WebResource.Create");
+                }
+            }
+        });
+
+        function ResetFields(){
+            $('#createForm input[type="text"]').val('');
+            $('#createForm input[type="number"]').val('');
+            $('.lst2').each(function(){
+                $(this).val('');
+                $(this).trigger('change.select2');
+            });
+        }
+
+        $("#ProductId").keyup(function(){
+            let valx = $(this).val();
+            if(valx == ""){
+                ResetFields();
+            }
+        });
+
+        function GetProductInfoById(Id){
+            $.ajax({
+                url: "/Purchase/GetProductInfoById",
+                type: "POST",
+                dataType: "json",
+                data: { id: Id },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#CompanyId").val(result.CompanyId);
+                    $("#CompanyId").trigger('change.select2');
+                    $("#VendorId").val(result.VendorId);
+                    $("#VendorId").trigger('change.select2');
+                    $("#DepartmentId").val(result.DepartmentId);
+                    $("#DepartmentId").trigger('change.select2');
+                    $("#CategoryId").val(result.CategoryId);
+                    $("#CategoryId").trigger('change.select2');
+                    $("#SeasonId").val(result.SeasonId);
+                    $("#SeasonId").trigger('change.select2');
+                    $("#SkuId").val(result.SkuId);
+                    $("#Sku").val(result.SkuCode);
+                    $("#Category").val(result.CategoryId);
+                    $("#Category").trigger('change.select2');
+                    $("#SkuId").val(result.SkuId);
+                    $("#SkuId").trigger('change.select2');
+                    $("#DescriptionId").val(result.DescriptionId);
+                    $("#DescriptionId").trigger('change.select2');
+                    $("#ColorId").val(result.ColorId);
+                    $("#ColorId").trigger('change.select2');
+                    $("#SizeId").val(result.SizeId);
+                    $("#SizeId").trigger('change.select2');
+                    $("#Unitid").val(result.Unitid);
+                    $("#Unitid").trigger('change.select2');
+                    $("#BrandId").val(result.BrandId);
+                    $("#BrandId").trigger('change.select2');
+                    $("#GroupId").val(result.GroupId);
+                    $("#GroupId").trigger('change.select2');
+                    $("#YearId").val(result.YearId);
+                    $("#YearId").trigger('change.select2');
+                    $("#ProductInitialPrice").val(result.ProductInitialPrice);
+                    $("#CostPrice").val(result.CostPrice);
+                    $("#Price1").val(result.ProductInitialPrice);
+                    $("#Discount1").val(result.Discount);
+                    $("#UnitBarcode").val(result.UnitBarcode);
+                    $("#UnitDescription").val(result.UnitDescription);
+                    $("#QtyPerUnit").val(result.QtyPerUnit);
+                    $("#UnitSalePrice").val(result.UnitSalePrice);
+                    $("#UnitCost").val(result.UnitCost);
+                    $("#BoxNo").val(result.BoxNo);
+                    $("#MinQty").val(result.MinQty);
+                    $("#PackBarcode").val(result.PackBarcode);
+                    $("#PackDescription").val(result.PackDescription);
+                    $("#QtyPerPack").val(result.QtyPerPack);
+                    $("#PackPrice").val(result.PackPrice);
+                    $("#PackCost").val(result.PackCost);
+                    $("#PackDescription").val(result.PackDescription);
+                    $("#QtyPerPack").val(result.QtyPerPack);
+                    $("#PackPrice").val(result.PackPrice);
+                    $("#PackCost").val(result.PackCost);
+                    $("#OrgPrice1").val(result.OreginalPrice);
+                    $("#Price1Vat").val(result.Vat);
+                    $("#ProductNameEng").val(result.ProductNameEng);
+                    $("#ProductNameArabic").val(result.ProductNameArabic);
+                    $("#MfgDate").val(result.MfgDate);
+                    $("#ExpDate").val(result.ExpDate);
+                    $("#WarrantyPeriod").val(result.WarrantyPeriod);
+                    $("#Currentstock").val(result.Currentstock);
+                    $("#Currentstock").attr('data-val',result.Currentstock);
+                    if(result.Image != ""){
+                        let imgPath = "@productImgPath" + result.Image;
+                        $("#ProductImg").attr("src", imgPath);
+                    }
+                    
+                    $("#OrgPrice1").val(result.OrgPrice1);
+                    $("#OrgPrice2").val(result.OrgPrice2);
+                    $("#OrgPrice3").val(result.OrgPrice3);
+                    $("#Discount1").val(result.Discount1);
+                    $("#Discount2").val(result.Discount2);
+                    $("#Discount3").val(result.Discount3);
+
+                    if (parseFloat(result.Currentstock) > 0) {
+                        $("#btnDelete").css('display', 'none');
+                    }
+                    else{
+                        $("#btnDelete").css('display', '');
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+         $("#CategoryId").change(function(){
+
+            var curId = $(this).val();
+
+            if(parseInt(curId) > 0){
+                $.ajax({
+                    url: "/Purchase/GetParentCategoryId",
+                type: "POST",
+                dataType: "json",
+                    data: { id: curId },
+                success: function (data) {
+                     $("#ParentCategoryId").val(data);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+            }
+            else{
+                $("#ParentCategoryId").val('0');
+            }
+
+        });
+
+        $("#Sku").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Purchase/GetSkuModels",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.Code, value: item.Code, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#Sku").val(ui.item.value);
+                $("#SkuId").val(ui.item.title);
+            }
+        });
+
+        function AddNewSku(Code){
+            $.ajax({
+                url: "/Warehouse/AddNewProductSku/" + Code,
+                type: "POST",
+                dataType: "json",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                success: function (data) {
+                    $('#SkuId').val(data.id);
+                    sleep();
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        $('#Sku').keyup(function(e){
+            let code = $(this).val();
+            if(code==""){
+                $('#SkuId').val('');
+            }
+        });
+
+        $('#Sku').bind("keypress",function(e){
+            let code = $(this).val();
+            if(code==""){
+                $('#SkuId').val('');
+            }
+            if(e.keyCode == 13){
+                let curSkuId = $('#SkuId').val();
+                if(code != "" && (curSkuId == "" || curSkuId == "0")){
+                    AddNewSku(code);
+                    sleep();
+                }
+                if (code == "") {
+                    $('#SkuId').val('');
+                }
+            }
+        });
+
+        $('#Sku').focusout(function(e){
+            let code = $('#Sku').val();
+            let curSkuId = $('#SkuId').val();
+
+            if (code == "") {
+                $('#SkuId').val('');
+            }
+
+                if(code != "" && (curSkuId == "" || curSkuId == "0")){
+                    AddNewSku(code);
+                    sleep();
+                }
+        });
+
+        $("#btnBarcode").click(function(){
+            let dept = $("#DepartmentId").val();
+            let cat = $("#ParentCategoryId").val();
+            let subcat = $("#CategoryId").val();
+            let sku = $("#Sku").val();
+            let skuId = $("#SkuId").val();
+            let color = $("#ColorId").val();
+            let size = $("#SizeId").val();
+            let curYear = $("#YearId option:selected").text();
+            let seasson = $("#SeasonId").val();
+            let company = $("#CompanyId").val();
+
+            if (parseInt(dept) > 0){
+                dept = dept;
+            }
+            else{
+                dept = 0;
+            }
+
+            if (parseInt(cat) > 0) {
+                cat = cat;
+                if (parseInt(cat) < 10){
+                    cat = "0" + cat;
+                }
+            }
+            else{
+                cat = "00";
+            }
+
+            if (parseInt(subcat) > 0) {
+                subcat = subcat;
+                if (parseInt(subcat) < 10) {
+                    subcat = "0" + subcat;
+                }
+            }
+            else {
+                subcat = "00";
+            }
+
+           
+            if (parseInt(color) > 0) {
+                color = color;
+                if (parseInt(color) < 10) {
+                    color = "0" + color;
+                }
+            }
+            else{
+                color = "00";
+            }
+
+            if (parseInt(size) > 0) {
+                size = size;
+                if (parseInt(size) < 10) {
+                    size = "0" + size;
+                }
+            }
+            else {
+                size = "00";
+            }
+
+            if (parseInt(seasson) > 0) {
+                seasson = seasson;
+            }
+            else {
+                seasson = "0";
+            }
+
+            if(parseInt(skuId) > 0){skuId = skuId;}else{skuId=0;}
+
+            if(parseInt(skuId) <10){
+                skuId = "00000" + skuId;
+            }
+            else{
+                if(parseInt(skuId) <100){
+                    skuId = "0000" + skuId;
+                }
+                else{
+                    if(parseInt(skuId) <1000){
+                        skuId = "000" + skuId;
+                    }
+                    else{
+                        if(parseInt(skuId) <10000){
+                            skuId = "00" + skuId;
+                        }
+                        else{
+                            if(parseInt(skuId) <100000){
+                                skuId = "0" + skuId;
+                            }
+                            else{
+                                skuId = skuId;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (parseInt(company) > 0) {
+                if(parseInt(company) <10){
+                    company = "00" + company;
+                }
+                if(parseInt(company) >=10 && parseInt(company) <100){
+                    company = "0" + company;
+                }
+                if(parseInt(company) >=1000){
+                company = company;
+                }
+            }
+            else {
+                company = "000";
+            }
+
+           // let barcode = dept + cat + subcat + color + size + curYear + seasson + company;
+            let barcode = "7" + dept + cat + subcat + skuId + color + size + curYear + seasson + "1";
+            //$("#ProductId").val(barcode);
+            CheckBarcode(barcode);
+            sleep();
+        });
+
+        function CheckBarcode(code){
+            let newCode = code;
+             $.ajax({
+                url: "/Purchase/GetProductIdByBarcode",
+                type: "POST",
+                dataType: "json",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                data: { code: code },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    if(parseInt(result) > 0)
+                    {
+                        let lastNo = code.slice(-1);
+                        var strNewCode = code.substring(0, code.length - 1);
+                        if(parseFloat(lastNo) < 9){
+                            newCode = strNewCode + (parseInt(lastNo) + 1);
+                            $("#ProductId").val(newCode);
+                            CheckBarcode(newCode);
+                            sleep();
+                        }
+                        else{
+                            swal({
+                                title: "@Html.Raw(WebResource.Warning)",
+                                text: "Barcode already exists!",
+                                type: "warning",
+                             });
+                        }
+                    }
+                    else{
+                        $("#ProductId").val(newCode);
+                        sleep();
+                    }
+
+                    //if(result == "0"){
+                    //     swal({
+                    //        title: "@Html.Raw(WebResource.Warning)",
+                    //        text: "@Html.Raw(WebResource.BarcodeNotFound)",
+                    //        type: "warning",
+                    //    });
+                    //}
+
+             },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        $("#ProductId").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                let barcode = $(this).val();
+                if(barcode != ""){
+                    //CheckBarcode(barcode);
+                }
+            }
+        });
+
+        $("#ProductId").focusout(function () {
+            let barcode=$(this).val();
+                if(barcode != ""){
+                   // CheckBarcode(barcode);
+                }
+        });
+
+
+         function GetDescriptionInfo(Id) {
+            $.ajax({
+                url: "/Warehouse/GetDescriptionData",
+                type: "POST",
+                dataType: "json",
+                data: { id: Id },
+                success: function (data) {
+                   var result = JSON.parse(JSON.stringify(data));
+                    $("#ProductNameEng").val(result.NameEng);
+                    $("#ProductNameArabic").val(result.NameArabic);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+
+        function GetPriceInfo(Id) {
+                $("#Price1").val('');
+                $("#Price2").val('');
+                $("#Price3").val('');
+                $("#Price1Vat").val('');
+                $("#OrgPrice1").val('');
+                $("#Discount1").val('');
+                $("#Price1Tot").text('');
+                $("#Price2Vat").val('');
+                $("#OrgPrice2").val('');
+                $("#Discount2").val('');
+                $("#Price21Tot").text('');
+                $("#Price3Vat").val('');
+                $("#OrgPrice3").val('');
+                $("#Discount3").val('');
+                $("#Price3Tot").text('');
+            $.ajax({
+                url: "/Warehouse/GetProductPrice",
+                type: "POST",
+                dataType: "json",
+                data: { id: Id },
+                success: function (data) {
+                    if(data!=null)
+                    {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#PriceId").val(result.Id);
+                        $("#Price1").val(result.Price1);
+                        $("#Price1Vat").val(result.Price1Vat);
+                        $("#Price2").val(result.Price2);
+                        $("#Price2Vat").val(result.Price2Vat);
+                        $("#Price3").val(result.Price3);
+                        $("#Price3Vat").val(result.Price3Vat);
+                        $("#Price1Vat").attr('data-value',result.Price1Vat);
+                        $("#Price2Vat").attr('data-value',result.Price2Vat);
+                        $("#Price3Vat").attr('data-value',result.Price3Vat);
+                        $("#OrgPrice1").val(result.OrgPrice1);
+                        $("#OrgPrice2").val(result.OrgPrice2);
+                        $("#OrgPrice3").val(result.OrgPrice3);
+                        $("#Discount1").val(result.Discount1);
+                        $("#Discount2").val(result.Discount2);
+                        $("#Discount3").val(result.Discount3);
+
+                        if(parseFloat(result.Price1) > 0){
+                            Price1ChangeAuto(result.Price1,result.Discount1);
+                        }
+                        if(parseFloat(result.Price2) > 0){
+                            Price2ChangeAuto(result.Price2,result.Discount2);
+                        }
+                        if(parseFloat(result.Price3) > 0){
+                            Price3ChangeAuto(result.Price3,result.Discount3);
+                        }                          
+                    }
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+
+        $("#NewStock").keyup(function(){
+            let stockN = $(this).val();
+            let stockO = $("#Currentstock").attr('data-val');
+            let stockCO = $(this).attr('data-val');
+            let stockC = 0;
+            
+
+            if(parseFloat(stockN) > 0 || parseFloat(stockN) < 0){
+                stockN = stockN;
+            }
+            else{
+                stockN=0;
+            }
+
+            if(parseFloat(stockO) > 0 || parseFloat(stockO) < 0){
+                stockO = stockO;
+            }
+            else{
+                stockO = 0;
+            }
+
+            if(parseFloat(stockCO) > 0 || parseFloat(stockCO) < 0){
+                stockCO = stockCO;
+            }
+            else{
+                stockCO = 0;
+            }
+
+            stockC = (parseFloat(parseFloat(stockO) - parseFloat(stockCO)) + parseFloat(stockN));
+            $("#Currentstock").val(stockC);
+            $("#Currentstock").attr('data-val', stockC);
+            $(this).attr('data-val', stockN);
+        });
+
+
+        $("#btnDelete").click(function(){
+            let Id = $("#Id").val();
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Warehouse/DeleteProduct/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        });
+
+        $("#btnPrintBarcode1").click(function(){
+            let Id = $("#Id").val();
+            let curPrice = $("#Price1").val();
+           
+            let storeId = 0;// $("#StoreId").val();
+            if (parseInt(Id) > 0 && parseFloat(curPrice) > 0) {
+                 $.ajax({
+                    url: "/Warehouse/CreateBarcode/" + Id + "/" + storeId + "?price=" + curPrice + "&flag=false",
+                    type: "POST",
+                    dataType: "json",
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        BarcodePopup(data);
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+        });
+
+         $("#btnPrintBarcode").click(function(){
+            let Id = $("#Id").val();
+            let curPrice = $("#Price1").val();
+            let vat = $("#Price1Vat").val();
+            let storeId = 0;// $("#StoreId").val();
+            let productPrice = 0;
+
+            if(parseFloat(curPrice)>0){
+                productPrice = curPrice;
+            }
+
+            if (parseFloat(vat) > 0) {
+                productPrice = parseFloat(productPrice) + parseFloat(vat);
+            }
+
+            if(parseInt(Id) > 0 && parseFloat(productPrice) > 0){
+                 $.ajax({
+                    url: "/Warehouse/CreateBarcode/" + Id + "/" + storeId + "?price=" + productPrice + "&flag=true",
+                    type: "POST",
+                    dataType: "json",
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        BarcodePopup(data);
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+        });
+
+        function BarcodePopup(Doc)
+        {
+            let FileName = "@barcodeImgPath" + Doc;
+            printJS(FileName);
+        }
+
+        function Price1Change(){
+            let vat = parseFloat(vatx);
+            let price = $("#Price1").val();
+            let discount = $("#Discount1").val();
+
+            if (parseFloat(discount) > 0){
+                discount = discount;
+            }
+            else{
+                discount=0;
+            }
+
+            if(parseFloat(price) > 0){
+                let orgPrice=(parseFloat(price)-parseFloat(discount));
+                let curVat = (parseFloat(orgPrice) * (parseFloat(vat)/100));
+                let tot = (parseFloat(orgPrice) + parseFloat(curVat));
+                $("#Price1Vat").val(curVat.toFixed(2));
+                $("#OrgPrice1").val(orgPrice.toFixed(2));
+                $("#Price1Tot").text(tot.toFixed(2));
+
+            }
+            else{
+                $("#Price1Vat").val('');
+                $("#OrgPrice1").val('');
+                $("#Discount1").val('');
+                $("#Price1Tot").text('');
+            }
+        }
+
+        function Price1ChangeAuto(Price, Discount){
+            let vat = parseFloat(vatx);
+            let price = Price;
+            let discount = Discount;
+
+            if (parseFloat(discount) > 0){
+                discount = discount;
+            }
+            else{
+                discount=0;
+            }
+
+            if(parseFloat(price) > 0){
+                let orgPrice=(parseFloat(price)-parseFloat(discount));
+                let curVat = (parseFloat(orgPrice) * (parseFloat(vat)/100));
+                let tot = (parseFloat(orgPrice) + parseFloat(curVat));
+                $("#Price1Vat").val(curVat.toFixed(2));
+                $("#OrgPrice1").val(orgPrice.toFixed(2));
+                $("#Price1Tot").text(tot.toFixed(2));
+
+            }
+            else{
+                $("#Price1Vat").val('');
+                $("#OrgPrice1").val('');
+                $("#Discount1").val('');
+                $("#Price1Tot").text('');
+            }
+        }
+       
+        function Price2Change(){
+            let vat = parseFloat(vatx);
+            let price = $("#Price2").val();
+
+            let discount = $("#Discount2").val();
+
+            if (parseFloat(discount) > 0){
+                discount = discount;
+            }
+            else{
+                discount=0;
+            }
+
+            if(parseFloat(price) > 0){
+                let orgPrice=(parseFloat(price)-parseFloat(discount));
+                let curVat = (parseFloat(orgPrice) * (parseFloat(vat)/100));
+                let tot = (parseFloat(orgPrice) + parseFloat(curVat));
+                $("#Price2Vat").val(curVat.toFixed(2));
+                $("#OrgPrice2").val(orgPrice.toFixed(2));
+                $("#Price2Tot").text(tot.toFixed(2));
+            }
+            else{
+                $("#Price2Vat").val('');
+                $("#OrgPrice2").val('');
+                $("#Discount2").val('');
+                $("#Price2Tot").text('');
+            }
+        }
+
+        function Price2ChangeAuto(Price, Discount){
+            let vat = parseFloat(vatx);
+            let price = Price;
+
+            let discount = Discount;
+
+            if (parseFloat(discount) > 0){
+                discount = discount;
+            }
+            else{
+                discount=0;
+            }
+
+            if(parseFloat(price) > 0){
+                let orgPrice=(parseFloat(price)-parseFloat(discount));
+                let curVat = (parseFloat(orgPrice) * (parseFloat(vat)/100));
+                let tot = (parseFloat(orgPrice) + parseFloat(curVat));
+                $("#Price2Vat").val(curVat.toFixed(2));
+                $("#OrgPrice2").val(orgPrice.toFixed(2));
+                $("#Price2Tot").text(tot.toFixed(2));
+            }
+            else{
+                $("#Price2Vat").val('');
+                $("#OrgPrice2").val('');
+                $("#Discount2").val('');
+                $("#Price2Tot").text('');
+            }
+        }
+
+        function Price3Change(){
+            let vat = parseFloat(vatx);
+            let price = $("#Price3").val();
+
+            let discount = $("#Discount3").val();
+
+            if (parseFloat(discount) > 0) {
+                discount = discount;
+            }
+            else {
+                discount = 0;
+            }
+
+            if (parseFloat(price) > 0) {
+                let orgPrice = (parseFloat(price) - parseFloat(discount));
+                let curVat = (parseFloat(orgPrice) * (parseFloat(vat) / 100));
+                let tot = (parseFloat(orgPrice) + parseFloat(curVat));
+                $("#Price3Vat").val(curVat.toFixed(2));
+                $("#OrgPrice3").val(orgPrice.toFixed(2));
+                $("#Price3Tot").text(tot.toFixed(2));
+            }
+            else {
+                $("#Price3Vat").val('');
+                $("#OrgPrice3").val('');
+                $("#Discount3").val('');
+                $("#Price3Tot").text('');
+            }
+        }
+
+        function Price3ChangeAuto(Price, Discount) {
+            let vat = parseFloat(vatx);
+            let price = Price;
+
+            let discount = Discount;
+
+            if (parseFloat(discount) > 0) {
+                discount = discount;
+            }
+            else {
+                discount = 0;
+            }
+
+            if (parseFloat(price) > 0) {
+                let orgPrice = (parseFloat(price) - parseFloat(discount));
+                let curVat = (parseFloat(orgPrice) * (parseFloat(vat) / 100));
+                let tot = (parseFloat(orgPrice) + parseFloat(curVat));
+                $("#Price3Vat").val(curVat.toFixed(2));
+                $("#OrgPrice3").val(orgPrice.toFixed(2));
+                $("#Price3Tot").text(tot.toFixed(2));
+            }
+            else {
+                $("#Price3Vat").val('');
+                $("#OrgPrice3").val('');
+                $("#Discount3").val('');
+                $("#Price3Tot").text('');
+            }
+        }
+        
+        $("#Price1").keyup(function(){
+            Price1Change();
+        });
+
+        $("#Price2").keyup(function(){
+            Price2Change();
+        });
+
+        $("#Price3").keyup(function () {
+            Price3Change()
+        });
+
+        $("#Discount1").keyup(function(){
+            Price1Change()
+        });
+        $("#Discount2").keyup(function(){
+           Price2Change()
+        });
+        $("#Discount3").keyup(function(){
+            Price3Change()
+        });
+
+        $("#Price1Vat").keyup(function () {
+            let oldval = $(this).attr('data-value');
+            let curVal = $(this).val();
+            let curPrice = $("#Price1").val();
+            let newTot = 0;
+           
+            if (parseFloat(curVal) > 0){
+                curVal = curVal;
+            }
+            else {
+                curVal = 0;
+            }
+
+            if (parseFloat(curPrice) > 0) {
+                newTot = (parseFloat(curPrice) + parseFloat(curVal));
+            }
+
+            $("#Price1Tot").text(newTot.toFixed(2));
+            $(this).attr('data-value',curVal);
+        });
+        $("#Price2Vat").keyup(function () {
+            let oldval = $(this).attr('data-value');
+            let curVal = $(this).val();
+            let curPrice = $("#Price2").val();
+            let newTot = 0;
+            if(parseFloat(oldval) > 0){
+                oldval = oldval;
+            }
+            else{
+                oldval=0;
+            }
+            if (parseFloat(curVal) > 0){
+                curVal = curVal;
+            }
+            else {
+                curVal = 0;
+            }
+
+            if (parseFloat(curPrice) > 0) {
+                newTot = (parseFloat(curPrice) + parseFloat(curVal));
+            }
+
+            $("#Price2Tot").text(newTot.toFixed(2));
+            $(this).attr('data-value',curVal);
+        });
+        $("#Price3Vat").keyup(function () {
+            let oldval = $(this).attr('data-value');
+            let curVal = $(this).val();
+            let curPrice = $("#Price3").val();
+            let newTot = 0;
+            if(parseFloat(oldval) > 0){
+                oldval = oldval;
+            }
+            else{
+                oldval=0;
+            }
+            if (parseFloat(curVal) > 0){
+                curVal = curVal;
+            }
+            else {
+                curVal = 0;
+            }
+
+            if (parseFloat(curPrice) > 0) {
+                newTot = (parseFloat(curPrice) + parseFloat(curVal));
+            }
+
+            $("#Price3Tot").text(newTot.toFixed(2));
+            $(this).attr('data-value',curVal);
+        });
+
+        const delay = (delayInms) => {
+            return new Promise(resolve => setTimeout(resolve, delayInms));
+        }
+
+        const sleep = async () => {
+            let delayres = await delay(1000);
+        }
+
+    </script>
+}

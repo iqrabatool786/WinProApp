@@ -1,0 +1,403 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@using WinProApp.ViewModels.Merchant.Vouchares;
+@model AddEditViewModel;
+@{
+    ViewData["Title"] = "Manage Vouchers";
+    Layout = "~/Views/Shared/_DashBoardLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h5 id="subTitle">@WebResource.Create @WebResource.Voucher</h5>
+        <form id="manageForm" method="post" asp-action="CreateUpdateVouchers" asp-controller="Merchant" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="StoreId">@WebResource.Store</label>
+                    <select id="StoreId" name="StoreId" class="form-control" asp-items="@ViewBag.StoreInfo">
+                        <option value="0">All</option>
+                    </select>
+                    <span asp-validation-for="StoreId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="IsMembersOnly">@WebResource.Type</label>
+                    <select id="IsMembersOnly" name="IsMembersOnly" class="form-control">
+                        <option value="false">All Customers</option>
+                        <option value="true">Members Only</option>
+                    </select>
+                    <span asp-validation-for="IsMembersOnly" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="StartDate">@WebResource.Start @WebResource.Date</label>
+                    <input type="text" id="StartDate" name="StartDate" class="form-control datefield" value="" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="EndDate">@WebResource.End @WebResource.Date</label>
+                    <input type="text" id="EndDate" name="EndDate" class="form-control datefield" value="" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Approved">@WebResource.Approved</label>
+                    <select id="Approved" name="Approved" class="form-control">
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                    <span asp-validation-for="Approved" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-12 row">
+                    <h4>@WebResource.Discount Ranges </h4>
+                </div>
+                <div class="col-md-12 row">
+                    <div class="form-floating col-md-1">
+                        <label>&nbsp;</label>
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label>@WebResource.Max @WebResource.Amount</label>
+                    </div>
+                   @* <div class="form-floating col-md-2">
+                        <label>@WebResource.To @WebResource.Amount</label>
+                    </div>*@
+                    <div class="form-floating col-md-2">
+                        <label>@WebResource.Voucher @WebResource.Amount</label>
+                    </div>
+                </div>
+                @{
+                    int r = 0;
+                }
+                @for(int i=0; i<15; i++)
+                {
+                    <div class="col-md-12 row" style="margin-bottom:10px;">
+                        <div class="form-floating col-md-1" style="text-align:right;">
+                            @(i+1)
+                            <input type="hidden" name="itemId" id="ItemId_@i" class="itemIdx" value="0" />
+                        </div>
+                        <div class="form-floating col-md-2">
+                            @if (i == 0)
+                            {
+                                <input type="number" name="EndAmount" id="EndAmount_@i" data-id="Amount_@r" class="form-control startX txt" value="" required />
+                            }
+                            else
+                            {
+                                <input type="number" name="EndAmount" id="EndAmount_@i" data-id="Amount_@r" class="form-control startX txt" value="" />
+                            }
+                        </div>
+@*                        <div class="form-floating col-md-2">
+                            <input type="number" name="EndAmount" id="strAmount_@(r+1)" class="form-control endX txt" value="" required />
+                        </div>*@
+                        <div class="form-floating col-md-2">
+                            @if (i == 0)
+                            {
+                                <input type="number" name="VoucharAmount" id="strAmount_@i" class="form-control amountX txt" value="" required />
+                            }
+                            else
+                            {
+                                <input type="number" name="VoucharAmount" id="strAmount_@i" class="form-control amountX txt" value="" />
+                            }
+                        </div>
+                    </div>
+
+                    r +=2;
+                }
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+            <input type="button" id="reloadBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3" value="@WebResource.Refresh" />
+        </form>
+    </div>
+
+</div>
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <hr />
+        <h3>@WebResource.Discount @WebResource.List</h3>
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Store
+                    </th>
+                    <th>
+                        @WebResource.Start @WebResource.Date
+                    </th>
+                    <th>
+                        @WebResource.End @WebResource.Date
+                    </th>
+                    <th>
+                        @WebResource.Type
+                    </th>
+                    <th>
+                        @WebResource.Approved
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script type="text/javascript">
+            $("form").attr('autocomplete', 'off');
+            var curId = $("#Id").val();
+            var msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+            var msg2 = "@Html.Raw(WebResource.RecordCreated)";
+
+
+
+            function OnSuccess(data, status, xhr) {
+                if (parseInt(curId) > 0) {
+                    msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+                    msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+                }
+                else {
+                    msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                    msg2 = "@Html.Raw(WebResource.RecordCreated)";
+                }
+                swal({
+                    type: 'success',
+                    title: msg1,
+                    text: msg2,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    button: {
+                        className: "btn theme waves-effect waves-light"
+                    }
+                }).then((value) => {
+                window.location.replace("/Merchant/VoucherDiscount");
+                });
+            }
+
+            function OnFailure(xhr, status, error) {
+                swal({
+                    type: 'error',
+                    title: "@Html.Raw(WebResource.Oops)",
+                    text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                }).then(x => {
+                    Ladda.stopAll();
+                });
+            }
+
+
+            $(".datefield").datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                todayHighlight: true,
+                autoclose: true
+            });
+
+            $("form").bind("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    return false;
+                }
+            });
+
+            $(document).ready(function () {
+                bindDataTable(0);
+            });
+
+            function bindDataTable(start) {
+                if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                    $('#tblDataTable').DataTable().destroy();
+                }
+
+                var table = $('#tblDataTable').DataTable(
+                    {
+                        serverSide: true,
+                        responsive: true,
+                        displayStart: start,
+                        iDisplayLength: 20,
+                        order: [[1, 'desc']],
+                        lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Merchant/GetVoucherDiscountList",
+                        sServerMethod: "POST",
+                        "columns": [
+                            {
+                                data: "Id",
+                                searchable: true,
+                                class: "dtr-control"
+                            },
+                            {
+                                data: "StoreName",
+                                searchable: true,
+                                class: "dtr-control"
+                            },                            
+                            {
+                                data: "StartDate",
+                                searchable: true,
+                                class: "dtr-control"
+                            },
+                            {
+                                data: "EndDate",
+                                searchable: true,
+                                class: "dtr-control"
+                            },
+                            {
+                                data: "IsMembersOnly",
+                                searchable: true,
+                                class: "dtr-control"
+                            },
+                            {
+                                data: "Approved",
+                                searchable: true,
+                                class: "dtr-control"
+                            },
+                            {
+                                data: "Id",
+                                searchable: false,
+                                orderable: false,
+                                class: "dtr-control",
+                                render: function (data, type, row) {
+                                    var content = '<div style="display:flex">'
+                                    content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Edit" data-flag="edit" title="@WebResource.Edit" data-Id="' + data + '" class="btn btn-primary btn-sm action editInfo"> <i class="fa fa-edit"></i></a>';
+                                    content += '&nbsp;<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" title="@WebResource.Delete" data-Id="' + data + '" class="btn btn-danger btn-sm action removeInfo"><i class="fa fa-times"></i></a>';
+                                    content += '&nbsp;</div>';
+
+                                    return content;
+                                }
+                            }
+                        ],
+                    });
+
+                // new $.fn.dataTable.FixedHeader(table);
+            };
+
+
+            function CurrentPageStart() {
+                var table = $('#tblDataTable').DataTable();
+                var info = table.page.info();
+                return info.start;
+            }
+
+            $(document).on("click", ".editInfo", function () {
+            var subtitle = "@WebResource.Edit" + " " + "@WebResource.Voucher";
+                $("#subTitle").text(subtitle);
+                var Id = $(this).attr("data-id");
+                curId = Id;
+                $.ajax({
+                url: "/Merchant/GetVoucherDiscountInfo/" + Id,
+                    type: "GET",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#Id").val(Id);
+                        $("#StoreId").val(result.StoreId);
+                        $("#IsMembersOnly").val(result.IsMembersOnly);
+                        $("#StartDate").val(result.StartDate);
+                        $("#EndDate").val(result.EndDate);
+                        $("#Approved").val(result.Approved);
+                        getItemsByVoucher(Id);
+                    },
+                    error: function () {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+
+            function getItemsByVoucher(Id){
+                $.ajax({
+                url: "/Merchant/GetVoucherDiscountItemInfo/" + Id,
+                    type: "GET",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        for (i= 0; i < result.length; i++){
+                            let idObj = "ItemId_" + i;
+                            let maxAmoutObj = "EndAmount_" + i;
+                            let amoutObj = "strAmount_" + i;
+                            $("#" + idObj).val(result[i].Id);
+                            $("#" + maxAmoutObj).val(result[i].MaxAmount);
+                            $("#" + amoutObj).val(result[i].Amount);
+                        }
+                    },
+                    error: function () {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+
+            $(document).on("click", ".removeInfo", function () {
+                var Id = $(this).attr("data-id");
+                swal({
+                    title: "@Html.Raw(WebResource.Confirm)",
+                    text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                    cancelButtonText: " @Html.Raw(WebResource.No) ",
+                });
+
+                $(".swal2-confirm").on("click", function () {
+                    $.ajax({
+                    url: "/Merchant/DeleteVoucherDiscount/" + Id,
+                        type: "POST",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (data) {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            swal({
+                                type: 'error',
+                                title: "@Html.Raw(WebResource.Oops)",
+                                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                            });
+                        }
+                    });
+                });
+            });
+
+            $("#reloadBtn").click(function () {
+                location.reload();
+            });
+
+        $(".txt").bind("keypress",function(e){
+            if (e.keyCode == 13)
+            {
+                let objId = $(this).attr('id');
+                 let arr = objId.split('_');
+
+                if (arr[0] == "EndAmount")
+                {
+                    let nextObj = "strAmount_" + arr[1];
+                    $("#" + nextObj).focus();
+                    $("#" + nextObj).select();
+                }
+                else{
+                    let index = (parseInt(arr[1]) + 1);
+                    let nextObj = "EndAmount_" + index;
+                    $("#" + nextObj).focus();
+                    $("#" + nextObj).select();
+                }
+
+                
+            }
+        });
+           
+
+        </script>
+}
+

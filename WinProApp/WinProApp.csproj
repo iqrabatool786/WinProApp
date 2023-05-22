@@ -1,0 +1,106 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\Warehouse\Products\DetailsViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BarcodeLib" Version="2.4.0" />
+    <PackageReference Include="ClosedXML" Version="0.100.3" />
+    <PackageReference Include="EFCore.BulkExtensions" Version="6.0.1" />
+    <PackageReference Include="EPPlus" Version="6.1.1" />
+    <PackageReference Include="itext7" Version="7.2.4" />
+    <PackageReference Include="itext7.commons" Version="7.2.4" />
+    <PackageReference Include="itext7.pdfhtml" Version="4.0.4" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="MailKit" Version="3.4.3" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+    <PackageReference Include="ResXResourceReader.NetStandard" Version="1.1.0" />
+    <PackageReference Include="StoredProcedureEFCore" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebResource.ar.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataModels\DataBase\Configuration\" />
+    <Folder Include="NewModels\" />
+    <Folder Include="wwwroot\Docs\Products\" />
+    <Folder Include="wwwroot\Docs\Suppliers\" />
+    <Folder Include="wwwroot\Docs\Upload\" />
+    <Folder Include="wwwroot\Docs\SupplierInvoice\" />
+    <Folder Include="wwwroot\Reports\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="ViewModels\Warehouse\Products\DetailsViewModel.cs" />
+    <None Include="wwwroot\Images\Customers\cr_03012023_231719.pdf" />
+    <None Include="wwwroot\Images\Customers\cr_03012023_231722.pdf" />
+    <None Include="wwwroot\Images\Customers\cr_03012023_233426.pdf" />
+    <None Include="wwwroot\Images\Customers\cr_03012023_234409.pdf" />
+    <None Include="wwwroot\Images\Customers\other_03012023_231719.pdf" />
+    <None Include="wwwroot\Images\Customers\other_03012023_231722.pdf" />
+    <None Include="wwwroot\Images\Customers\other_03012023_233426.pdf" />
+    <None Include="wwwroot\Images\Customers\other_03012023_234409.pdf" />
+    <None Include="wwwroot\Images\Customers\tax_03012023_231719.pdf" />
+    <None Include="wwwroot\Images\Customers\tax_03012023_231722.pdf" />
+    <None Include="wwwroot\Images\Customers\tax_03012023_233426.pdf" />
+    <None Include="wwwroot\Images\Customers\tax_03012023_234409.pdf" />
+    <None Include="wwwroot\Images\ProductBarcodes\909090.pdf" />
+    <None Include="wwwroot\Images\ProductBarcodes\909091.pdf" />
+    <None Include="wwwroot\Images\ProductBarcodes\909092546745745.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WebResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

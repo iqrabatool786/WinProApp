@@ -1,0 +1,87 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@using WinProApp.ViewModels.Loyalty.CardInfo;
+@model AddEditPointSysViewModel;
+@{
+    ViewData["Title"] = "Manage Point System";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="manageForm" method="post" asp-action="PointSystemUpdate" asp-controller="Merchant" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="@ViewBag.Id" />
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="Amount">@WebResource.Start @WebResource.Amount</label>
+                    <input type="number" asp-for="Amount" class="form-control" value="@ViewBag.Amount" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Points">Points %</label>
+                    <input type="number" asp-for="Points" class="form-control" value="@ViewBag.Points" />
+                    <span asp-validation-for="Points" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var curId = $("#Id").val();
+        var msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+        var msg2 = "@Html.Raw(WebResource.RecordCreated)";
+
+
+
+        function OnSuccess(data, status, xhr) {
+            if (parseInt(curId) > 0) {
+                msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+            }
+            else {
+                msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordCreated)";
+            }
+            swal({
+                type: 'success',
+                title: msg1,
+                text: msg2,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Merchant/PointSystem");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+   
+
+    </script>
+}

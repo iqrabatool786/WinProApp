@@ -1,0 +1,51 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Works for Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Works for Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.bottomright {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    width: 300px;
+    max-height: 600px;
+    overflow-y: scroll;
+    background-color: #fff;
+    padding: 5px;
+}
+
+.removeRow{color:#ff6a00;}
+.removeRow:hover {
+    color: #ff0000;
+}
+.rightText {
+    text-align: right;
+}
+
+.dataTable > thead > th {font-size:0.9em; font-weight:600;}

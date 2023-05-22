@@ -1,0 +1,305 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.CorporateEmployees.EditViewModel;
+@{
+    ViewData["Title"] = @WebResource.CorporateEmployee + " " + @WebResource.Edit;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="createForm" enctype="multipart/form-data" asp-action="EditCorporateEmployee" asp-controller="Merchant" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">Company @WebResource.Details</h3></div>
+                <div class="card-body">
+                    <div class="col-md-12 row">
+                        <div class="form-floating col-md-2">
+                            <label for="BpCode">@WebResource.Name</label>
+                            <input asp-for="CompanyName" id="CompanyName" name="CompanyName" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="Address">@WebResource.Address</label>
+                            <input asp-for="Address" type="text" id="Address" name="Address" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="PhoneNo">@WebResource.PhoneNo</label>
+                            <input asp-for="PhoneNo" type="text" id="PhoneNo" name="PhoneNo" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="Fax">@WebResource.Fax</label>
+                            <input asp-for="Fax" type="text" id="Fax" name="Fax" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="Email">@WebResource.Email</label>
+                            <input asp-for="Email" type="email" id="Email" name="Email" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="Website">@WebResource.Website</label>
+                            <input asp-for="Website" type="text" id="Website" name="Website" class="form-control" />
+                        </div>
+                        <div class="col-md-2" style="margin-bottom:10px;">
+                            <label for="Status">@WebResource.Status</label>
+                            <select asp-for="Status" name="Status" id="Status" class="form-control">
+                                <option value="Active">Active</option>
+                                <option value="YES">YES</option>
+                            </select>
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="InsertBy">Insert By</label>
+                            <input asp-for="InsertBy" type="text" id="InsertBy" name="InsertBy" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-2">
+                            <label for="BpCode">@WebResource.Bpcode</label>
+                            <input asp-for="Bpcode" id="BpCode" name="BpCode" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="VatNo">@WebResource.VatNo</label>
+                            <input asp-for="VatNo" type="text" id="VatNo" name="VatNo" class="form-control numberonly" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="Bank">@WebResource.Bank</label>
+                            <input asp-for="BankName" type="text" id="Bank" name="Bank" class="form-control" />
+                        </div>
+                        <div class="form-floating col-md-3">
+                            <label for="BankAccountNumber">Bank Account Number</label>
+                            <input asp-for="BankAccountNumber" type="text" id="BankAccountNumber" name="BankAccountNumber" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            <div id="Block1" class="row col-md-12 card card-success" style="margin-top: 10px;">
+                <div class="card-header"><h3 class="card-title">Customer @WebResource.Details</h3></div>
+                <div class="card-body">
+                    <div class="row col-md-12">
+                        <div class="form-floating col-md-6">
+                            <label for="FullName">@WebResource.FullName</label>
+                            <input type="text" id="custFullName" class="form-control clearAfterAdd" value="" />
+                        </div>
+                        <div class="form-floating col-md-6">
+                            <label for="Address">@WebResource.Address</label>
+                            <input type="text" id="custAddress" class="form-control clearAfterAdd" value="" />
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <label for="MobileNumber">@WebResource.MobileNumber</label>
+                            <input type="text" id="custMobileNumber" class="form-control clearAfterAdd numberonly" value="" />
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <label for="Discount">@WebResource.Discount</label>
+                            <input type="number" id="custDiscount" class="form-control clearAfterAdd decimalTwoDigits" value="" />
+                        </div>
+                        <div class="col-md-2" style="margin-bottom:10px;">
+                            <label for="Status">Discount Type</label>
+                            <select id="custDiscountType" class="form-control">
+                                <option value="true">%</option>
+                                <option value="false">Fixed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="button" id="btnAddItem" name="btnAddItem" value="@WebResource.Add" class="btn btn-flat btn-sm btn-secondary" style="margin-top:37px;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card card-success" style="margin-top:20px;">
+                <div class="card-header"><h3 class="card-title">Customers</h3></div>
+                <div class="card-body col-md-12 row">
+                    <table id="tblItems" class="table table-striped table-bordered table-responsive" style="height:550px">
+                        <thead>
+                            <tr>
+                                <th class="col-md-4">@WebResource.FullName</th>
+                                <th class="col-md-4">@WebResource.Address</th>
+                                <th class="col-md-3">@WebResource.MobileNumber</th>
+                                <th class="col-md-3">@WebResource.Discount</th>
+                                <th class="col-md-2">Discount Type</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+        GetCustomers("@Model.Id");
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Merchant/CorporateEmployees");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(document).on('keypress', '.numberonly', function (e) {
+            var charCode = (e.which) ? e.which : event.keyCode
+            if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                return false;
+        });
+
+        $(document).on('keypress', '.decimalTwoDigits', function () {
+            if (this.value.includes('.')) {
+                if (this.value.split('.')[1].length > 1) {
+                    return false;
+                }
+            };
+        });
+
+        function AddItemRows() {
+            let custName = $("#custFullName").val();
+            let custAdd = $("#custAddress").val() ? $("#custAddress").val() : "0";
+            let custMobNo = $("#custMobileNumber").val() ? $("#custMobileNumber").val() : "0";
+            let custDisc = $("#custDiscount").val();
+            let custDiscType = $("#custDiscountType option:selected").text();
+            let custDiscTypeValue = $("#custDiscountType").val();
+
+            if ($.trim(custName) != "" && $.trim(custDisc) != "") {
+                let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a>';
+                let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                var itemCell = "<tr id='" + rowId + "'>";
+
+                itemCell += '<td><input type="hidden" name="CustomerId" value="0"/><input type="hidden" name="Custname" value="' + custName + '"/>' + custName + '</td>';
+                itemCell += '<td><input type="hidden" name="CustAddress" value="' + custAdd + '"/>' + custAdd + '</td>';
+                itemCell += '<td><input type="hidden" name="CustMobile" value="' + custMobNo + '"/>' + custMobNo + '</td>';
+                itemCell += '<td><input type="hidden" name="CustDiscount" value="' + custDisc + '"/>' + custDisc + '</td>';
+                itemCell += '<td><input type="hidden" name="CustIsDiscPerc" value="' + custDiscTypeValue + '"/>' + custDiscType + '</td>';
+                itemCell += '<td>' + btn + '</td></tr>';
+
+                $('#tblItems tbody').append(itemCell);
+                $("#custFullName").focus();
+                clear();
+            }
+        }
+
+        function GetCustomers(Id) {
+            if (parseInt(Id) > 0) {
+                $.ajax({
+                    url: "/Merchant/GetCustomersByCompanyId/" + Id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        for (i = 0; i < result.length; i++) {
+                            let custIdd = result[i].Id;
+                            let custName = result[i].FullName;
+                            let custAdd = result[i].Address;
+                            let custMobNo = result[i].MobileNumber;
+                            let custDisc = result[i].DiscountAmount;
+                            let custDiscType = result[i].IsDiscountPercentage == true ? "%" : "Fixed";
+                            let custDiscTypeValue = result[i].IsDiscountPercentage;
+
+                            if ($.trim(custName) != "" && $.trim(custDisc) != "") {
+                                let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;" data-id="' + custIdd + '"><i class="fa fa-times"></i></a>';
+                                let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                                var itemCell = "<tr id='" + rowId + "'>";
+
+                                itemCell += '<td><input type="hidden" name="CustomerId" value="' + custIdd + '"/><input type="hidden" name="Custname" value="' + custName + '"/>' + custName + '</td>';
+                                itemCell += '<td><input type="hidden" name="CustAddress" value="' + custAdd + '"/>' + custAdd + '</td>';
+                                itemCell += '<td><input type="hidden" name="CustMobile" value="' + custMobNo + '"/>' + custMobNo + '</td>';
+                                itemCell += '<td><input type="hidden" name="CustDiscount" value="' + custDisc + '"/>' + custDisc + '</td>';
+                                itemCell += '<td><input type="hidden" name="CustIsDiscPerc" value="' + custDiscTypeValue + '"/>' + custDiscType + '</td>';
+                                itemCell += '<td>' + btn + '</td></tr>';
+
+                                $('#tblItems tbody').append(itemCell);
+                                $("#custFullName").focus();
+                            }
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+            }
+        }
+
+        function clear() {
+            $(".clearAfterAdd").val('');
+        }
+
+        $("#btnAddItem").click(function () {
+            if (!$('#custFullName').val() && !$('#custDisc').val()) {
+                alert('Please enter Customer Name and Discount');
+            } else {
+                AddItemRows();
+            }
+        });
+
+        $(document).on("click", ".removeRow", function () {
+            var Id = $(this).attr("data-id");
+            if (parseInt(Id) > 0) {
+                DeleteItem(Id);
+            }
+            else {
+                $(this).parent().parent().remove();
+            }
+        })
+
+        function DeleteItem(Id) {
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Merchant/DeleteCustomer/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        }
+
+    </script>
+}

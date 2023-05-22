@@ -1,0 +1,236 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+
+@{
+    ViewData["Title"] = @WebResource.Asset + " " + @WebResource.Reports;
+
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Type @WebResource.English
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Type @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Department @WebResource.English
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Department @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Location @WebResource.English
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Location @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Barcode
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Name @WebResource.English
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Name  @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Manufacture @WebResource.Name
+                    </th>
+                    <th>
+                        @WebResource.WarrantyPeriod
+                    </th>
+                    <th>
+                        @WebResource.Temp
+                    </th>
+                    <th>
+                        @WebResource.Manufacture @WebResource.Date
+                    </th>
+                    <th>
+                        @WebResource.ExpireDate
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Value
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 10,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        'colvis'
+                    ],
+                    sAjaxSource: "/Warehouse/AssetList",
+                    sServerMethod: "POST",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetTypeNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetTypeNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetDepartmentNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetDepartmentNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetLocationNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetLocationNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Barcode",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ManufactureName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "WarrentyPeriod",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Temp",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ManufactureDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ExpireDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetValue",
+                            searchable: true,
+                            class: "dtr-control"
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+
+    </script>
+}
+

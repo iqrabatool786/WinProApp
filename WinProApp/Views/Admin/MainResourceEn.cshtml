@@ -1,0 +1,56 @@
+﻿@model IEnumerable<WinProApp.ViewModels.Administrator.ResourcesViewModel>
+@{
+    ViewData["Title"] = "Main Resource English";
+}
+<style>
+    ul.pagination{float:right;}
+    #table1_filter > label{float:right; width:40%;}
+</style>
+<form id="lngForm" method="post" asp-action="UpdateMainResourceEn">
+    <div class="row">
+    <div class="col-md-12" style="text-align:right;">
+        <input type="submit" value="Save" class="btn btn-lg btn-primary" style="float:right; width:10%;" />
+    </div>
+    </div>
+<table id="table1" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Value</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var item in Model)
+    {
+        <tr>
+                <td>
+                        <input type="hidden" name="txtName" class="form-control" value="@item.Name" />
+                         <input type="text" name="txtValue" class="form-control" value="@item.Value" />
+                        <span style="display:none;">@item.Value</span>
+                </td>
+        </tr>
+    }
+    </tbody>
+</table>
+    <div class="row">
+        <div class="col-md-12" style="text-align:right;">
+            <input type="submit" value="Save" class="btn btn-lg btn-primary" style="float:right; width:10%;" />
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#table1').DataTable({
+              "paging": true,
+              "lengthChange": true,
+              "searching": true,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false,
+              "responsive": true,
+            });
+        });
+    </script>
+}

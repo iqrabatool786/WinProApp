@@ -1,0 +1,248 @@
+﻿
+@{
+    ViewData["Title"] = "Purchase Information";
+    Layout = "~/Views/Shared/_DashBoardLayout.cshtml";
+}
+
+<div class="row" style="margin-top:5px;">
+    <div class="col-md-12">
+        <h3>
+            Purchase and Pocurment Dashboard
+        </h3>
+    </div>
+    <div class="row col-md-12" style="margin-bottom:25px;">
+        <div class="col-md-3"></div>
+        <div class="col-md-1" style="text-align:right; padding-top:7px;"><label>Filter By</label> </div>
+        <div class="col-md-2">
+            <input type="text" name="txtDate1" id="txtDate1" class="form-control datefield" placeholder="From Date" />
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="txtDate2" id="txtDate2" class="form-control datefield" placeholder="To Date" />
+        </div>
+        <div class="col-md-1">
+            <input type="button" id="btnSearch" name="btnSearch" class="btn btn-info" value="Search" />
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-success">
+              <div class="inner">
+                <h3 id="Total1">@ViewBag.TotalToday</h3>
+
+                <p>Total Purchase</p>
+              </div>
+              <div class="icon">
+                <i class="fa-product-hunt "></i>
+              </div>
+            <a href="/Purchase/PurchaseInvoices" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+    </div>
+
+        <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-blue">
+              <div class="inner">
+                <h3 id="Total2">@ViewBag.totShipping</h3>
+
+                <p>Total Shipment</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-share"></i>
+              </div>
+            <a href="/Shipping/ShippingInfo" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+         </div>
+
+            <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+              <div class="inner">
+                <h3 id="Total3">@ViewBag.supplierCount</h3>
+
+                <p>
+                    Total supplier
+                </p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-users"></i>
+              </div>
+            <a href="/Purchase/Suppliers" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+         </div>
+
+                <div class="col-lg-3 col-6">
+        <div class="small-box bg-lightblue">
+              <div class="inner">
+                <h3 id="Total4"><span style="font-size:13px;">RFI:</span> @ViewBag.rfiinfo</h3>
+                <h3 id="Total04" style="float:right;"><span style="font-size:13px;"> RFQ:</span> @ViewBag.rfqInfo</h3>
+                <p>
+                    Total RFI and RFQ
+                </p>
+              </div>
+              <div class="icon">
+            <i class="fas fa-list"></i>
+              </div>
+            <a href="/Purchase/RequestForInfo" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+                </div>
+
+                    <div class="col-lg-3 col-6">
+    <div class="small-box bg-lightblue">
+              <div class="inner">
+                <h3 id="Total5">@ViewBag.prInfo</h3>
+
+                <p>
+                    Total PR
+                </p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-list"></i>
+              </div>
+            <a href="/Purchase/RequestForPurchase" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+                    </div>
+
+
+                        <div class="col-lg-3 col-6">
+    <div class="small-box bg-lightblue">
+        <div class="inner">
+                <h3 id="Total6">@ViewBag.poInfo</h3>
+
+                <p>Total PO</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-list-alt"></i>
+        </div>
+            <a href="/Purchase/PurchaseOrders" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+        </a>
+    </div>
+                        </div>
+
+
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-gradient-warning">
+              <div class="inner">
+                <h3 id="Total7">0</h3>
+
+                <p>Total Payment</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-receipt"></i>
+              </div>
+              <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+   </div>
+
+   <div class="col-lg-3 col-6">
+    <div class="small-box bg-green">
+              <div class="inner">
+                <h3 id="Total8">0</h3>
+
+                <p>Total Payable</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-calculator"></i>
+              </div>
+              <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+        </div>
+   </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-orange">
+            <div class="inner">
+                <h3 id="Total9">@ViewBag.returnInfo</h3>
+
+                <p>
+                    Purchase Return
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-share"></i>
+            </div>
+            <a href="/Warehouse/Returns" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3 id="Total10">@ViewBag.damageInfo</h3>
+
+                <p>
+                    Damage Good
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-ban"></i>
+            </div>
+            <a href="/Warehouse/DamageReturns" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("#txtDate1").attr('autocomplete', 'off');
+        $("#txtDate2").attr('autocomplete', 'off');
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $("#btnSearch").click(function(){
+            let dt1 = $("#txtDate1").val();
+            let dt2 = $("#txtDate2").val();
+
+            $.ajax({
+                url: "/Purchase/GetPurchasingInfoByDate",
+                type: "POST",
+                dataType: "json",
+                data: { fromDt: dt1, toDt:dt2 },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#Total1").text(result.PurchaseCount);
+                    $("#Total2").text(result.ShipmentCount);
+                    $("#Total3").text(result.SupplierCount);
+                    $('#Total4').text(result.RFICount);
+                    $('#Total04').text(result.RQCount);
+                    $('#Total5').text(result.PRCount);
+                    $('#Total6').text(result.POCount);
+                    $('#Total9').text(result.ReturnCount);
+                    $('#Total10').text(result.DamageCount);
+                },
+                error: function () {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+
+    </script>
+}

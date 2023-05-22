@@ -1,0 +1,390 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Warehouse.AddEditStoreViewModel;
+@{
+    ViewData["Title"] = @WebResource.Store + " " + @WebResource.Manage;
+
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5 id="subTitle">@WebResource.Create @WebResource.Store</h5>
+        <form id="manageForm" method="post" asp-action="CreateUpdateStore" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label for="StoreCode">@WebResource.Store @WebResource.ID</label>
+                    <input asp-for="StoreCode" class="form-control" value="@ViewBag.MaxId" />
+                    <span asp-validation-for="StoreCode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="Name">@WebResource.Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Address">@WebResource.Address</label>
+                    <textarea asp-for="Address" class="form-control"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Phone">@WebResource.PhoneNumber</label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="GlAccount">@WebResource.GlAccount</label>
+                    <input asp-for="GlAccount" class="form-control" />
+                    <span asp-validation-for="GlAccount" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label for="Brand">@WebResource.Brand</label>
+                    <input asp-for="Brand" class="form-control" />
+                    <span asp-validation-for="Brand" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="Brandcode">@WebResource.Brandcode</label>
+                    <input asp-for="Brandcode" class="form-control" />
+                    <span asp-validation-for="Brandcode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="StoreType">@WebResource.StoreType</label>
+                    <input asp-for="StoreType" class="form-control" />
+                    <span asp-validation-for="StoreType" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="Office">@WebResource.Office</label>
+                    <input asp-for="Office" class="form-control" />
+                    <span asp-validation-for="Office" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="City">@WebResource.City</label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="VatNo">@WebResource.VAT @WebResource.No</label>
+                    <input asp-for="VatNo" class="form-control" />
+                    <span asp-validation-for="VatNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="CRNo">@WebResource.CRNo</label>
+                    <input asp-for="CRNo" class="form-control" />
+                    <span asp-validation-for="CRNo" class="text-danger"></span>
+                </div>
+               
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <hr />
+        <h3>@WebResource.Store @WebResource.List</h3>
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Store @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Name
+                    </th>
+                    <th>
+                        @WebResource.Address
+                    </th>
+                    <th>
+                        @WebResource.PhoneNumber
+                    </th>
+                    <th>
+                        @WebResource.GlAccount
+                    </th>
+                    <th>
+                        @WebResource.Brand
+                    </th>
+                    <th>
+                        @WebResource.Brandcode
+                    </th>
+                    <th>
+                        @WebResource.StoreType
+                    </th>
+                    <th>
+                        @WebResource.Office
+                    </th>
+                    <th>
+                        @WebResource.City
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var curId = $("#Id").val();
+        var msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+        var msg2 = "@Html.Raw(WebResource.RecordCreated)";
+
+        
+
+        function OnSuccess(data, status, xhr) {
+            if (parseInt(curId) > 0){
+             msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+             msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+                }
+                else{
+                     msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                     msg2 = "@Html.Raw(WebResource.RecordCreated)";
+                }
+            swal({
+                type: 'success',
+                title: msg1,
+                text: msg2,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/Store");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        var allowed = "@allowed";
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 20,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Warehouse/StoreList",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "StoreCode",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Name",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Address",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Phone",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "GlAccount",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Brand",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Brandcode",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "StoreType",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "Office",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "City",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "Id",
+                            searchable: false,
+                            orderable: false,
+                            class: "dtr-control",
+                            render: function (data, type, row) {
+                                var content = '<div style="display:flex">'
+                                    content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Edit" data-flag="edit" title="@WebResource.Edit" data-Id="' + data + '" class="btn btn-primary btn-sm action editInfo"> <i class="fa fa-edit"></i></a>';
+                                    if (allowed == "Yes") {
+                                        content += '&nbsp;<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" title="@WebResource.Delete" data-Id="' + data + '" class="btn btn-danger btn-sm action removeInfo"><i class="fa fa-times"></i></a>';
+                                    }
+                                content += '&nbsp;</div>';
+
+                                return content;
+                            }
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+        $(document).on("click", ".editInfo", function () {
+            var subtitle = "@WebResource.Edit" + " " + "@WebResource.Store";
+            $("#subTitle").text(subtitle);
+            var Id = $(this).attr("data-id");
+            curId = Id;
+                 $.ajax({
+                    url: "/Warehouse/GetStoreInfo/" + Id,
+                        type: "GET",
+                        success: function (data) {
+                            var result = JSON.parse(JSON.stringify(data));
+                            $("#Id").val(Id);
+                            $("#StoreCode").val(result.StoreCode);
+                            $("#Name").val(result.Name);
+                            $("#Address").val(result.Address);
+                            $("#Phone").val(result.Phone);
+                            $("#GlAccount").val(result.GlAccount);
+                            $("#Brand").val(result.Brand);
+                            $("#Brandcode").val(result.Brandcode);
+                            $("#StoreType").val(result.StoreType);
+                            $("#Office").val(result.Office);
+                            $("#City").val(result.City);
+                        },
+                        error: function () {
+                            swal({
+                                type: 'error',
+                                title: "@Html.Raw(WebResource.Oops)",
+                                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                            });
+                        }
+                    });
+        });
+
+        $(document).on("click", ".removeInfo", function () {
+            var Id = $(this).attr("data-id");
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Warehouse/DeleteStore/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.id != "0") {
+                            swal({
+                                type: 'error',
+                                title: "@Html.Raw(WebResource.Oops)",
+                                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                            });
+                        }
+                        else{
+                            location.reload();
+                        }
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

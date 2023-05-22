@@ -1,0 +1,372 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@using WinProApp.ViewModels.Warehouse.Asset;
+@model AddEditViewModel;
+
+@{
+    ViewData["Title"] = @WebResource.Asset + " " + @WebResource.Relocated;
+
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="manageForm" method="post" asp-action="AssetsReLocated" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="Barcode">@WebResource.Barcode</label>
+                    <input asp-for="Barcode" class="form-control" />
+                    <span asp-validation-for="Barcode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="OldType">@WebResource.Asset @WebResource.Type</label>
+                    <input name="OldType" id="OldType" class="form-control" readonly />
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="OldDepartment">@WebResource.Asset @WebResource.Department</label>
+                    <input name="OldDepartment" id="OldDepartment" class="form-control" readonly />
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="OldLocation">@WebResource.Asset @WebResource.Location</label>
+                    <input name="OldLocation" id="OldLocation" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label for="AssetTypeId">@WebResource.New @WebResource.Asset @WebResource.Type</label>
+                    <select asp-for="AssetTypeId" class="form-control lst2" asp-items="@ViewBag.AssetTypes">
+                        <option value="">@WebResource.Asset @WebResource.Type</option>
+                    </select>
+                    <span asp-validation-for="AssetTypeId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="AssetDepartmentId">@WebResource.New @WebResource.Asset @WebResource.Department</label>
+                    <select asp-for="AssetDepartmentId" class="form-control lst2" asp-items="@ViewBag.AssetDepartments">
+                        <option value="">@WebResource.Asset @WebResource.Department</option>
+                    </select>
+                    <span asp-validation-for="AssetDepartmentId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="AssetLocationId">@WebResource.New @WebResource.Asset @WebResource.Location</label>
+                    <select asp-for="AssetLocationId" class="form-control lst2" asp-items="@ViewBag.AssetLocations">
+                        <option value="">@WebResource.Asset @WebResource.Location</option>
+                    </select>
+                    <span asp-validation-for="AssetLocationId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label asp-for="AssetNameEng">@WebResource.Asset @WebResource.NameEng</label>
+                    <input asp-for="AssetNameEng" class="form-control" readonly />
+                    <span asp-validation-for="AssetNameEng" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="AssetNameArabic">@WebResource.Asset @WebResource.NameArabic</label>
+                    <input asp-for="AssetNameArabic" class="form-control" readonly />
+                    <span asp-validation-for="AssetNameArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row" style="display:none;">
+                <div class="form-floating col-md-4">
+                    <label asp-for="ManufactureName">@WebResource.Manufacture</label>
+                    <input asp-for="ManufactureName" class="form-control" readonly />
+                    <span asp-validation-for="ManufactureName" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="WarrentyPeriod">@WebResource.WarrantyPeriod</label>
+                    <input asp-for="WarrentyPeriod" class="form-control" readonly />
+                    <span asp-validation-for="WarrentyPeriod" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="Temp">@WebResource.Asset @WebResource.Temp</label>
+                    <input asp-for="Temp" class="form-control" readonly />
+                    <span asp-validation-for="Temp" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row" style="display:none;">
+                <div class="form-floating col-md-4">
+                    <label for="ManufactureDate">@WebResource.Manufacture @WebResource.Date</label>
+                    <input name="ManufactureDate" id="ManufactureDate" type="text" class="form-control datefield" readonly />
+                    <span asp-validation-for="ManufactureDate" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label for="ExpireDate">@WebResource.ExpireDate</label>
+                    <input name="ExpireDate" id="ExpireDate" type="text" class="form-control datefield" readonly />
+                    <span asp-validation-for="ExpireDate" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="AssetValue">@WebResource.Asset @WebResource.Value</label>
+                    <input asp-for="AssetValue" class="form-control" readonly />
+                    <span asp-validation-for="AssetValue" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function OnSuccess(data, status, xhr) {
+            var curId = $("#Id").val();
+            if (parseInt(curId) > 0) {
+                msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+            }
+            else {
+                msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordCreated)";
+            }
+            swal({
+                type: 'success',
+                title: msg1,
+                text: msg2,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/Assets");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $('.lst2').select2();
+
+        
+
+        $(document).on("click", ".editInfo", function () {
+            var subtitle = "@WebResource.Edit" + " " + "@WebResource.Store";
+            $("#subTitle").text(subtitle);
+            var Id = $(this).attr("data-id");
+            curId = Id;
+            $.ajax({
+                url: "/Warehouse/GetAssetInfo/" + Id,
+                type: "GET",
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#Id").val(Id);
+                    $("#AssetTypeId").val(result.AssetTypeId);
+                    $("#AssetTypeId").trigger('change.select2');
+                    $("#AssetDepartmentId").val(result.AssetDepartmentId);
+                    $("#AssetDepartmentId").trigger('change.select2');
+                    $("#AssetLocationId").val(result.AssetLocationId);
+                    $("#AssetLocationId").trigger('change.select2');
+                    $("#Barcode").val(result.Barcode);
+                    $("#AssetNameEng").val(result.AssetNameEng);
+                    $("#AssetNameArabic").val(result.AssetNameArabic);
+                    $("#ManufactureName").val(result.ManufactureName);
+                    $("#WarrentyPeriod").val(result.WarrentyPeriod);
+                    $("#Temp").val(result.Temp);
+                    $("#ManufactureDate").val(result.ManufactureDate);
+                    $("#ExpireDate").val(result.ExpireDate);
+                    $("#AssetValue").val(result.AssetValue);
+                    $("#OldType").val(result.AssetTypeNameEng);
+                    $("#OldDepartment").val(result.AssetDepartmentNameEng);
+                    $("#OldLocation").val(result.AssetLocationNameEng);
+                },
+                error: function () {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+
+       
+        $("#Barcode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Warehouse/GetAssetInfoByBarcode",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.Barcode, value: item.Barcode, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#Id").val('');
+                $("#Id").val(ui.item.title);
+                GetAssetInfo(ui.item.title);
+            }
+        });
+
+        $("#AssetNameEng").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Warehouse/GetAssetInfoByNameEng",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.AssetNameEng, value: item.AssetNameEng, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#Id").val('');
+                $("#Id").val(ui.item.title);
+                GetAssetInfo(ui.item.title);
+            }
+        });
+
+        $("#AssetNameArabic").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Warehouse/GetAssetByNameArabicAsync",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.AssetNameArabic, value: item.AssetNameArabic, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#Id").val('');
+                $("#Id").val(ui.item.title);
+                GetAssetInfo(ui.item.title);
+            }
+        });
+
+        function GetAssetInfo(Id) {
+            $.ajax({
+                url: "/Warehouse/GetAssetInfo/" + Id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#AssetTypeId").val(result.AssetTypeId);
+                        $("#AssetTypeId").trigger('change.select2');
+                        $("#AssetDepartmentId").val(result.AssetDepartmentId);
+                        $("#AssetDepartmentId").trigger('change.select2');
+                        $("#AssetLocationId").val(result.AssetLocationId);
+                        $("#AssetLocationId").trigger('change.select2');
+                        $("#AssetNameEng").val(result.AssetNameEng);
+                        $("#AssetNameArabic").val(result.AssetNameArabic);
+                        $("#ManufactureName").val(result.ManufactureName);
+                        $("#WarrentyPeriod").val(result.WarrentyPeriod);
+                        $("#Temp").val(result.Temp);
+                        $("#ManufactureDate").val(result.ManufactureDate);
+                        $("#ExpireDate").val(result.ExpireDate);
+                        $("#AssetValue").val(result.AssetValue);
+                        $("#OldType").val(result.AssetTypeNameEng);
+                        $("#OldDepartment").val(result.AssetDepartmentNameEng);
+                        $("#OldLocation").val(result.AssetLocationNameEng);
+
+                    }
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+    </script>
+}
+

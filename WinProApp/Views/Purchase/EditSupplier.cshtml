@@ -1,0 +1,247 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Purchase.EditSupliersViewModel
+@{
+    ViewData["Title"] = @WebResource.EditSupplier;
+    string docpath = "/Docs/Suppliers/" + Model.CRDocument;
+    string taxdocpath = "/Docs/Suppliers/" + Model.TaxDocument;
+    string otherdocpath = "/Docs/Suppliers/" + Model.OtherDocument;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="editForm" enctype="multipart/form-data" asp-action="EditSupplier" asp-controller="Purchase" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="form-floating col-md-6">
+                    <label asp-for="CompanyName">@WebResource.CompanyName</label>
+                    <input asp-for="CompanyName" class="form-control" autocomplete="CompanyName" aria-required="true" />
+                    <span asp-validation-for="CompanyName" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="Address">@WebResource.Address</label>
+                    <textarea name="Address" class="form-control">@Model.Address</textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="PhoneNo">@WebResource.PhoneNo</label>
+                    <input asp-for="PhoneNo" class="form-control" autocomplete="InvAmount" />
+                    <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Fax">@WebResource.Fax</label>
+                    <input asp-for="Fax" class="form-control" autocomplete="InvoiceNo" />
+                    <span asp-validation-for="Fax" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Email">@WebResource.Email</label>
+                    <input type="email" asp-for="Email" class="form-control" autocomplete="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Website">@WebResource.Website</label>
+                    <input asp-for="Website" class="form-control" autocomplete="Vat" />
+                    <span asp-validation-for="Website" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="Bpcode">@WebResource.Bpcode</label>
+                    <input asp-for="Bpcode" class="form-control" autocomplete="Balance" />
+                    <span asp-validation-for="Bpcode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Balance">@WebResource.Balance</label>
+                    <input asp-for="Balance" class="form-control" autocomplete="SupplierVatNo" />
+                    <span asp-validation-for="Balance" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="OpeningBalance">@WebResource.OpeningBalance</label>
+                    <input asp-for="OpeningBalance" class="form-control" autocomplete="SupplierMobile" />
+                    <span asp-validation-for="OpeningBalance" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="VatNo">@WebResource.VatNo</label>
+                    <input asp-for="VatNo" id="vatNoInput" class="form-control numberonly" type="text" maxlength="15" min="0" title="Please enter exactly 15 digits" />
+                    <span asp-validation-for="VatNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="BankName">@WebResource.Bank</label>
+                    <input asp-for="BankName" class="form-control datefield" autocomplete="PaymentDate" />
+                    <span asp-validation-for="BankName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-3">
+                    <label asp-for="AccountNo">@WebResource.AccountNo</label>
+                    <input asp-for="AccountNo" class="form-control" autocomplete="FlatNo" />
+                    <span asp-validation-for="AccountNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CRNumber">@WebResource.CRNumber</label>
+                    <input asp-for="CRNumber" class="form-control numberonly" type="text" maxlength="10" min="0" title="Please enter exactly 10 digits" />
+                    <span asp-validation-for="CRNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="Upload">@WebResource.CRDocument</label>
+                    <input type="file" asp-for="Upload" class="form-control" accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="TaxDocUpload">@WebResource.Tax @WebResource.Document</label>
+                    <input type="file" asp-for="TaxDocUpload" class="form-control" accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="OtherDocUpload">@WebResource.Other @WebResource.Document</label>
+                    <input type="file" asp-for="OtherDocUpload" class="form-control" accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+
+            </div>
+
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="updateSubmit" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+     <div class="row" style="margin-top:50px;">
+    @if (Model.CRDocument != null)
+    {
+        <div class="col-md-4">
+           <label>@WebResource.CRDocument</label><br />
+            <img src="@docpath" style="max-width:99%;" />
+        </div>
+    }
+    @if (Model.TaxDocument != null)
+    {
+            <div class="col-md-4">
+                <label>@WebResource.Tax @WebResource.Document</label><br />
+                <img src="@taxdocpath" style="max-width:99%;" />
+        </div>
+    }
+    @if (Model.OtherDocument != null)
+    {
+            <div class="col-md-4">
+                <label>@WebResource.Other @WebResource.Document</label><br />
+                <img src="@otherdocpath" style="max-width:99%;" />
+        </div>
+    }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("#updateSubmit").click(function (event) {
+            if ($('#vatNoInput').val()) {
+                event.preventDefault();
+                var Id = $("#vatNoInput").val();
+                $('#updateSubmit').prop('disabled', true);
+                $.ajax({
+                    url: "/Purchase/IsVatNoExists/" + Id,
+                    type: "GET",
+                    success: function (data) {
+                        if (data == true) {
+                            swal({
+                                title: "Vat No already exists",
+                                text: "Do you want to proceed",
+                                showCancelButton: true,
+                                showConfirmButton: true,
+                                confirmButtonText: 'Yes',
+                                cancelButtonText: 'No',
+                                confirmButtonClass: 'btn btn-success',
+                                cancelButtonClass: 'btn btn-danger',
+                                type: 'warning',
+                                buttonsStyling: false
+                            }).then(function (yes) {
+                                if (yes.value == true) {
+                                    $('#updateSubmit').prop('disabled', false);
+                                    $("#editForm").submit();
+                                } else {
+                                    $('#updateSubmit').prop('disabled', false);
+                                    event.preventDefault();
+                                }
+                            })
+                        } else {
+                            $("#editForm").submit();
+                        }
+                    },
+                    error: function () {
+                        $('#updateSubmit').prop('disabled', false);
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+                $("#editForm").submit();
+                $('#updateSubmit').prop('disabled', false);
+            }
+            else {
+                event.preventDefault();
+                swal({
+                    title: "No Vat No",
+                    text: "Do you want to proceed without Vat No ?",
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    type: 'warning',
+                    buttonsStyling: false
+                }).then(function (yes) {
+                    if (yes.value == true) {
+                        $("#editForm").submit();
+                        $('#updateSubmit').prop('disabled', false);
+                    } else {
+                        $('#updateSubmit').prop('disabled', false);
+                        event.preventDefault();
+                    }
+                })
+            }
+        });
+
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Purchase/Suppliers");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        $(document).ready(function () {
+            $('.numberonly').keypress(function (e) {
+                var charCode = (e.which) ? e.which : event.keyCode
+                if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                    return false;
+            });
+        });
+    
+    </script>
+}

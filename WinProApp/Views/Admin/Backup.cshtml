@@ -1,0 +1,122 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.ProFormaInvoice.AddProFormaViewModel;
+@{
+    ViewData["Title"] = WebResource.Database + " " + WebResource.Backup;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="msgBlock" style="color:blue; font-size:18px; font-weight:bold; display:none; padding:15px; text-align:center;">@WebResource.Proccess</div>
+        <form id="createForm" method="post" asp-action="BackupDb" asp-controller="Administrator" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-4">@WebResource.Create @WebResource.Backup</button>
+        </form>
+     <div>
+
+    </div>
+</div>
+
+<hr />
+    <div class="row" style="margin-top:20px;">
+        <h3>@WebResource.Backup @WebResource.Files</h3>
+        <div class="col-md-12">
+            <table id="tblBackups" class="table table-striped table-bordered dataTable table-hover">
+                <thead>
+                    <tr>
+                        <th>@WebResource.FileName</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.FileList)
+                    {
+                        <tr>
+                            <td>@item.BackupFileName</td>
+                            <td>
+                                <a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" data-Id="@item.BackupFileName" class="btn btn-info btn-sm action download"><i class="fa fa-download"></i></a>&nbsp;
+                                <a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" data-Id="@item.BackupFileName" class="btn btn-danger btn-sm action remove"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                </table>
+            </div>
+    </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.CreatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordCreated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                    window.location.replace("/Administrator/Backup");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $('#createForm').submit(function(e) {
+            e.preventDefault();
+            $("#msgBlock").css("display","");
+        });
+
+        $(".download").click(function(){
+            var filename = $(this).attr("data-id");
+                window.location.href = "/Administrator/FileDownload/" + filename;
+        });
+
+            $(".remove").click(function () {
+                var filename = $(this).attr("data-id");
+
+                swal({
+                    title: "@Html.Raw(WebResource.Confirm)",
+                    text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                    cancelButtonText: " @Html.Raw(WebResource.No) ",
+                });
+
+                $(".swal2-confirm").on("click", function () {
+                    $.ajax({
+                        url: "/Administrator/BackupDelete/" + filename,
+                        type: "POST",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (data) {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            HandleResponse(data);
+                        }
+                    });
+                });
+            });
+
+    </script>
+    }
+

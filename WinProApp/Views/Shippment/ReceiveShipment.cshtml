@@ -1,0 +1,2793 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Shipping.AddViewModel;
+@{
+    ViewData["Title"] = @WebResource.Receive + " " + @WebResource.Shipment;
+    string productImgPath = "/Docs/Products/";
+    string barcodeImgPath = "/Images/ProductBarcodes/";
+    string reportPath = "/Reports/";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="createForm" enctype="multipart/form-data" asp-action="Create" asp-controller="Shipping" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <input asp-for="Id" type="hidden" value="0" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RecordType" value="Receive" />
+            <div class="row col-md-12" style="margin-bottom:20px;">
+                 @*<div class="col-md-2" style="margin-bottom:10px;">
+                      <label for="ShippmentType">@WebResource.Type</label>
+                      <select name="ShippmentType" id="ShippmentType" class="form-control">
+                            <option value="new">@WebResource.New</option>
+                            <option value="existing">@WebResource.Existing</option>
+                            <option value="pending">@WebResource.Received</option>
+                        </select>
+                 </div>*@
+                 <div class="row col-md-10" style="margin-bottom:10px;" id="Block1">
+                         <div class="col-md-3">
+                              <label for="RecordId">@WebResource.ID</label>
+                        <select name="RecordId" id="RecordId" class="form-control" asp-items="@ViewBag.RecordsIdList">
+                                <option value="">@WebResource.Select Id</option>
+                            </select>
+                         </div>
+                          <div class="col-md-3">
+                              <label for="RefNo">@WebResource.Reference</label>
+                        <select name="RefNo" id="RefNo" class="form-control" asp-items="@ViewBag.RecordsReferenceList">
+                                <option value="">@WebResource.Select @WebResource.Reference</option>
+                            </select>
+                         </div>
+                 </div>
+            </div>
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Supplier @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    <div class="form-floating col-md-3">
+                        <label asp-for="SupplierId">@WebResource.Supplier</label>
+                        <select asp-for="SupplierId" class="form-control" asp-items="@ViewBag.Suppliers">
+                            <option value="">@WebResource.Select @WebResource.Supplier</option>
+                        </select>
+                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating col-md-2">
+                        <label for="BpCode">@WebResource.Bpcode</label>
+                        <input id="BpCode" name="BpCode" class="form-control" readonly />
+                    </div>
+
+                    <div class="form-floating col-md-3">
+                        <label for="Address">@WebResource.Address</label>
+                        <input type="text" id="Address" name="Address" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="VatNo">@WebResource.VatNo</label>
+                        <input id="VatNo" name="VatNo" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="Balance">@WebResource.Balance</label>
+                        <input id="Balance" name="Balance" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Store @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    <div class="form-floating col-md-3">
+                        <label asp-for="ToStoreId">@WebResource.Store</label>
+                        <select asp-for="ToStoreId" class="form-control" asp-items="@ViewBag.Stores">
+                            <option value="">@WebResource.Select @WebResource.Store</option>
+                        </select>
+                        <span asp-validation-for="ToStoreId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating col-md-2">
+                        <label for="StoreCode">@WebResource.Code</label>
+                        <input id="StoreCode" name="StoreCode" class="form-control" readonly />
+                    </div>
+
+                    <div class="form-floating col-md-3">
+                        <label for="Address">@WebResource.Address</label>
+                        <input type="text" id="SAddressa" name="SAddress" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="VatNo">@WebResource.VatNo</label>
+                        <input id="SVatNo" name="SVatNo" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Shipment @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    <div class="form-floating col-md-3">
+                        <label asp-for="ReferenceNo">@WebResource.Reference @WebResource.Number</label>
+                        <input asp-for="ReferenceNo" class="form-control" aria-required="true" autocomplete="off" />
+                        <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating col-md-3">
+                        <label for="Date">@WebResource.Date</label>
+                        <input type="text" name="Date" id="Date" class="form-control datefield" aria-required="true" autocomplete="off" required />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating col-md-3">
+                        <label for="AttachedDoc">@WebResource.AttachedDoc</label>
+                        <input type="file" name="AttachedDoc" id="AttachedDoc" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card card-success" style="margin-top:10px;padding-top:15px; padding-bottom:7px; background-color:#e8e9e9;display:none;" id="Block2">
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-3">
+                    </div>
+                    <div class="form-floating col-md-3">
+                    </div>
+                    <div class="form-floating col-md-3">
+                        <input type="button" id="btnUDownload" value="@WebResource.Download @WebResource.Sample @WebResource.Format" class="btn btn-outline-success btn-outline-info" />
+                    </div>
+                    <div class="form-floating col-md-3" style="text-align:right;">
+                        <input type="button" id="btnUpload" value="@WebResource.Upload @WebResource.Shipment @WebResource.Items" class="btn btn-outline-success btn-outline-info" />
+                    </div>
+                </div>
+            </div>
+
+           @* <div class="row" style="margin-top:20px;">
+                <div class="form-floating col-md-3">
+                    <label for="txtBarcode">@WebResource.Barcode</label>
+                    <input type="text" name="txtBarcode" id="txtBarcode" class="form-control" />
+                    <input type="hidden" name="curBarcodeProductId" id="curBarcodeProductId" value="" />
+                </div>
+                <div class="form-floating col-md-4">
+                    <label for="txtDesc">@WebResource.Description @WebResource.English</label>
+                    <input type="text" name="txtDesc" id="txtDesc" class="form-control" />
+                </div>
+                <div class="form-floating col-md-4">
+                    <label for="txtDesc1">@WebResource.Description @WebResource.Arabic</label>
+                    <input type="text" name="txtDesc1" id="txtDesc1" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:10px;">
+                <div class="form-floating col-md-2">
+                    <label for="txtStock">@WebResource.Stock</label>
+                    <input type="text" id="txtStock" name="txtStock" class="form-control" readonly />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="txtBoxNo">@WebResource.Box @WebResource.No </label>
+                    <input type="text" id="txtBoxNo" name="txtBoxNo" class="form-control" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="txtQtyBox">@WebResource.Qty @WebResource.Per @WebResource.Box </label>
+                    <input type="number" id="txtQtyBox" name="txtQtyBox" class="form-control" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="txtQty">@WebResource.Qty</label>
+                    <input type="number" id="txtQty" name="txtQty" class="form-control" />
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="txtPrice">@WebResource.Price</label>
+                    <input type="number" id="txtPrice" name="txtPrice" class="form-control" />
+                </div>
+                @* <div class="form-floating col-md-2">
+                <label for="txtVat">@WebResource.VAT</label>
+                <input type="number" id="txtVat" name="txtVat" class="form-control" />
+                </div>
+
+                <div class="form-floating col-md-1">
+                    <label for="btnAddItem">&nbsp;</label>
+                    <input type="hidden" name="txtTotal" id="txtTotal" value="" />
+                    <input type="button" id="btnAddItem" name="btnAddItem" value="@WebResource.Add" class="btn btn-flat btn-sm btn-secondary" style="margin-top:37px;" />
+                </div>
+            </div>*@
+
+            <div class="row card card-success" style="margin-top:20px;">
+                <div class="card-header"><h3 class="card-title">@WebResource.Invoice @WebResource.Items</h3></div>
+                <div class="card-body col-md-12 row">
+                    <table id="tblItems" class="table table-striped table-bordered table-responsive" style="height:550px">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th class="col-md-1">@WebResource.Barcode &nbsp;&nbsp;<a id="AllBarcodeGen" href="JavaScript:" class="btn btn-flat" title="Generate All Barcodes"><i class="fa fa-barcode"></i>&nbsp;+</a></th>
+                                <th class="col-md-2">@WebResource.Description (@WebResource.English) </th>
+                                <th class="col-md-2">@WebResource.Description (@WebResource.Arabic)</th>
+                                <th class="col-md-2">@WebResource.Seasson</th>
+                                <th class="col-md-2">@WebResource.Department</th>
+                                <th class="col-md-2">@WebResource.Category</th>
+                                <th class="col-md-2">@WebResource.Model_SKU</th>
+                                <th class="col-md-2">@WebResource.Size</th>
+                                <th class="col-md-2">@WebResource.Color</th>
+                                <th class="col-md-2">@WebResource.Year</th>
+                                <th class="col-md-2">@WebResource.Box @WebResource.No</th>
+                                <th class="col-md-1">@WebResource.Qty @WebResource.Per @WebResource.Box </th>
+                                <th class="col-md-1">@WebResource.Qty</th>
+                                <th id="RQtyCol" class="col-md-1">@WebResource.Received @WebResource.Qty</th>
+                                <th class="col-md-1">@WebResource.Cost</th>
+                                @*<th class="col-md-1">@WebResource.VAT</th>*@
+                                <th class="col-md-1">@WebResource.Total @WebResource.Cost</th>
+                                <th class="col-md-1">@WebResource.Image</th>
+                                <th class="col-md-1">@WebResource.Selling @WebResource.Price &nbsp;&nbsp;<a id="AllPriceCalculate" href="JavaScript:" class="btn btn-flat" title="Calculate All Rows"><i class="fa fa-calculator"></i>&nbsp;+</a></th>
+                                <th class="col-md-1">@WebResource.Selling @WebResource.VAT</th>
+                                <th class="col-md-1">@WebResource.Org_Price</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row card card-success" style="margin-top:20px; padding-top:7px;">
+                <div class="row col-md-12">
+                    @*                    <div class="form-floating col-md-10" style="text-align:right;">
+                    <label for="InvoiceVatTot" style="margin-left:7px;">@WebResource.VAT @WebResource.Total</label>
+                    </div>
+                    <div class="form-floating col-md-2">
+                    <input type="text" name="VatAmount" id="VatAmount" class="form-control" value="" data-val="0" style="text-align:right;" />
+                    </div>*@
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                             <label for="totPcs" style="margin-left:7px;">Total Qty</label>
+                         </div>
+                         <div class="form-floating col-md-4">
+                             <input type="text" readonly name="totPcs" id="totPcs" class="form-control" value="" data-val="0" style="text-align:right;" />
+                         </div>
+                    </div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="Discount" style="margin-left:7px;">@WebResource.Discount</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input type="number" name="Discount" id="Discount" class="form-control" value="" data-val="0" style="text-align:right;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="ChargesDescription" style="margin-left:7px;">@WebResource.ChargesDescription </label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input type="text" name="ChargesDescription" id="ChargesDescription" class="form-control" value="" data-val="0" />
+                        </div>
+                    </div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="OtherCharges" style="margin-left:7px;">@WebResource.Charges</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input type="number" name="OtherCharges" id="OtherCharges" class="form-control" value="" data-val="0" style="text-align:right;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="row col-md-6"></div>
+                    <div class="row col-md-6">
+                        <div class="form-floating col-md-8" style="text-align:right;">
+                            <label for="Total" style="margin-left:7px;">@WebResource.Total</label>
+                        </div>
+                        <div class="form-floating col-md-4">
+                            <input type="text" readonly name="Total" id="Total" class="form-control" value="" style="text-align:right;" />
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+             <div class="row col-md-12">
+                 <div class="form-floating col-md-2">
+                    <label asp-for="Status">@WebResource.Status</label>
+                    <select asp-for="Status" class="form-control">
+                         <option value="false">@WebResource.OnHold</option>
+                         <option value="true">@WebResource.Approved</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+             </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+             <input type="button" id="btnPrint"  class="w-100 btn btn-lg btn-primary col-md-3" value="Print" style="display:none;" />
+        </form>
+    </div>
+
+</div>
+
+<div class="modal fade" id="uploadModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top:45%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="float:right;position:absolute; right:5px;">&times;</button>
+                <h4 class="modal-title">@WebResource.Shipment  @WebResource.Items @WebResource.Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-8">
+                        <label for="UploadItems">@WebResource.Upload</label>
+                        <input type="file" id="UploadItems" name="UploadItems" class="form-control" accept=".xlsx" />
+                        <span id="ImportMsgBlock" style="padding:10px; margin-top:20px; text-align:center; font-weight:bold; color:darkgreen; display:none;">Processing... wait..</span>
+                    </div>
+                    <div class="form-floating col-md-4">
+                        <div class="form-floating col-md-12" style="height:30px;">&nbsp;</div>
+                        <input type="button" id="btnItemsUpload" class="btn btn-outline-success" value="Upload" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="printModal" role="dialog">
+    <div class="modal-dialog" style="width:100%;">
+        <div class="modal-content" style="margin-top:45%; width:700px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="float:right;position:absolute; right:5px;">&times;</button>
+                <h4 class="modal-title">Print</h4>
+            </div>
+            <div class="modal-body">
+                 <div class="row col-md-12">
+                     <div class="form-floating col-md-6" style="text-align:right;">
+                       <label for="Orientation" style="font-weight:400;">Orientation</label>
+                    </div>
+                    <div class="form-floating col-md-6">
+                       <select name="pageType" id="pageType" class="form-control">
+                           <option value="Portrait">Portrait</option>
+                            <option value="Landscape">Landscape</option>
+                       </select>
+                    </div>
+                 </div>
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-12">
+                        <h4>Report Columns</h4>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Barcode" id="Barcode" value="Barcode" class="chPrint" checked disabled />
+                            <label for="Barcode" style="font-weight:400;">Barcode</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="DescriptionEn" id="DescriptionEn" value="Description English" class="chPrint" checked />
+                            <label for="DescriptionEn" style="font-weight:400;">Description English</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="DescriptionAb" id="DescriptionAb" value="Description Arabic" class="chPrint" />
+                            <label for="DescriptionAb" style="font-weight:400;">Description Arabic</label>
+                        </div>
+                    </div>
+                     <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Department" id="Department" value="Department" class="chPrint" />
+                            <label for="Department" style="font-weight:400;">Department</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Seasson" id="Seasson" value="Seasson" class="chPrint" />
+                            <label for="Seasson" style="font-weight:400;">Seasson</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Style" id="Style" value="Style" class="chPrint" />
+                            <label for="Style" style="font-weight:400;">Style/Sku</label>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Size" id="Size" value="Size" class="chPrint" />
+                            <label for="Size" style="font-weight:400;">Size</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Color" id="Color" value="Color" class="chPrint" />
+                            <label for="Color" style="font-weight:400;">Color</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Year" id="Year" value="Year" class="chPrint" />
+                            <label for="Year" style="font-weight:400;">Year</label>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="BoxNo" id="BoxNo" value="BoxNo" class="chPrint" checked />
+                            <label for="BoxNo" style="font-weight:400;">Box No</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="QtyPerBox" id="QtyPerBox" value="QtyPerBox" class="chPrint" checked />
+                            <label for="QtyPerBox" style="font-weight:400;">Qty Per Box</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Qty" id="Qty" value="Qty" class="chPrint" checked />
+                            <label for="Qty" style="font-weight:400;">Qty</label>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="Price" id="Price" value="Price" class="chPrint" checked />
+                            <label for="Price" style="font-weight:400;">Price</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="SalePrice" id="SalePrice" value="SalePrice" class="chPrint" />
+                            <label for="SalePrice" style="font-weight:400;">Sale Price</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="SaleVat" id="SaleVat" value="SaleVat" class="chPrint" />
+                            <label for="SaleVat" style="font-weight:400;">Sale Vat</label>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" name="OriginalPrice" id="OriginalPrice" value="OriginalPrice" class="chPrint" />
+                            <label for="OriginalPrice" style="font-weight:400;">Original Price</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="RowItemTotal" id="RowItemTotal" value="Item Total" class="chPrint" checked />
+                            <label for="RowItemTotal" style="font-weight:400;">Item Total</label>
+                        </div>
+                    </div>
+                    
+                </div>
+                 <form id="frmPrint" action="">
+                     <input type="hidden" name="PrintColumns" id="PrintColumns" value="Barcode,Description English,BoxNo,QtyPerBox,Qty,Price,Item Total" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnReportGen" type="button" class="btn btn-default" data-dismiss="modal">Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div id="imageModal" class="imgmodelpopup">
+
+  <!-- The Close Button -->
+  <span id="popupClose" class="close">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="modelImg">
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption"></div>
+</div>
+
+<!-- The Upload Modal -->
+<div id="imageUploadModal" class="imgmodelpopup">
+    <span id="UploadPopupClose" class="close">&times;</span>
+     <div class="modal-content" style="margin-top:5%; width:700px;">
+    <!-- The Close Button -->
+        <div class="modal-body">
+        <div class="col-md-12 row">
+            <div class="col-md-8">
+                    <label for="UploadImage">@WebResource.Image</label>
+                    <input type="file" name="UploadProductImg" id="UploadProductImg" class="form-control" />
+                </div>
+
+            <div class="col-md-2">
+                <label for="btnProductImgUpload">&nbsp;</label>
+                <input type="hidden" name="RowIdx" id="RowIdx" value="" />
+                <input type="button" name="btnProductImgUpload" id="btnProductImgUpload" class="btn btn-primary" style="margin-top:25px;" value="Upload" />
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                let status = $("#Status").val();
+                //if(status=='true'){
+                //    window.location.replace("/Shipping/ShippingInfo");
+                //}
+                //else{
+                //    window.location.replace("/Shipping/Import");
+                //}
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        $(document).on('keypress', '.numberonly', function (e) {
+            var charCode = (e.which) ? e.which : event.keyCode
+            if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                return false;
+        });
+
+        $(document).on('keypress', '.decimalTwoDigits', function () {
+            if (this.value.includes('.')) {
+                if (this.value.split('.')[1].length > 1) {
+                    return false;
+                }
+            };
+        });
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        GetShippingRecordIds('pending');
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+
+        var vatx = "@ViewBag.VatPercentage";
+        $("#RecordId").select2();
+        $("#RefNo").select2();
+        $('#ToStoreId').select2();
+        $('#SupplierId').select2();
+
+       function GetSupplierInfo(Id) {
+            $("#Address").val('');
+            $("#VatNo").val('');
+            $('#Balance').val('');
+            if (parseInt(Id) > 0) {
+                $.ajax({
+                    url: "/Purchase/GetSupplierInfo/" + Id,
+                    type: "GET",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#BpCode").val(result.Bpcode);
+                        $("#Address").val(result.Address);
+                        $("#VatNo").val(result.VatNo);
+                        $('#Balance').val(result.Balance);
+                    },
+                    error: function () {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+            else {
+                $("#Address").val('');
+                $("#VatNo").val('');
+                $('#Balance').val('');
+            }
+        }
+
+        function GetStoreInfo(Id) {
+            $("#SAddress").val('');
+            $("#SVatNo").val('');
+            $('#StoreCode').val('');
+            if (parseInt(Id) > 0) {
+                $.ajax({
+                    url: "/Shipping/GetStoreInfo/" + Id,
+                    type: "GET",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#StoreCode").val(result.StoreCode);
+                        $("#SAddress").val(result.Address);
+                        $("#SVatNo").val(result.VatNo);
+                    },
+                    error: function () {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+            else {
+                $("#SAddress").val('');
+                $("#SVatNo").val('');
+                $('#StoreCode').val('');
+            }
+        }
+
+
+         $("#SupplierId").change(function () {
+             var Id = $(this).val();
+             GetSupplierInfo(Id);
+
+         });
+
+        $("#ToStoreId").change(function () {
+            var Id = $(this).val();
+            GetStoreInfo(Id);
+        });
+
+
+        $("#Sku").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Purchase/GetSkuModels",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            $("#SkuId").val('');
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.Code, value: item.Code, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#SkuId").val('');
+                $("#Sku").val(ui.item.value);
+                $("#SkuId").val(ui.item.title);
+            }
+        });
+
+
+        $("#ProductYear").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Purchase/GetProductYears",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            $("#ProductYearId").val('');
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.YearName, value: item.YearName, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#ProductYearId").val('');
+                $("#ProductYear").val(ui.item.value);
+                $("#ProductYearId").val(ui.item.title);
+            }
+        });
+
+        function CheckSku(code){
+             $.ajax({
+                url: "/Purchase/GetSkuIdBySkuCode",
+                type: "POST",
+                dataType: "json",
+                data: { code: code },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    if(result == "0"){
+                         swal({
+                            title: "@Html.Raw(WebResource.Warning)",
+                            text: "@Html.Raw(WebResource.NotFound)",
+                            type: "warning",
+                        });
+                        $("#SkuId").val('');
+                    }
+
+             },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        function CheckYear(name){
+             $.ajax({
+                url: "/Purchase/GetYearIdByYearName",
+                type: "POST",
+                dataType: "json",
+                data: { yearname: name },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    if(result == "0"){
+                         swal({
+                            title: "@Html.Raw(WebResource.Warning)",
+                            text: "@Html.Raw(WebResource.NotFound)",
+                            type: "warning",
+                        });
+                        $("#ProductYearId").val('');
+                    }
+
+             },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        $("#Sku").focusout(function () {
+            let code = $(this).val();
+            if ($.trim(code) != "") {
+                CheckSku(code);
+            }
+        });
+
+        $("#ProductYear").focusout(function () {
+            let code = $(this).val();
+            if ($.trim(code) != "") {
+                CheckYear(code);
+            }
+        });
+
+        $("#Sku").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                let code = $(this).val();
+                if ($.trim(code) != "") {
+                    CheckSku(code);
+                }
+            }
+        });
+        $("#ProductYear").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                let code = $(this).val();
+                if ($.trim(code) != "") {
+                    CheckYear(code);
+                }
+            }
+        });
+
+        $("#txtBarcode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Purchase/GetBarcodes",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.ProductId, value: item.ProductId, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#curBarcodeProductId").val('');
+                $("#txtBarcode").val(ui.item.value);
+                $("#curBarcodeProductId").val(ui.item.title);
+                GetProductInfoById(ui.item.title);
+            }
+        });
+
+        function GetProductInfoById(Id) {
+            $.ajax({
+                url: "/Purchase/GetProductInfoById",
+                type: "POST",
+                dataType: "json",
+                data: { id: Id },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#txtDesc").val(result.ProductName);
+                    $("#txtDate1").val(result.MfgDate);
+                    $("#txtDate2").val(result.ExpDate);
+                    $("#txtStock").val(result.Currentstock);
+                    $("#txtPrice").val(result.UnitCost);
+                    // $("#txtPrice").val(result.ProductInitialPrice);
+                    //  $("#txtVat").val(result.Vat);
+                    $("#txtOriginal").val(result.OreginalPrice);
+                    $("#Category").val(result.CategoryId);
+                    $("#Category").trigger('change.select2');
+                    $("#SkuId").val(result.SkuId);
+                    $("#Sku").val(result.SkuCode);
+                    $("#Size").val(result.SizeId);
+                    $("#Size").trigger('change.select2');
+                    $("#Color").val(result.ColorId);
+                    $("#Color").trigger('change.select2');
+                    $("#Seasson").val(result.SeasonId);
+                    $("#Seasson").trigger('change.select2');
+                    $("#Department").val(result.DepartmentId);
+                    $("#Department").trigger('change.select2');
+                    $("#Unit").val(result.Unitid);
+                    $("#Unit").trigger('change.select2');
+                    $("#Brand").val(result.BrandId);
+                    $("#Brand").trigger('change.select2');
+                    $("#Vendor").val(result.VendorId);
+                    $("#Vendor").trigger('change.select2');
+                    $("#Group").val(result.GroupId);
+                    $("#Group").trigger('change.select2');
+                    $("#Description").val(result.DescriptionId);
+                    $("#Description").trigger('change.select2');
+                    $("#ProductYear").val(result.YearName);
+                    $("#ProductYearId").val(result.YearId);
+                    $("#txtDesc").val(result.ProductNameEng);
+                    $("#txtDesc1").val(result.ProductNameArabic);
+                    productImg = "@productImgPath" + result.Image;
+                    $("#ProductImage").attr('src', productImg);
+
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        function CheckBarcode(code) {
+            $.ajax({
+                url: "/Purchase/GetProductIdByBarcode",
+                type: "POST",
+                dataType: "json",
+                data: { code: code },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    if (result == "0") {
+                        swal({
+                            title: "@Html.Raw(WebResource.Warning)",
+                            text: "@Html.Raw(WebResource.BarcodeNotFound)",
+                            type: "warning",
+                        });
+                        $("#curBarcodeProductId").val('');
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        $("#txtBarcode").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                let barcode = $(this).val();
+                if (barcode != "") {
+                  //  CheckBarcode(barcode);
+                    $("#txtDesc").focus();
+                }
+            }
+        });
+
+        $("#txtBarcode").focusout(function () {
+            let barcode = $(this).val();
+            if (barcode != "") {
+               // CheckBarcode(barcode);
+            }
+        });
+
+        $("#txtBoxNo").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                $("#txtQtyBox").focus();
+            }
+        });
+
+        $("#txtQtyBox").keyup(function () {
+            ItemTotCalculate();
+        });
+
+        $("#txtQtyBox").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                ItemTotCalculate();
+                $("#txtQty").focus();
+            }
+        });
+
+        $("#txtQty").keyup(function () {
+            ItemTotCalculate();
+        });
+
+        $("#txtQty").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                ItemTotCalculate();
+                $("#txtPrice").focus();
+            }
+        });
+
+        $("#txtPrice").keyup(function () {
+            ItemTotCalculate();
+        });
+
+        $("#txtPrice").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                let p = $(this).val();
+                ItemTotCalculate();
+                if (parseFloat(p) > 0) {
+                    $("#btnAddItem").trigger("click");
+                }
+
+            }
+        });
+
+        function CalculateRowTotal(Amount) {
+            //  let vatamoutX = (parseFloat(vatx) + parseFloat(100));
+            let amount = parseFloat(Amount);
+            let flag = true;
+
+            $("#txtOriginal").val(amount.toFixed(2));
+
+            let tot = parseFloat(Amount) + parseFloat(vatVal);
+            $("#txtPrice").val(tot.toFixed(2));
+        }
+
+        function ItemTotCalculate() {
+            let qtyd = $("#txtQtyD").val();
+            let qtyp = $("#txtQtyP").val();
+            let cost = $("#txtCost").val();
+            //  let sell = $("#txtSelling").val();
+            //  let itemvat = $("#salesVat").val();
+
+            //if(parseFloat(itemvat) > 0){
+            //    itemvat = itemvat;
+            //}
+            //else{
+            //    itemvat = 0;
+            //}
+
+            //  let vatamoutX =(parseFloat(vatx)/parseFloat(100));
+            let tot = 0;
+            let totVat = 0;
+
+            if ($("#DozenToQty").is(':checked') || (parseFloat(qtyp) > 0 && parseFloat(qtyd) > 0)) {
+                qtyp = (parseFloat(qtyp) + (parseFloat(qtyd) * 12))
+            }
+            else {
+                if (parseFloat(qtyp) > 0) {
+                    qtyp = qtyp;
+                }
+                if (parseFloat(qtyd) > 0) {
+                    qtyp = qtyd;
+                }
+            }
+
+            tot = (parseFloat(qtyp) * parseFloat(cost));
+
+            //if (parseFloat(qtyp) > 0) {
+            //    totVat = (parseFloat(tot) * parseFloat(vatamoutX));
+            //}
+
+
+            $("#txtTotal").val(tot);
+            //   $("#txtTotalVat").val(totVat);
+        }
+
+        $(document).on("keyup.autocomplete", ".itemBarcodeX", function (e) {
+            //$(this).parent().find('.ProductIdX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetBarcodes",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find('.ProductIdX').val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.ProductIdX').val(item.Id);
+                                        thisOne.val(item.ProductId);
+                                    } else {
+                                        thisOne.parent().find(".ProductIdX").val('');
+                                    }
+                                    return { label: item.ProductId, value: item.ProductId, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find('.ProductIdX').val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find('.ProductIdX').val(ui.item.title);
+                }
+            });
+        });
+
+        $(document).on("keyup.autocomplete", ".itemSkuX", function (e) {
+            //$(this).parent().find('.ProductSkuX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetSkuModels",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".ProductSkuX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.ProductSkuX').val(item.Id);
+                                        thisOne.val(item.Code);
+                                    } else {
+                                        thisOne.parent().find(".ProductSkuX").val('');
+                                    }
+                                    return { label: item.Code, value: item.Code, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".ProductSkuX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".ProductSkuX").val(ui.item.title);
+                }
+            });
+        });
+
+        $(document).on("keyup.autocomplete", ".itemDeptX", function (e) {
+            //$(this).parent().find('.ProductDeptX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetDepartments",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".ProductDeptX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.ProductDeptX').val(item.Id);
+                                        thisOne.val(item.Name);
+                                    } else {
+                                        thisOne.parent().find(".ProductDeptX").val('');
+                                    }
+                                    return { label: item.Name, value: item.Name, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".ProductDeptX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".ProductDeptX").val(ui.item.title);
+                }
+            });
+        });
+
+
+        $(document).on("keyup.autocomplete", ".itemSeassonX", function (e) {
+            //$(this).parent().find('.ProductSeassonX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetSeassons",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".ProductSeassonX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.ProductSeassonX').val(item.Id);
+                                        thisOne.val(item.Name);
+                                    } else {
+                                        thisOne.parent().find(".ProductSeassonX").val('');
+                                    }
+                                    return { label: item.Name, value: item.Name, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".ProductSeassonX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".ProductSeassonX").val(ui.item.title);
+                }
+            });
+        });
+
+        $(document).on("keyup.autocomplete", ".itemColorX", function (e) {
+            //$(this).parent().find('.ProductColorX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetColors",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".ProductColorX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.ProductColorX').val(item.Id);
+                                        thisOne.val(item.Name);
+                                    } else {
+                                        thisOne.parent().find(".ProductColorX").val('');
+                                    }
+                                    return { label: item.Name, value: item.Name, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".ProductColorX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".ProductColorX").val(ui.item.title);
+                }
+            });
+        });
+
+
+        $(document).on("keyup.autocomplete", ".itemSizeX", function (e) {
+            //$(this).parent().find('.ProductSizeX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetSizes",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".ProductSizeX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.ProductSizeX').val(item.Id);
+                                        thisOne.val(item.Name);
+                                    } else {
+                                        thisOne.parent().find(".ProductSizeX").val('');
+                                    }
+                                    return { label: item.Name, value: item.Name, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".ProductSizeX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".ProductSizeX").val(ui.item.title);
+                }
+            });
+        });
+
+
+        $(document).on("keyup.autocomplete", ".itemYearX", function (e) {
+            //$(this).parent().find('.productYearIdX').val('');
+            let thisOne = $(this);
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Purchase/GetProductYears",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".productYearIdX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.productYearIdX').val(item.Id);
+                                        thisOne.val(item.YearName);
+                                    } else {
+                                        thisOne.parent().find(".productYearIdX").val('');
+                                    }
+                                    return { label: item.YearName, value: item.YearName, title: item.Id };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".productYearIdX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".productYearIdX").val(ui.item.title);
+                }
+            });
+        });
+
+        $(document).on("keyup.autocomplete", ".itemCatText", function (e) {
+            let thisOne = $(this);
+            //$(this).parent().find('.itemCatX').val('');
+            //$(this).parent().find('.itemParentCatX').val('');
+            $(this).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Shipping/GetSCategoryAutocomplete",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            if (!data.length) {
+                                var result = [
+                                    {
+                                        label: 'No matches found',
+                                        value: response.term
+                                    }
+                                ];
+                                thisOne.parent().find(".itemCatX").val('');
+                                thisOne.parent().find(".itemParentCatX").val('');
+                                response(result);
+                            }
+                            else {
+                                response($.map(data, function (item) {
+                                    if (data.length == 1) {
+                                        thisOne.parent().find('.itemCatX').val(item.Id);
+                                        thisOne.parent().find('.itemParentCatX').val(item.ParentId);
+                                        thisOne.val(item.CategoryNameEng);
+                                    } else {
+                                        thisOne.parent().find(".itemCatX").val('');
+                                        thisOne.parent().find(".itemParentCatX").val('');
+                                    }
+                                    return { label: item.CategoryNameEng, value: item.CategoryNameEng, title: item.Id, dataId: item.ParentId };
+                                }))
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result);
+                        }
+                    })
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).parent().find(".itemCatX").val('');
+                    $(this).parent().find(".itemParentCatX").val('');
+                    $(this).val(ui.item.value);
+                    $(this).parent().find(".itemCatX").val(ui.item.title);
+                    $(this).parent().find(".itemParentCatX").val(ui.item.dataId);
+                }
+            });
+        });
+
+        //function AddItemRows() {
+        //    let vatamoutX = (parseFloat(vatx) / parseFloat(100));
+        //    let code = $("#txtBarcode").val();
+        //    let productId = $("#curBarcodeProductId").val();
+        //    let desc = $("#txtDesc").val();
+        //    let descab = $("#txtDesc1").val();
+        //    let sku = $("#SkuId").val();
+        //    let skuText = $("#Sku").val();
+        //    let cat = $("#Category").val();
+        //    let catText = $("#Category option:selected").text();
+        //    let parentCat = $("#ParentCategoryId").val();
+        //    let seassonId = $("#Seasson").val();
+        //    let seassonText = $("#Seasson option:selected").text();
+        //    let deptId = $("#Department").val();
+        //    let deptText = $("#Department option:selected").text();
+        //    let color = $("#Color").val();
+        //    let colorText = $("#Color option:selected").text();
+        //    let size = $("#Size").val();
+
+        //    let yearId = $("#ProductYearId").val();
+        //    let yearText = $("#ProductYear").val();
+        //    let unit = $("#Unit").val();
+        //    let brand = $("#Brand").val();
+        //    let vendor = $("#Vendor").val();
+        //    let group = $("#Group").val();
+        //    //   let descriptionId = $("#Description").val();
+
+        //    let sizeText = $("#Size option:selected").text();
+
+        //    let stock = $("#txtStock").val();
+        //    let qtyb = $("#txtQtyBox").val();
+        //    let qty = $("#txtQty").val();
+        //    let cost = $("#txtPrice").val();
+        //    let boxno = $("#txtBoxNo").val();
+        //    // let vat = $("#txtVat").val();
+        //    //  let vattot = $("#txtTotalVat").val();
+        //    let total = parseFloat(cost) * parseFloat(qty);  //$("#txtTotal").val();
+
+        //    //  let productVat = (parseFloat(cost) * parseFloat(vatamoutX));
+
+
+        //    if (parseInt(cat) > 0) {
+        //        catText = catText;
+        //    }
+        //    else {
+        //        catText = "";
+        //    }
+        //    if (parseInt(seassonId) > 0) {
+        //        seassonText = seassonText;
+        //    }
+        //    else {
+        //        seassonText = "";
+        //    }
+        //    if (parseInt(deptId) > 0) {
+        //        deptText = deptText;
+        //    }
+        //    else {
+        //        deptText = "";
+        //    }
+
+        //    if (parseInt(size) > 0) {
+        //        sizeText = sizeText;
+        //    }
+        //    else {
+        //        sizeText = "";
+        //    }
+
+        //    if (parseInt(color) > 0) {
+        //        colorText = colorText;
+        //    }
+        //    else {
+        //        colorText = "";
+        //    }
+
+
+
+        //    if ($.trim(code) != "" && $.trim(desc) != "" && parseFloat(cost) > 0 && (parseFloat(qty) > 0 && parseFloat(qtyb) > 0)) {
+        //        let itemCode = '<input type="hidden" name="ItemId" value="0" /><input type="hidden" name="ItemProductId" class="ProductIdX" value="' + productId + '" /><input type="text" name="Barcode" class="itemBarcodeX" value="' + code + '" />';
+        //        let itemDesc = '<input type="hidden" name="ItemDescription" value="' + desc + '" /><input type="hidden" name="ItemDescriptionAb" value="' + descab + '" /><input type="hidden" class="itemCatX" name="itemCategory" value="' + cat + '" /><input type="hidden" class="itemParentCatX" name="itemParentCategory" value="' + parentCat + '" />' + desc + "/ " + descab;
+        //        let itemSeasson = '<input type="hidden" name="itemSeassonId" class="ProductSeassonX" value="' + seassonId + '" /><input type="text" name="itemSeasson" class="itemSeassonX" value="' + seassonText + '" />';
+        //        let itemDept = '<input type="hidden" name="itemDepartmentId" class="ProductDeptX" value="' + deptId + '" /><input type="text" name="itemDepartment" class="itemDeptX" value="' + deptText + '" />';
+        //        let itemSku = '<input type="hidden" name="itemSkuId" class="ProductSkuX" value="' + sku + '" /><input type="text" name="itemSkuText" class="itemSkuX" value="' + skuText + '" />';
+        //        let itemSize = '<input type="hidden" name="itemSizeId" class="ProductSizeX" value="' + size + '" /><input type="text" name="itemSize" class="itemSizeX" value="' + sizeText + '" style="width:120px;" />';
+        //        let itemColor = '<input type="hidden" name="itemColorId" class="ProductColorX" value="' + color + '" /><input type="text" name="itemColor" class="itemColorX" value="' + colorText + '" style="width:120px;" />';
+        //        let itemYear = '<input type="hidden" name="itemYear" class="productYearIdX" value="' + yearId + '" /><input type="text" name="itemYearText" class="itemYearX" style="width:50px;" value="' + yearText + '" />';
+        //        let itemAddtional = '<input type="hidden" name="itemBrand" value="' + brand + '" /><input type="hidden" name="itemVendor" value="' + vendor + '" /><input type="hidden" name="itemGroup" value="' + group + '" /><input type="hidden" name="ItemUnitId" value="' + unit + '" />';
+        //        let itemBoxNo = '<input type="text" name="ItemBoxNo" value="' + boxno + '" />';
+        //        let itemQtyB = '<input type="text" name="ItemQtyBox" value="' + qtyb + '" style="width:60px;" />';
+        //        let itemQty = '<input type="text" name="ItemQty" class="ItemQtyX" value="' + qty + '" style="width:60px;" />';
+        //        //  let itemVat = '<input type="text" name="ItemVat" value="' + vat + '" /><input type="hidden" name="TotalItemsVat" class="itemsellvatx" value="' + vattot + '" />';
+        //        let itemCost = '<input type="text" name="itemPrice" class="itemPriceX" value="' + cost + '" style="width:100px;" />';
+        //        let itemTotal = '<input type="hidden" name="itemTotal" class="itemtotx" value="' + total.toFixed(2) + '" /><span class="TotTextX">' + total.toFixed(2) + '</span>';
+        //        let productImg = '<img src="" style="width:80px;" />';
+        //        let btnBarcode = '<input type="button" class="printBarcode" name="btnPrintBarcode" value="Print Barcode" />';
+        //        let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a>';
+
+        //        let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+        //        var itemCell = "<tr id='" + rowId + "'>";
+        //        //  $('#tblItems tbody').append(itemRow);
+
+        //        itemCell += '<td>' + itemCode + '</td>';
+        //        itemCell += '<td style="min-width:150px;">' + itemDesc + '</td>';
+        //        itemCell += '<td>' + itemSeasson + '</td>';
+        //        itemCell += '<td>' + itemDept + '</td>';
+        //        itemCell += '<td>' + itemSku + '</td>';
+        //        itemCell += '<td>' + itemSize + '</td>';
+        //        itemCell += '<td>' + itemColor + itemAddtional + '</td>';
+        //        itemCell += '<td>' + itemYear + '</td>';
+        //        itemCell += '<td>' + itemBoxNo + '</td>';
+        //        itemCell += '<td>' + itemQtyB + '</td>';
+        //        itemCell += '<td>' + itemQty + '</td>';
+        //        itemCell += '<td>' + itemCost + '</td>';
+        //        //  itemCell += '<td>' + itemVat + '</td>';
+        //        // itemCell += '<td class="itemvattotalx" style="display:none;">' + vattot + '</td>';
+        //        itemCell += '<td class="itemtotlx">' + itemTotal + '</td>';
+        //        itemCell += '<td>' + productImg + '</td>';
+        //        itemCell += '<td>' + btnBarcode + '</td>';
+        //        itemCell += '<td>' + btn + '</td>';
+        //        itemCell += '</tr>';
+        //        // $('#tblItems #' + rowId).append(itemCell);
+        //        $('#tblItems tbody').append(itemCell);
+
+        //        $("#Department").val('');
+        //        $("#Category").val('');
+        //        $("#Sku").val('');
+        //        $("#SkuId").val('');
+        //        $("#Color").val('');
+        //        $("#Size").val('');
+        //        $("#ProductYear").val('');
+        //        $("#Seasson").val('');
+
+        //        $("#txtBarcode").val('');
+        //        $("#txtOriginal").val('');
+        //        $("#txtDesc").val('');
+        //        $("#txtDate1").val('');
+        //        $("#txtDate2").val('');
+        //        $("#txtStock").val('');
+        //        $("#txtQtyBox").val('');
+        //        $("#txtQty").val('');
+        //        $("#txtCost").val('');
+        //        $("#txtVat").val('');
+        //        $("#txtTotal").val('');
+        //        $("#ProductYearId").val('');
+        //        $("#Unit").val('');
+        //        $("#Brand").val('');
+        //        $("#Vendor").val('');
+        //        $("#Group").val('');
+        //        $("#Description").val('');
+        //        $("#curBarcodeProductId").val('');
+
+        //        $("#Department").trigger('change.select2');
+        //        $("#Category").trigger('change.select2');
+        //        $("#Color").trigger('change.select2');
+        //        $("#Size").trigger('change.select2');
+        //        $("#Seasson").trigger('change.select2');
+
+        //        $("#Unit").trigger('change.select2');
+        //        $("#Brand").trigger('change.select2');
+        //        $("#Vendor").trigger('change.select2');
+        //        $("#Group").trigger('change.select2');
+        //        $("#Description").trigger('change.select2');
+
+
+
+        //        $("#txtBarcode").focus();
+        //    }
+
+        //    CalculateTotal();
+        //}
+
+        //$("#btnAddItem").click(function () {
+        //    AddItemRows();
+        //});
+
+        $(document).on("keyup", ".ItemQtyX", function () {
+            let q = $(this).val();
+            let p = $(this).parent().parent().find('td').find('.itemPriceX').val();
+            let tot = 0;
+
+            if (parseFloat(q) > 0 && parseFloat(p) > 0) {
+                tot = (parseFloat(q) * parseFloat(p));
+            }
+
+            $(this).parent().parent().find('td').find('.itemtotx').val(tot.toFixed(2));
+            $(this).parent().parent().find('td').find('.TotTextX').text(tot.toFixed(2));
+            CalculateTotal();
+        });
+
+        $(document).on("keyup", ".itemPriceX", function () {
+            let p = $(this).val();
+            let q = $(this).parent().parent().find('td').find('.ItemQtyX').val();
+            let tot = 0;
+
+            if (parseFloat(q) > 0 && parseFloat(p) > 0) {
+                tot = (parseFloat(q) * parseFloat(p));
+            }
+
+            $(this).parent().parent().find('td').find('.itemtotx').val(tot.toFixed(2));
+            $(this).parent().parent().find('td').find('.TotTextX').text(tot.toFixed(2));
+            CalculateTotal();
+        });
+
+        $(document).on("click", ".removeRow", function () {
+            $(this).parent().parent().remove();
+            CalculateTotal();
+        })
+
+        function CalculateTotal() {
+            var total = 0;
+            var vattotal = 0;
+            var totQty = 0;
+
+            $(".itemtotx").each(function () {
+                var val = $(this).val();
+                if (parseFloat(val) > 0) {
+                    total = parseFloat(total) + parseFloat(val);
+                }
+            });
+
+            $(".ItemQtyX").each(function () {
+                var qtyVal = $(this).val();
+                if (parseFloat(qtyVal) > 0) {
+                    totQty = parseFloat(totQty) + parseFloat(qtyVal);
+                }
+            });
+
+            //$(".itemvattotalx").each(function () {
+            //   var val1 = $(this).text();
+            //    if (parseFloat(val1) > 0){
+            //        vattotal = parseFloat(vattotal) + parseFloat(val1);
+            //    }
+            //});
+            
+            let discount = $("#Discount").val();
+            let charges = $("#OtherCharges").val();
+
+            if (parseFloat(discount) > 0) {
+                discount = parseFloat(discount);
+            }
+            else {
+                discount = 0;
+            }
+
+            if (parseFloat(charges) > 0) {
+                charges = parseFloat(charges);
+            }
+            else {
+                charges = 0;
+            }
+
+            total = ((parseFloat(total) + parseFloat(charges)) - parseFloat(discount));
+
+            $("#totPcs").val(totQty.toFixed(2));
+            $("#totPcs").attr('data-val', totQty.toFixed(2));
+
+            //   $("#VatAmount").val(vattotal.toFixed(2));
+            //   $("#VatAmount").attr('data-val',vattotal.toFixed(2));
+            $("#Total").val(total.toFixed(2));
+        }
+
+        //$("#VatAmount").keyup(function () {
+        //    let prev = $(this).attr('data-val');
+        //     let curVat = $(this).val();
+        //     let tot = $("#Total").val();
+
+        //     if(parseFloat(prev) > 0){
+        //         prev = prev;
+        //     }
+        //     else{
+        //         prev=0;
+        //     }
+
+        //     if(parseFloat(curVat) > 0){
+        //         curVat = curVat;
+        //     }
+        //     else{
+        //         curVat=0;
+        //     }
+
+        //     if(parseFloat(tot) > 0){
+        //         tot = tot;
+        //     }
+        //     else{
+        //         tot=0;
+        //     }
+
+        //     if(parseFloat(tot) > 0){
+        //         tot = (parseFloat(parseFloat(tot) - parseFloat(prev)) + parseFloat(curVat));
+        //          $("#Total").val(tot.toFixed(2));
+        //          $(this).attr('data-val', curVat);
+        //     }
+
+        //});
+
+        $("#Discount").keyup(function () {
+            CalculateTotal(); 
+            //let prev = $(this).attr('data-val');
+            //let discount = $(this).val();
+            //let tot = $("#Total").val();
+
+            //if (parseFloat(prev) > 0) {
+            //    prev = prev;
+            //}
+            //else {
+            //    prev = 0;
+            //}
+
+            //if (parseFloat(discount) > 0) {
+            //    discount = discount;
+            //}
+            //else {
+            //    discount = 0;
+            //}
+
+            //if (parseFloat(tot) > 0) {
+            //    tot = tot;
+            //}
+            //else {
+            //    tot = 0;
+            //}
+
+            //tot = (parseFloat(parseFloat(tot) + parseFloat(prev)) - parseFloat(discount));
+
+            //$("#Total").val(tot.toFixed(2));
+            //$(this).attr('data-val', discount);
+        });
+
+        $("#OtherCharges").keyup(function () {
+            let prev = $(this).attr('data-val');
+            let charges = $(this).val();
+            let tot = $("#Total").val();
+
+            if (parseFloat(prev) > 0) {
+                prev = prev;
+            }
+            else {
+                prev = 0;
+            }
+
+            if (parseFloat(charges) > 0) {
+                charges = charges;
+            }
+            else {
+                charges = 0;
+            }
+
+            if (parseFloat(tot) > 0) {
+                tot = tot;
+            }
+            else {
+                tot = 0;
+            }
+
+            tot = (parseFloat(parseFloat(tot) - parseFloat(prev)) + parseFloat(charges));
+
+            $("#Total").val(tot.toFixed(2));
+            $(this).attr('data-val', charges);
+        });
+
+        $("#btnUDownload").click(function () {
+            let url = "/Shipping/DownloadSample";
+            window.location.href = url;
+        });
+
+        $("#btnUpload").click(function () {
+            $("#uploadModal").modal();
+        });
+
+        $("#btnItemsUpload").click(function () {
+            let fileData = new FormData();
+            var fileUpload = $("#UploadItems").get(0);
+            var upload = fileUpload.files[0];
+            fileData.append("upload", upload);
+           
+            if($("#UploadItems").get(0).files.length > 0){
+            $("#ImportMsgBlock").css('display','');
+            $(this).prop('disabled', true);
+
+            $.ajax({
+                url: "/Shipping/ItemUpload",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (data) {
+                        var calTotal = 0;
+                    if (data != null) {
+                            $('#tblItems tbody').empty();
+                        Clear();
+                        for (i = 0; i < data.length; i++) {
+                            var result = JSON.parse(JSON.stringify(data[i]));
+                            let code = result.Barcode;
+                            let productId = result.ProductId;
+                            let desc = result.DescriptionEng;
+                            let descab = result.DescriptionArabic;
+                            let sku = result.SkuId;
+                            let skuText = result.Sku;
+                            let cat = parseInt(result.CategoryId) > 0?result.CategoryId:'';
+                            let catText = result.CategoryName;
+                            let parentCat = parseInt(result.ParentCategoryId) > 0 ?result.ParentCategoryId:'';
+                            let seassonId = result.SeassonId;
+                            let seassonText = result.SessonName;
+                            let deptId = result.DepartmentId;
+                            let deptText = result.DepartmentName;
+                            let color = result.ColorId;
+                            let colorText = result.ColorName;
+                            let size = result.SizeId;
+                            let sizeText = result.SizeName;
+
+                            let yearId = result.YearId;
+                            let yearText = result.YearName;
+                            let unit = result.UnitId;
+                            let brand = result.BrandId;
+                            let vendor = result.VendorId;
+                            let group = result.GroupId;
+                            // let descriptionId = $("#Description").val();
+
+                            let boxno = result.BoxNo;
+
+                            //let qtyb = result.QtyPerBox;
+                            //let qty = result.Qty;
+                            //let cost = result.Price;
+                            //let total = result.Total; //parseFloat(cost) * parseFloat(qty);  //$("#txtTotal").val();
+                            //let sellp = result.SalePrice;
+                            //let sellVat = result.SaleVat;
+                            //let orgP = result.OriginalPrice;
+
+                            let qtyb = parseInt(result.QtyPerBox)>0?result.QtyPerBox:'';
+                            let qty = parseInt(result.Qty)>0?result.Qty:'';
+                            let cost = parseFloat(result.Price) > 0?result.Price:'';
+                            let total = parseFloat(result.Total) > 0?result.Total:'';
+
+                            let sellp = parseFloat(result.SalePrice)>0?result.SalePrice:'';
+                            let sellVat = parseFloat(result.SaleVat)>0?result.SaleVat:'';
+                            let orgP = parseFloat(result.OriginalPrice)>0?result.OriginalPrice:'';
+                            let img = result.ImageUrl;
+                            let imgPath = '';
+
+                            if(parseFloat(result.Price) > 0 && parseInt(result.Qty) > 0) {
+                                total = (parseFloat(result.Price) * parseInt(result.Qty)).toFixed(2);
+                                calTotal += total;
+                            } else{
+                                calTotal += 0;
+                            }
+                            calTotal += parseFloat(result.Total);
+                            //if(parseFloat(result.Total) > 0) {
+                            //    calTotal += parseFloat(result.Total);
+                            //} else if(parseFloat(result.Price) > 0 && parseInt(result.Qty) > 0) {
+                            //    calTotal += (parseFloat(result.Price) * parseInt(result.Qty));
+                            //}
+
+                            if(img != ""){
+                                imgPath += "@productImgPath" + img;
+                            }
+
+                            if (parseInt(cat) > 0) {
+                                catText = catText;
+                            }
+                            else {
+                                catText = "";
+                            }
+                            if (parseInt(seassonId) > 0) {
+                                seassonText = seassonText;
+                            }
+                            else {
+                                seassonText = "";
+                            }
+                            if (parseInt(deptId) > 0) {
+                                deptText = deptText;
+                            }
+                            else {
+                                deptText = "";
+                            }
+
+                            if (parseInt(size) > 0) {
+                                sizeText = sizeText;
+                            }
+                            else {
+                                sizeText = "";
+                            }
+
+                            if (parseInt(color) > 0) {
+                                colorText = colorText;
+                            }
+                            else {
+                                colorText = "";
+                            }
+
+                            let itemCode = '<input type="hidden" name="ItemId" value="0" /><input type="hidden" name="ItemProductId" class="ProductIdX" value="' + productId + '" /><input readonly type="text" name="Barcode" id="Barcode_' + i + '" class="itemBarcodeX cellText" value="' + code + '" />';
+                            let itemDesc = '<input readonly type="text" name="ItemDescription" id="ItemDescription_' + i + '" class="descEn cellText" value="' + desc + '" />';
+                                let itemDesc1 = '<input readonly type="text" name="ItemDescriptionAb" id="ItemDescriptionAb_' + i + '" class="descAb cellText" value="' + descab + '" />';
+                            let itemSeasson = '<input readonly type="hidden" name="itemSeassonId" class="ProductSeassonX" value="' + seassonId + '" /><input readonly type="text" name="itemSeasson" id="itemSeasson_' + i + '" class="itemSeassonX cellText" value="' + seassonText + '" />';
+                            let itemDept = '<input type="hidden" name="itemDepartmentId" class="ProductDeptX" value="' + deptId + '" /><input readonly type="text" name="itemDepartment" id="itemDepartment_' + i + '" class="itemDeptX cellText" value="' + deptText + '" />';
+                            let itemCat = '<input readonly type="text" class="itemCatText" name="itemCategoryText" id="itemCategory_' + i + '" value="' + catText + '" /><input type="hidden" class="itemCatX" name="itemCategory" value="' + cat + '" /><input type="hidden" class="itemParentCatX cellText" name="itemParentCategory" id="itemParentCategory_' + i + '" value="' + parentCat + '" />';
+                                let itemSku = '<input type="hidden" name="itemSkuId" class="ProductSkuX" value="' + sku + '" /><input readonly type="text" name="itemSkuText" id="itemSkuText_' + i + '" class="itemSkuX cellText" value="' + skuText + '" required />';
+                            let itemSize = '<input type="hidden" name="itemSizeId" class="ProductSizeX" value="' + size + '" /><input readonly type="text" name="itemSize" id="itemSize_' + i + '" class="itemSizeX cellText" value="' + sizeText + '" style="width:120px;" />';
+                            let itemColor = '<input type="hidden" name="itemColorId" class="ProductColorX" value="' + color + '" /><input readonly type="text" name="itemColor" id="itemColor_' + i + '" class="itemColorX cellText" value="' + colorText + '" style="width:120px;" />';
+                            let itemYear = '<input type="hidden" name="itemYear" value="' + yearId + '" /><input readonly type="text" name="itemYearText" class="itemYearX cellText" id="itemYearText_' + i + '" style="width:50px;" value="' + yearText + '" />';
+                            let itemAddtional = '<input type="hidden" name="itemBrand" value="' + brand + '" /><input type="hidden" name="itemVendor" value="' + vendor + '" /><input type="hidden" name="itemGroup" value="' + group + '" /><input type="hidden" name="ItemUnitId" value="' + unit + '" />';
+                            let itemBoxNo = '<input readonly type="text" name="itemBoxNo" id="itemBoxNo_' + i + '" value="' + boxno + '" class="cellText" />';
+                            let itemQtyB = '<input readonly type="number" name="ItemQtyBox" id="ItemQtyBox_' + i + '" value="' + qtyb + '" class="cellText" style="width:60px;" />';
+                            let itemQty = '<input readonly type="text" name="ItemQty" id="ItemQty_' + i + '" class="ItemQtyX cellText numberonly" value="' + qty + '" style="width:60px;" />';
+                            let itemCost = '<input readonly type="number" name="itemPrice" id="itemPrice_' + i + '" class="itemPriceX cellText" value="' + cost + '" style="width:100px;" />';
+                            let itemTotal = '<input readonly type="hidden" name="itemTotal" class="itemtotx" value="' + total + '" /><span class="TotTextX">' + total + '</span>';
+                            let productImg = '<input readonly type="hidden" name="productImg" id="imgName_' + i + '" value="' + img + '" />';
+                             productImg += '<img class="curImg" id="imgView_' + i + '" src="' + imgPath + '" style="width:80px;" />';
+                            let itemSellPrice = '<input readonly type="number" name="ItemSellingPrice" id="ItemSellingPrice_' + i + '" class="itemSellx cellText" value="' + sellp + '" style="width:100px;" />';
+                            let itemSellVat = '<input readonly type="number" name="ItemSellingVat" id="ItemSellingVat_' + i + '"  class="itemSellVatx cellText" value="' + sellVat + '" style="width:100px;" />';
+                            let itemOrgPrice = '<input readonly type="number" name="ItemOrgPrice" id="ItemOrgPrice_' + i + '"  class="itemOrg cellText" value="' + orgP + '" style="width:100px;" />';
+                            let uploadBtn = '<input type="button" class="btnImgUpload" name="imageUploadBtn"  id="imageUpload_' + i + '" value="Upload" />';
+                            let btnBarcodegen = '<input type="button" class="createBarcodeBtn" name="btnCreateBarcode" value="+" style="position:absolute;" />';
+                            let btnBarcode = '<input type="button" class="printBarcode" name="btnPrintBarcode" value="Print Barcode" />';
+                            let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a>';
+
+                            let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                            var itemCell = "<tr id='" + rowId + "'>";
+
+                            itemCell += '<td>' + (parseInt(i) + 1) + '</td>';
+                            itemCell += '<td style="position: relative;">' + itemCode + btnBarcodegen + '</td>';
+                            itemCell += '<td>' + itemDesc + '</td>';
+                            itemCell += '<td>' + itemDesc1 + '</td>';
+                            itemCell += '<td>' + itemSeasson + '</td>';
+                            itemCell += '<td>' + itemDept + '</td>';
+                            itemCell += '<td>' + itemCat + '</td>';
+                            itemCell += '<td>' + itemSku + '</td>';
+                            itemCell += '<td>' + itemSize + '</td>';
+                            itemCell += '<td>' + itemColor + itemAddtional + '</td>';
+                            itemCell += '<td>' + itemYear + '</td>';
+                            itemCell += '<td>' + itemBoxNo + '</td>';
+                            itemCell += '<td>' + itemQtyB + '</td>';
+                            itemCell += '<td>' + itemQty + '</td>';
+                            itemCell += '<td>' + itemCost + '</td>';
+                            itemCell += '<td class="itemtotlx">' + itemTotal + '</td>';
+                            itemCell += '<td>' + productImg + '</td>';
+                            itemCell += '<td>' + itemSellPrice + '</td>';
+                            itemCell += '<td>' + itemSellVat + '</td>';
+                            itemCell += '<td>' + itemOrgPrice + '</td>';
+                            itemCell += '<td>' + uploadBtn + '</td>';
+                            itemCell += '<td>' + btnBarcode + '</td>';
+                            //itemCell += '<td>' + btn + '</td>';
+                            itemCell += '</tr>';
+
+                            $('#tblItems tbody').append(itemCell);
+                            //  $('#tblItems #' + rowId).append(itemCell);
+                            CalculateTotal();
+                        }
+                    }
+
+                    sleep();
+
+                    CalculateTotal();
+                        //$("#Total").val(calTotal.toFixed(2));
+                        $("#ImportMsgBlock").css('display', 'none');
+                        $("#btnItemsUpload").prop('disabled', false);
+                    $(".close").trigger('click');
+                },
+                error: function (result) {
+                    console.log(result);
+                        $("#ImportMsgBlock").css('display', 'none');
+                        $("#btnItemsUpload").prop('disabled', false);
+                }
+            });
+            }
+        });
+
+        $(document).on("click", ".printBarcode", function () {
+          let storeId = $("#ToStoreId").val();
+          let curBarcode = $(this).parent().parent().find('td').find(".itemBarcodeX").val();
+          let desc1 = $(this).parent().parent().find('td').find(".descEn").val();
+          let desc2 = $(this).parent().parent().find('td').find(".descAb").val();
+          let curPrice = $(this).parent().parent().find('td').find(".itemSellx").val();
+          let refNo = $("#ReferenceNo").val();
+          let sku = $(this).parent().parent().find('td').find(".itemSkuX").val();
+
+            if (parseInt(storeId) > 0) {
+                $.ajax({
+                    url: "/Shipping/CreateBarcode/" + storeId + "?barcode=" + curBarcode + "&price=" + curPrice + "&desc1=" + desc1 + "&desc2=" + desc2 + "&refno=" + refNo + "&style=" + sku,
+                    type: "POST",
+                    dataType: "json",
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        BarcodePopup(data);
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+
+        });
+
+        function BarcodePopup(Doc)
+        {
+            let FileName = "@barcodeImgPath" + Doc;
+            printJS(FileName);
+        }
+
+        $("#ShippmentType").change(function(){
+                Clear();
+                $("#RQtyCol").css('display','none');
+             let t = $(this).val();
+            if(t=="new"){
+                $("#Block1").css('display', 'none');
+                $("#Block2").css('display', '');
+                $("#createForm").attr('asp-action', 'Create');
+                $("#createForm").attr('action', '/Shipping/Create');
+                $("#frmPrint").attr('action', '');
+                $("#Id").val('0');
+                $("#btnPrint").css('display', 'none');
+                $("#RQtyCol").css('display','none');
+                $('#Discount').val('');
+                $('#Discount').attr('readonly', false);
+            }
+            else{
+                if(t=="pending"){
+                    $('#Discount').val('');
+                    $('#Discount').attr('readonly', false);
+                    $("#RQtyCol").css('display','');
+                }
+                else{
+                    $("#RQtyCol").css('display','none');
+                    $('#Discount').val('');
+                    $('#Discount').attr('readonly', true);
+                }
+                GetShippingRecordIds(t);
+                $("#Block1").css('display', '');
+                $("#Block2").css('display', 'none');
+                $("#createForm").attr('asp-action', 'Edit');
+                $("#createForm").attr('action', '/Shipping/Edit');
+                $("#Id").val('0');                
+            }
+            $('#tblItems tbody').empty();
+        });
+
+        $("#RecordId").change(function(){
+            Clear();
+            $("#RefNo").val('');
+            $("#RefNo").trigger('change.select2');
+            let Id = $(this).val();
+            if(Id==""){
+                Id=0;
+            }
+            $("#Id").val(Id);
+            $('#tblItems tbody').empty();
+            if(parseInt(Id) > 0)
+            {
+                $("#btnPrint").css('display', '');
+                GetItems(Id);
+                GetShippingInfo(Id);
+                $("#createForm").attr('action', '/Shipping/Edit/' + Id);
+                $("#frmPrint").attr('action', '/Shipping/ShippmentReportGenerate/' + Id);
+            }
+        });
+
+        $("#RefNo").change(function () {
+            Clear();
+            $("#RecordId").val('');
+            $("#RecordId").trigger('change.select2');
+            let Id = $(this).val();
+            if (Id == "") {
+                Id = 0;
+            }
+            $("#Id").val(Id);
+            $('#tblItems tbody').empty();
+            if(parseInt(Id) > 0)
+            {
+                $("#btnPrint").css('display', '');
+                GetItems(Id);
+                GetShippingInfo(Id);
+                $("#createForm").attr('action', '/Shipping/Edit/' + Id);
+                $("#frmPrint").attr('action', '/Shipping/ShippmentReportGenerate/' + Id);
+            }
+        });
+
+        function GetShippingRecordIds(type){
+            $("#RecordId option").remove();
+            $("#RefNo option").remove();
+            let opt1 = "<option value=''>Select Id</option>";
+            let opt2 = "<option value=''>Select Reference</option>";
+             $.ajax({
+                url: "/Shipping/GetShippingIds/" + type,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+
+                        for (i = 0; i < data.length; i++) {
+                            var result = JSON.parse(JSON.stringify(data[i]));
+                            opt1 += "<option value='" + result.Id +"'>" + result.Id + "</option>";
+                            opt2 += "<option value='" + result.Id +"'>" + result.ReferenceNo + "</option>";
+                        }
+                    }
+
+                    $("#RecordId").append(opt1);
+                    $("#RefNo").append(opt2);
+                }
+             });
+        }
+
+        function GetItems(Id) {
+            let sType = $("#ShippmentType").val();
+            $.ajax({
+                url: "/Shipping/GetShippingDetails/" + Id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var calcTotQty = 0;
+                    var calTotal = 0;
+                    if (data != null) {
+                        for (i = 0; i < data.length; i++) {
+                            var result = JSON.parse(JSON.stringify(data[i]));
+                            let curItemId = result.Id;
+                            let code = result.Barcode;
+                            let productId = parseInt(result.ProductId)>0?result.ProductId:'';
+                            let desc = result.DescriptionEng;
+                            let descab = result.DescriptionArabic;
+                            let sku = parseInt(result.SkuId)>0?result.SkuId:'';
+                            let skuText = result.Sku;
+                            let cat = parseInt(result.CategoryId) > 0?result.CategoryId:'';
+                            let catText = result.CategoryName;
+                            let parentCat = parseInt(result.ParentCategoryId)>0?result.ParentCategoryId:'';
+                            let seassonId = parseInt(result.SeassonId)>0?result.SeassonId:'';
+                            let seassonText = result.SessonName;
+                            let deptId = parseInt(result.DepartmentId)>0?result.DepartmentId:'';
+                            let deptText = result.DepartmentName;
+                            let color = parseInt(result.ColorId)>0?result.ColorId:'';
+                            let colorText = result.ColorName;
+                            let size = parseInt(result.SizeId)>0?result.SizeId:'';
+                            let sizeText = result.SizeName;
+
+                            let yearId = parseInt(result.YearId)>0?result.YearId:'';
+                            let yearText = result.YearName;
+                            let unit = result.UnitId;
+                            let brand = result.BrandId;
+                            let vendor = result.VendorId;
+                            let group = result.GroupId;
+                            // let descriptionId = $("#Description").val();
+
+                            let boxno = result.BoxNo;
+
+                            let qtyb = parseInt(result.QtyPerBox)>0?result.QtyPerBox:'';
+                            let qty = parseInt(result.Qty)>0?result.Qty:'';
+                            let rqty = parseInt(result.ReceivedQty)>0?result.ReceivedQty:'';
+                            let cost = parseFloat(result.Price) > 0?result.Price:'';
+                            let total = parseFloat(result.Total) > 0?result.Total:'';
+
+                            let sellp = parseFloat(result.StrSalePrice)>0?result.StrSalePrice:'';
+                            let sellVat = parseFloat(result.StrSaleVat)>0?result.StrSaleVat:'';
+                            let orgP = parseFloat(result.StrOriginalPrice)>0?result.StrOriginalPrice:'';
+                            let img = result.ProductImage;
+
+                            let productQty = parseInt(result.Qty) > 0 ? result.Qty : 0;
+                            calcTotQty += parseInt(productQty);
+
+                            if (parseFloat(result.Total) > 0) {
+                                calTotal += parseFloat(result.Total);
+                            } else if (parseFloat(result.Price) > 0 && parseInt(result.Qty) > 0) {
+                                calTotal += (parseFloat(result.Price) * parseInt(result.Qty));
+                            }
+
+                            let imgPath = '';
+
+                            if(img != ""){
+                                imgPath += "@productImgPath" + img;
+                            }
+
+                            if (parseInt(cat) > 0) {
+                                catText = catText;
+                            }
+                            else {
+                                catText = "";
+                            }
+                            if (parseInt(seassonId) > 0) {
+                                seassonText = seassonText;
+                            }
+                            else {
+                                seassonText = "";
+                            }
+                            if (parseInt(deptId) > 0) {
+                                deptText = deptText;
+                            }
+                            else {
+                                deptText = "";
+                            }
+
+                            if (parseInt(size) > 0) {
+                                sizeText = sizeText;
+                            }
+                            else {
+                                sizeText = "";
+                            }
+
+                            if (parseInt(color) > 0) {
+                                colorText = colorText;
+                            }
+                            else {
+                                colorText = "";
+                            }
+
+                            let itemCode = '<input type="hidden" name="ItemId" value="' + curItemId + '" /><input type="hidden" name="ItemProductId" class="ProductIdX" value="' + productId + '" /><input readonly type="text" name="Barcode" id="Barcode_' + i + '" class="itemBarcodeX cellText" value="' + code + '" />';
+                            let itemDesc = '<input type="text" name="ItemDescription" id="ItemDescription_' + i + '" class="descEn cellText" value="' + desc + '" />';
+                            let itemDesc1 = '<input type="text" name="ItemDescriptionAb" id="ItemDescriptionAb_' + i + '" class="descAb cellText" value="' + descab + '" />';
+                            let itemSeasson = '<input type="hidden" name="itemSeassonId" class="ProductSeassonX" value="' + seassonId + '" /><input readonly type="text" name="itemSeasson" id="itemSeasson_' + i + '" class="itemSeassonX cellText" value="' + seassonText + '" />';
+                            let itemDept = '<input type="hidden" name="itemDepartmentId" class="ProductDeptX" value="' + deptId + '" /><input readonly type="text" name="itemDepartment" id="itemDepartment_' + i + '" class="itemDeptX cellText" value="' + deptText + '" />';
+                            let itemCat = '<input readonly type="text" class="itemCatText" name="itemCategoryText" value="' + catText + '" /><input type="hidden" class="itemCatX" name="itemCategory" value="' + cat + '" /><input type="hidden" class="itemParentCatX cellText" name="itemParentCategory"  id="itemParentCategory_' + i + '" value="' + parentCat + '" />';
+                            let itemSku = '<input type="hidden" name="itemSkuId" class="ProductSkuX" value="' + sku + '" /><input readonly type="text" name="itemSkuText" id="itemSkuText_' + i + '" class="itemSkuX cellText" value="' + skuText + '" required />';
+                            let itemSize = '<input type="hidden" name="itemSizeId" class="ProductSizeX" value="' + size + '" /><input readonly type="text" name="itemSize" id="itemSize_' + i + '" class="itemSizeX cellText" value="' + sizeText + '" style="width:120px;" />';
+                            let itemColor = '<input type="hidden" name="itemColorId" class="ProductColorX" value="' + color + '" /><input readonly type="text" name="itemColor" id="itemColor_' + i + '" class="itemColorX cellText" value="' + colorText + '" style="width:120px;" />';
+                            let itemYear = '<input type="hidden" name="itemYear" class="productYearIdX" value="' + yearId + '" /><input readonly type="text" name="itemYearText" id="itemYearText_' + i + '" class="itemYearX cellText" value="' + yearText + '" style="width:50px;" />';
+                            let itemAddtional = '<input type="hidden" name="itemBrand" value="' + brand + '" /><input type="hidden" name="itemVendor" value="' + vendor + '" /><input type="hidden" name="itemGroup" value="' + group + '" /><input type="hidden" name="ItemUnitId" value="' + unit + '" />';
+                            let itemBoxNo = '<input readonly type="text" name="itemBoxNo" id="itemBoxNo_' + i + '" value="' + boxno + '" class="cellText" />';
+                            let itemQtyB = '<input readonly type="number" name="ItemQtyBox" id="ItemQtyBox_' + i + '" value="' + qtyb + '" class="cellText" style="width:60px;" />';
+                            let itemQty = '<input readonly type="number" name="ItemQty" id="ItemQty_' + i + '" class="ItemQtyX cellText" value="' + qty + '" style="width:60px;" />';
+                            let itemRQty = '<input type="text" name="ItemRQty" id="ItemRQty_' + i + '" class="ItemRQtyX cellText numberonly" value="' + rqty + '" style="width:60px;" required />';
+                            let itemCost = '<input readonly type="number" name="itemPrice" id="itemPrice_' + i + '" class="itemPriceX cellText" value="' + cost + '" style="width:100px;" />';
+                            let itemTotal = '<input type="hidden" name="itemTotal" class="itemtotx" value="' + total + '" /><span class="TotTextX">' + total + '</span>';
+                          //  let productImg = '<img src="" style="width:80px;" />';
+                            let productImg = '<input type="hidden" name="productImg" id="imgName_' + i + '" value="' + img + '" />';
+                                productImg += '<img class="curImg" id="imgView_' + i + '" src="' + imgPath + '" style="width:80px;" />';
+                          
+                            let itemSellPrice = '<input type="number" name="ItemSellingPrice" id="ItemSellingPrice_' + i + '" class="itemSellx cellText decimalTwoDigits" value="' + sellp + '" style="width:100px;" />';
+                            let itemSellVat = '<input readonly type="number" name="ItemSellingVat" id="ItemSellingVat_' + i + '"  class="itemSellVatx cellText" value="' + sellVat + '" style="width:100px;" />';
+                            let itemOrgPrice = '<input readonly type="number" name="ItemOrgPrice" id="ItemOrgPrice_' + i + '"  class="itemOrg cellText" value="' + orgP + '" style="width:100px;" />';
+                            let uploadBtn = '<input type="button" class="btnImgUpload" name="imageUploadBtn"  id="imageUpload_' + i + '" value="Upload" />';
+                            let btnBarcode = '<input type="button" class="printBarcode" name="btnPrintBarcode" value="Print Barcode" />';
+                            let btnBarcodegen = '<input type="button" class="createBarcodeBtn" name="btnCreateBarcode" value="+" style="position:absolute;" />';
+                            let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a>';
+
+                            let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                            var itemCell = "<tr id='" + rowId + "'>";
+
+                            itemCell += '<td>' + (parseInt(i) + 1) + '</td>';
+                            itemCell += '<td style="position: relative;">' + itemCode + btnBarcodegen + '</td>';
+                            itemCell += '<td>' + itemDesc + '</td>';
+                            itemCell += '<td>' + itemDesc1 + '</td>';
+                            itemCell += '<td>' + itemSeasson + '</td>';
+                            itemCell += '<td>' + itemDept + '</td>';
+                            itemCell += '<td>' + itemCat + '</td>';
+                            itemCell += '<td>' + itemSku + '</td>';
+                            itemCell += '<td>' + itemSize + '</td>';
+                            itemCell += '<td>' + itemColor + itemAddtional + '</td>';
+                            itemCell += '<td>' + itemYear + '</td>';
+                            itemCell += '<td>' + itemBoxNo + '</td>';
+                            itemCell += '<td>' + itemQtyB + '</td>';
+                            itemCell += '<td>' + itemQty + '</td>';
+                            itemCell += '<td>' + itemRQty + '</td>';
+                            //if(sType == "pending")
+                            //{
+                            //    itemCell += '<td>' + itemRQty + '</td>';
+                            //}
+                            itemCell += '<td>' + itemCost + '</td>';
+                            itemCell += '<td class="itemtotlx">' + itemTotal + '</td>';
+                            itemCell += '<td>' + productImg + '</td>';
+                            itemCell += '<td>' + itemSellPrice + '</td>';
+                            itemCell += '<td>' + itemSellVat + '</td>';
+                            itemCell += '<td>' + itemOrgPrice + '</td>';
+                            itemCell += '<td>' + uploadBtn + '</td>';
+                            itemCell += '<td>' + btnBarcode + '</td>';
+                            //itemCell += '<td>' + btn + '</td>';
+                            itemCell += '</tr>';
+
+                            $('#tblItems tbody').append(itemCell);
+                            //  $('#tblItems #' + rowId).append(itemCell);
+                            CalculateTotal();
+                        }
+                    }
+
+                    sleep();
+
+                    CalculateTotal();
+                    $("#Total").val(calTotal.toFixed(2));
+
+                        $("#totPcs").val(calcTotQty.toFixed(2));
+                        $("#totPcs").attr('data-val', calcTotQty.toFixed(2));
+                    $(".close").trigger('click');
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        function GetShippingInfo(Id){
+             $.ajax({
+                url: "/Shipping/GetShippingInfo/" + Id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#SupplierId").val(result.SupplierId);
+                    $("#SupplierId").trigger('change.select2');
+                    $("#ToStoreId").val(result.ToStoreId);
+                    $("#ToStoreId").trigger('change.select2');
+                    GetSupplierInfo(result.SupplierId);
+                    GetStoreInfo(result.ToStoreId);
+                    $("#ReferenceNo").val(result.ReferenceNo);
+                    $("#Date").val(result.Date);
+                    $("#ChargesDescription").val(result.ChargesDescription);
+                    $("#Discount").val(result.StrDiscount);
+                    $("#OtherCharges").val(result.StrOtherCharges);
+                    $("#Total").val(result.StrTotal);   
+                }
+             });
+        }
+
+        function Clear(){
+            $("#SupplierId").val('');
+            $("#BpCode").val('');
+            $("#Address").val('');
+            $("#VatNo").val('');
+            $("#Balance").val('');
+            $("#ToStoreId").val('');
+            $("#StoreCode").val('');
+            $("#SAddressa").val('');
+            $("#SVatNo").val('');
+            $("#ReferenceNo").val('');
+            $("#Date").val('');
+            $("#ChargesDescription").val('');
+            $("#Discount").val('');
+            $("#OtherCharges").val('');
+            $("#Total").val('');
+            $("#totPcs").val('');
+        }
+
+        $(document).on("keyup", ".itemSellx", function(){
+             let vatamoutX = (parseFloat(vatx) + parseFloat(100));
+            let amount = $(this).val();
+
+            if(parseFloat(amount) > 0)
+            {
+                let vatVal = (parseFloat(parseFloat(amount)/parseFloat(vatamoutX)) * parseFloat(100));
+                let curVat = parseFloat(parseFloat(amount) - parseFloat(vatVal));
+                let orgPrice =(parseFloat(amount) - parseFloat(curVat))
+                $(this).parent().parent().find(".itemSellVatx").val(curVat.toFixed(2));
+                $(this).parent().parent().find(".itemOrg").val(orgPrice.toFixed(2));
+            }
+            else{
+                $(this).parent().parent().find(".itemSellVatx").val('');
+                $(this).parent().parent().find(".itemOrg").val('');
+            }
+        });
+
+        $(document).on("click",".createBarcodeBtn", function(){
+         //   let dept = $(this).parent().parent().find(".ProductDeptX").val();
+         //   let cat = $(this).parent().parent().find(".itemParentCatX").val();
+         //   let subcat = $(this).parent().parent().find(".itemCatX").val();
+         //   let skuId = $(this).parent().parent().find(".ProductSkuX").val();
+         //   let sku = $(this).parent().parent().find(".itemSkuX").val();
+         //   let color = $(this).parent().parent().find(".ProductColorX").val();
+         //   let size = $(this).parent().parent().find(".ProductSizeX").val();
+         //   let curYear = $(this).parent().parent().find(".itemYearX").val();
+         //   let seasson = $(this).parent().parent().find(".ProductSeassonX").val();
+         //   let company = $("#SupplierId").val();
+
+         let dept = $(this).parent().parent().find(".itemDeptX").val();
+            let cat = $(this).parent().parent().find(".itemParentCatX").val();
+            let subcat = $(this).parent().parent().find(".itemCatX").val();
+            let sku = $(this).parent().parent().find(".itemSkuX").val();
+            let color = $(this).parent().parent().find(".itemColorX").val();
+            let size = $(this).parent().parent().find(".itemSizeX").val();
+            let curYear = $(this).parent().parent().find(".itemYearX").val();
+            let seasson = $(this).parent().parent().find(".itemSeassonX").val();
+            let newBarcodeText = $(this).parent().parent().find(".itemBarcodeX");
+                var barCodesData = [];
+                barCodesData.push({
+                    Department: dept,
+                    CatId: cat,
+                    SubCatId: subcat,
+                    SKU: sku,
+                    Color: color,
+                    Size: size,
+                    Year: curYear,
+                    Season: seasson,
+                    NewBarCode: "No"
+                });
+                console.log(barCodesData);
+
+                $.ajax({
+                    url: "/Purchase/GenerateBarcodes",
+                    type: "POST",
+                    dataType: "json",
+                    data: { barCodesData: barCodesData },
+                    success: function (data) {
+                        console.log(data);
+                        newBarcodeText.val(data[0].NewBarCode);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+
+         //   if (parseInt(dept) > 0){
+         //       dept = dept;
+         //   }
+         //   else{
+         //       dept = 0;
+         //   }
+
+         //   if (parseInt(cat) > 0) {
+         //       cat = cat;
+         //       if (parseInt(cat) < 10){
+         //           cat = "0" + cat;
+         //       }
+         //   }
+         //   else{
+         //       cat = "00";
+         //   }
+
+         //   if (parseInt(subcat) > 0) {
+         //       subcat = subcat;
+         //       if (parseInt(subcat) < 10) {
+         //           subcat = "0" + subcat;
+         //       }
+         //   }
+         //   else {
+         //       subcat = "00";
+         //   }
+
+           
+         //   if (parseInt(color) > 0) {
+         //       color = color;
+         //       if (parseInt(color) < 10) {
+         //           color = "0" + color;
+         //       }
+         //   }
+         //   else{
+         //       color = "00";
+         //   }
+
+         //   if (parseInt(size) > 0) {
+         //       size = size;
+         //       if (parseInt(size) < 10) {
+         //           size = "0" + size;
+         //       }
+         //   }
+         //   else {
+         //       size = "00";
+         //   }
+
+         //   if (parseInt(seasson) > 0) {
+         //       seasson = seasson;
+         //   }
+         //   else {
+         //       seasson = "0";
+         //   }
+
+         //   if(parseInt(skuId) > 0){skuId = skuId;}else{skuId=0;}
+
+         //   if(parseInt(skuId) <10){
+         //       skuId = "00000" + skuId;
+         //   }
+         //   else{
+         //       if(parseInt(skuId) <100){
+         //           skuId = "0000" + skuId;
+         //       }
+         //       else{
+         //           if(parseInt(skuId) <1000){
+         //               skuId = "000" + skuId;
+         //           }
+         //           else{
+         //               if(parseInt(skuId) <10000){
+         //                   skuId = "00" + skuId;
+         //               }
+         //               else{
+         //                   if(parseInt(skuId) <100000){
+         //                       skuId = "0" + skuId;
+         //                   }
+         //                   else{
+         //                       skuId = skuId;
+         //                   }
+         //               }
+         //           }
+         //       }
+         //   }
+
+         //   if (parseInt(company) > 0) {
+         //      if(parseInt(company) <10){
+         //           company = "00" + company;
+         //       }
+         //       if(parseInt(company) >=10 && parseInt(company) <100){
+         //           company = "0" + company;
+         //       }
+         //       if(parseInt(company) >=1000){
+         //       company = company;
+         //       }
+         //   }
+         //   else {
+         //       company = "00";
+         //   }
+
+         // //  let barcode = dept + cat + subcat + color + size + curYear + seasson + company;
+         ////   let barcode = dept + cat + subcat + sku + color + size + curYear + seasson + company;
+
+         // //  $(this).parent().parent().find(".itemBarcodeX").val(barcode);
+         ////   $(this).parent().parent().find(".ProductIdX").val('0');
+         // //  CheckBarcode(barcode);
+
+         // let barcode = "7" + dept + cat + subcat + skuId + color + size + curYear + seasson + "1";
+
+         //     obj1 =  $(this).parent().parent().find(".itemBarcodeX");
+         //     obj2 =  $(this).parent().parent().find(".ProductIdX");
+         //     CheckRowBarcode(barcode,obj1,obj2);
+
+        });
+
+        function CheckRowBarcode(code,obj1, obj2){
+            let newCode = code;
+             $.ajax({
+                url: "/Purchase/GetProductIdByBarcode",
+                type: "POST",
+                dataType: "json",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                data: { code: code },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    if(parseInt(result) > 0)
+                    {
+                        let lastNo = code.slice(-1);
+                        var strNewCode = code.substring(0, code.length - 1);
+                        if(parseFloat(lastNo) < 9){
+                            newCode = strNewCode + (parseInt(lastNo) + 1);
+                            obj1.val(newCode);
+                            obj2.val('0');
+                            CheckRowBarcode(newCode);
+                            sleep();
+                        }
+                        else{
+                            swal({
+                                title: "@Html.Raw(WebResource.Warning)",
+                                text: newCode + " is already exists!",
+                                type: "warning",
+                             });
+                        }
+                    }
+                    else{
+                        obj1.val(newCode);
+                        obj2.val('0');
+                        sleep();
+                    }
+
+             },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+
+        const delay = (delayInms) => {
+            return new Promise(resolve => setTimeout(resolve, delayInms));
+        }
+
+        const sleep = async () => {
+            let delayres = await delay(1000);
+        }
+
+        $(".chPrint").click(function(){
+            let str = "";
+            $(".chPrint").each(function(){
+                if($(this).is(':checked')){
+                    if(str == ""){
+                        str = $(this).val();
+                    }
+                    else{
+                        str += "," + $(this).val();
+                    }
+                }
+            });
+            $("#PrintColumns").val(str);
+        
+        });
+
+        $("#btnPrint").click(function(){
+            $("#printModal").modal();
+        });
+
+        function ReportPopup(Doc)
+        {
+            let FileName = "@reportPath" + Doc;
+            printJS(FileName);
+        }
+
+        $("#btnReportGen").click(function(){
+            let cols = $("#PrintColumns").val();
+            let Id = $("#Id").val();
+            let type = $("#pageType").val();
+                $.ajax({
+                url: "/Shipping/ShippmentReportCreate/" + Id,
+                    type: "POST",
+                    dataType: "json",
+                    data: {id: Id, colnames: cols, pagetype:type},
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        ReportPopup(result);
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+        });
+
+
+         $(document).on("click", ".removeRow", function () {
+            var Id = $(this).attr("data-id");
+            if(parseInt(Id) > 0)
+            {
+                DeleteItem(Id);
+            }
+            else{
+                $(this).parent().parent().remove();
+            }
+            
+            CalculateTotal();
+        })
+
+        function DeleteItem(Id) {
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Shipping/DeleteItem/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        }
+        
+        $("#AllBarcodeGen").click(function(){
+            //$(".createBarcodeBtn").each(function(){
+            //    $(this).trigger("click");
+            //});
+
+            var barCodesData = [];
+            $('#tblItems tr').each(function () {
+                barCodesData.push({
+                    NewBarCode: '',
+                    Department: $(this).find(".itemDeptX").val(),
+                    CatId: $(this).find(".itemParentCatX").val(),
+                    SubCatId: $(this).find(".itemCatX").val(),
+                    SKU: $(this).find(".itemSkuX").val(),
+                    Color: $(this).find(".itemColorX").val(),
+                    Size: $(this).find(".itemSizeX").val(),
+                    Year: $(this).find(".itemYearX").val(),
+                    Season: $(this).find(".itemSeassonX").val()
+                });
+            });
+            barCodesData.splice(0, 1);
+            $.ajax({
+                //contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                url: "/Purchase/GenerateBarcodes",
+                type: "POST",
+                //data: JSON.stringify(barCodesData),
+                data: { barCodesData: barCodesData },
+                success: function (data) {
+                    $('#tblItems tr').each(function (index) {
+                        if (index > 0) {
+                            $(this).find(".itemBarcodeX").val(data[index - 1].NewBarCode);
+                            $(this).find(".ProductDeptX").val(data[index - 1].Department);
+                            $(this).find(".itemParentCatX").val(data[index - 1].CatId);
+                            $(this).find(".itemCatX").val(data[index - 1].SubCatId);
+                            $(this).find(".ProductSkuX").val(data[index - 1].SKU);
+                            $(this).find(".ProductColorX").val(data[index - 1].Color);
+                            $(this).find(".ProductSizeX").val(data[index - 1].Size);
+                            $(this).find(".productYearIdX").val(data[index - 1].Year);
+                            $(this).find(".ProductSeassonX").val(data[index - 1].Season);
+                        }
+                    });
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#AllPriceCalculate").click(function(){
+            $(".itemSellx").each(function(){
+                $(this).trigger("keyup");
+            });
+        });
+
+
+        $(document).on("keyup", ".cellText", function(e){
+            if (e.keyCode == 13) {
+                 let objId = $(this).attr('id');
+                 let arr = objId.split('_');
+                 let index = (parseInt(arr[1]) + 1);
+                 let nextObj = arr[0] + "_" + index;
+
+                 if($("#" + nextObj).length){
+                     $("#" + nextObj).focus();
+                 }
+                 else{
+                     let firstObj = arr[0] + "_0";
+                    $("#" + firstObj).focus();
+                 }
+            }
+        });
+
+
+        $(document).on("click", ".curImg", function(){
+            // Get the modal
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("modelImg");
+             modal.style.display = "block";
+             modalImg.src = this.src;
+        });
+
+        $("#popupClose").click(function(){
+            $("#imageModal").css('display','none');
+        });
+
+
+         $(document).on("click",".btnImgUpload",function(){
+             let Idx = $(this).attr('id');
+             let IdArr = Idx.split("_");
+             let Id = IdArr[1];
+             $("#RowIdx").val(Id);
+            var modal = document.getElementById("imageUploadModal");
+            modal.style.display = "block";
+        });
+
+         $("#UploadPopupClose").click(function(){
+            $("#imageUploadModal").css('display', 'none');
+        });
+
+
+    $("#btnProductImgUpload").on("click",function () {
+        let Id = $("#RowIdx").val();
+        let objName = "imgName_" + Id;
+        let objView = "imgView_" + Id;
+
+            let fileData = new FormData();
+            var fileUpload = $("#UploadProductImg").get(0);
+            var upload = fileUpload.files[0];
+            fileData.append("upload", upload);
+           
+            if($("#UploadProductImg").get(0).files.length > 0){
+
+            $.ajax({
+                    url: "/Shipping/ImageUpload",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (data) {
+                    if (data != null) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#" + objName).val(result);
+                         let imgPath = "@productImgPath" + result;
+                        $("#" + objView).attr('src', imgPath);
+                        $('#UploadProductImg').val('');
+                            $("#UploadPopupClose").trigger('click');
+                    }
+                }
+            });
+            }
+    });
+
+        //$(".itemBarcodeX").keypress(function (e) {
+        //    if (e.keyCode == 13) {
+        //        let index = $(this).index();
+        //        alert(index);
+        //       // $(this).next(".itemBarcodeX").focus();
+        //    }
+        //});
+
+    </script>
+}

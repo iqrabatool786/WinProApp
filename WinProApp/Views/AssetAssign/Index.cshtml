@@ -1,0 +1,361 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@using WinProApp.ViewModels.Warehouse.AssetAssign;
+@model AddEditViewModel;
+
+@{
+    ViewData["Title"] = @WebResource.Manage + " " + @WebResource.Asset + " " + @WebResource.Assign;
+
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5 id="subTitle">@WebResource.Asset @WebResource.Assign</h5>
+        <form id="manageForm" method="post" asp-action="CreateUpdateAssetAssign" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label for="AssetId">@WebResource.Asset</label>
+                    <select asp-for="AssetId" class="form-control lst2" asp-items="@ViewBag.Assets">
+                        <option value="">@WebResource.Asset</option>
+                    </select>
+                    <span asp-validation-for="AssetId" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-3">
+                    <label asp-for="TypeName">@WebResource.Asset @WebResource.Type</label>
+                    <input asp-for="TypeName" class="form-control" readonly />
+                    <span asp-validation-for="TypeName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-3">
+                    <label asp-for="LocationName">@WebResource.Asset @WebResource.Location</label>
+                    <input asp-for="LocationName" class="form-control" readonly />
+                    <span asp-validation-for="LocationName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-3">
+                    <label asp-for="DepartmentName">@WebResource.Asset @WebResource.Department</label>
+                    <input asp-for="DepartmentName" class="form-control" readonly />
+                    <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                </div>
+               
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label asp-for="AssignTo">@WebResource.Assign @WebResource.To</label>
+                    <input asp-for="AssignTo" class="form-control" />
+                    <span asp-validation-for="AssignTo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label for="Status">@WebResource.Status</label>
+                    <select name="Status" id="Status" class="form-control">
+                        <option value="true">@WebResource.Active</option>
+                        <option value="false">@WebResource.Disabled</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+             </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <hr />
+        <h3>@WebResource.Asset @WebResource.Location @WebResource.List</h3>
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Name @WebResource.English
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Name @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Department @WebResource.English
+                    </th>
+                     <th>
+                        @WebResource.Asset @WebResource.Department @WebResource.Arabic
+                    </th>
+                   <th>
+                        @WebResource.Assign @WebResource.To
+                    </th>                   
+                    <th>
+                        @WebResource.Status
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var curId = $("#Id").val();
+        var msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+        var msg2 = "@Html.Raw(WebResource.RecordCreated)";
+
+
+
+        function OnSuccess(data, status, xhr) {
+            if (parseInt(curId) > 0) {
+                msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+            }
+            else {
+                msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordCreated)";
+            }
+            swal({
+                type: 'success',
+                title: msg1,
+                text: msg2,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/AssetAsigns");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $('.lst2').select2();
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        var allowed = "@allowed";
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 20,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Warehouse/AssetAsignList",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                         {
+                            data: "AssetDepartmentNameEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                         {
+                            data: "AssetDepartmentNameArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },                         
+                        {
+                            data: "AssignTo",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Status",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Id",
+                            searchable: false,
+                            orderable: false,
+                            class: "dtr-control",
+                            render: function (data, type, row) {
+                                var content = '<div style="display:flex">'
+                                content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Edit" data-flag="edit" title="@WebResource.Edit" data-Id="' + data + '" class="btn btn-primary btn-sm action editInfo"> <i class="fa fa-edit"></i></a>';
+                                if (allowed == "Yes") {
+                                    content += '&nbsp;<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" title="@WebResource.Delete" data-Id="' + data + '" class="btn btn-danger btn-sm action removeInfo"><i class="fa fa-times"></i></a>';
+                                }
+                                content += '&nbsp;</div>';
+
+                                return content;
+                            }
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+
+        $(document).on("click", ".editInfo", function () {
+            var subtitle = "@WebResource.Edit" + " " + "@WebResource.Store";
+            $("#subTitle").text(subtitle);
+            var Id = $(this).attr("data-id");
+            curId = Id;
+            $.ajax({
+                url: "/Warehouse/GetAssetAsignInfo/" + Id,
+                type: "GET",
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#Id").val(Id);
+                    $("#AssetId").val(result.AssetId);
+                    $("#AssetId").trigger('change.select2');                   
+                    $("#AssignTo").val(result.AssignTo);                    
+                    if (result.Status == true){
+                        $("#Status").val("true");
+                    }
+                    else{
+                        $("#Status").val("false");
+                    }
+                },
+                error: function () {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+
+
+        $(document).on("click", ".removeInfo", function () {
+            var Id = $(this).attr("data-id");
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Warehouse/DeleteAssetAsign/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        });
+
+        $("#AssetId").change(function(){
+            let Id = $(this).val();
+
+            if(parseInt(Id) > 0){
+                $.ajax({
+                    url: "/Warehouse/GetAssetDetails/" + Id,
+                    type: "GET",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#TypeName").val(result.TypeName);
+                        $("#LocationName").val(result.LocationName);
+                        $("#DepartmentName").val(result.DepartmentName);
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+            else{
+                $("#TypeName").val('');
+                $("#LocationName").val('');
+                $("#DepartmentName").val('');
+            }
+        })
+
+    </script>
+}
+

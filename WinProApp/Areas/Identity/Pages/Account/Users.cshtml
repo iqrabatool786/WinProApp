@@ -1,0 +1,77 @@
+﻿@page "/Administrator/ManageAccounts"
+@using WinProApp.Resources;
+@model UsersModel
+
+@{
+    ViewData["Title"] = WebResource.Users + " " + WebResource.List;
+}
+<div class="row">
+    <table id="tblUsers" class="table table-striped table-bordered dataTable table-hover" style="width:100%;">
+        <thead>
+            <tr>
+                <th>@WebResource.FirstName</th>
+                <th>@WebResource.LastName</th>
+                <th>@WebResource.UserName</th>
+                <th>@WebResource.Email</th>
+                <th>@WebResource.PhoneNumber</th>
+                <th>@WebResource.Role</th>
+                <th>@WebResource.Status</th>
+                <th>@WebResource.Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.CurUsers){
+                <tr>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>@item.Role</td>
+                    <td>@item.Status</td>
+                    <td>
+                        @{
+                            var content = "<div style='display:flex'>";
+                            content += "&nbsp;<a href='JavaScript:' data-toggle='tooltip' data-original-title='Update Info' data-flag='Edit' data-Id='" + item.Id + "' class='btn btn-info btn-sm action editUserInfo'><i class='fa fa-edit'></i></a>";
+                            content += "&nbsp;<a href='JavaScript:' data-toggle='tooltip' data-original-title='Change Password' data-flag='Change Password' data-Id='" + item.Id + "' class='btn btn-warning btn-sm action changePw'><i class='fa fa-key'></i></a>";
+                            @if (item.UserName != User.Identity.Name && User.IsInRole("Administrator"))
+                            {
+                                content += "&nbsp;<a href='JavaScript:' data-toggle='tooltip' data-original-title='Delete Account' data-flag='Delete Account' data-Id='" + item.Id + "' class='btn btn-danger btn-sm action DeleteUser'><i class='fa fa-trash'></i></a>";
+                            }
+                            else
+                            {
+                                if (item.UserName != User.Identity.Name && User.IsInRole(item.Role))
+                                {
+                                    content += "&nbsp;<a href='JavaScript:' data-toggle='tooltip' data-original-title='Delete Account' data-flag='Delete Account' data-Id='" + item.Id + "' class='btn btn-danger btn-sm action DeleteUser'><i class='fa fa-trash'></i></a>";
+                                }
+                            }
+                            content += "&nbsp;</div>";
+                        }
+                        @Html.Raw(content)
+                    </td>
+                </tr>
+            }
+        </tbody>
+     </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("#tblUsers").DataTable();
+        $(document).on("click",".editUserInfo",function(){
+            let Id=$(this).attr("data-id");
+            window.location.href = "/Administrator/EditUserInfo/" + Id;
+        });
+
+        $(document).on("click", ".changePw",function () {
+            let Id=$(this).attr("data-id");
+            window.location.href = "/Administrator/UserPasswordChange/" + Id;
+        });
+
+        $(document).on("click",".DeleteUser",function (){
+            let Id=$(this).attr("data-id");
+            window.location.href = "/Administrator/DeleteUser/" + Id;
+        });
+    </script>
+}

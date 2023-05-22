@@ -1,0 +1,366 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Warehouse.Products.EditViewModel;
+@{
+    ViewData["Title"] = @WebResource.ProductInfo + " " + @WebResource.Edit;
+}
+<style>
+    label {
+        background-color: #eeefef;
+        font-weight: 500 !important;
+        padding-left: 5px;
+        margin-bottom: 0px;
+        margin-top: 10px;
+        width: 100%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <form id="editForm" enctype="multipart/form-data" asp-action="EditProduct" asp-controller="Warehouse" asp-route-id="@Model.Id" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label asp-for="ProductId">@WebResource.Product @WebResource.ID</label>
+                    <input asp-for="ProductId" class="form-control" autocomplete="CompanyName" aria-required="true" />
+                    <span asp-validation-for="ProductId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="CompanyId">@WebResource.CompanyName</label>
+                    <select asp-for="CompanyId" class="form-control lst2" asp-items="@ViewBag.Suppliers">
+                        <option value="">@WebResource.CompanyName</option>
+                    </select>
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="CategoryId">@WebResource.Category</label>
+                    <select asp-for="CategoryId" class="form-control lst2" asp-items="@ViewBag.Categories">
+                        <option value="">@WebResource.CompanyName</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="DepartmentId">@WebResource.Department</label>
+                    <select asp-for="DepartmentId" class="form-control lst2" asp-items="@ViewBag.Departments">
+                        <option value="">@WebResource.Department</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="SeasonId">@WebResource.Seasson</label>
+                    <select asp-for="SeasonId" class="form-control lst2" asp-items="@ViewBag.Seassons">
+                        <option value="">@WebResource.Seasson</option>
+                    </select>
+                    <span asp-validation-for="SeasonId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="SkuId">@WebResource.Model_SKU</label>
+                    <select asp-for="SkuId" class="form-control lst2" asp-items="@ViewBag.Styles">
+                        <option value="">@WebResource.Model_SKU</option>
+                    </select>
+                    <span asp-validation-for="SkuId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="DescriptionId">@WebResource.Description</label>
+                    <select asp-for="DescriptionId" class="form-control lst2" asp-items="@ViewBag.Descriptions">
+                        <option value="">@WebResource.Description</option>
+                    </select>
+                    <span asp-validation-for="DescriptionId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="ColorId">@WebResource.Color</label>
+                    <select asp-for="ColorId" class="form-control lst2" asp-items="@ViewBag.Colors">
+                        <option value="">@WebResource.Color</option>
+                    </select>
+                    <span asp-validation-for="ColorId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="SizeId">@WebResource.Size</label>
+                    <select asp-for="SizeId" class="form-control lst2" asp-items="@ViewBag.Sizes">
+                        <option value="">@WebResource.Size</option>
+                    </select>
+                    <span asp-validation-for="SizeId" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-2">
+                    <label asp-for="Unitid">@WebResource.Unit</label>
+                    <select asp-for="Unitid" class="form-control lst2" asp-items="@ViewBag.Units">
+                        <option value="">@WebResource.Unit</option>
+                    </select>
+                    <span asp-validation-for="Unitid" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="VendorId">@WebResource.Vendor</label>
+                    <select asp-for="VendorId" class="form-control lst2" asp-items="@ViewBag.Vendores">
+                        <option value="">@WebResource.Vendor</option>
+                    </select>
+                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="BrandId">@WebResource.Brand</label>
+                    <select asp-for="BrandId" class="form-control lst2" asp-items="@ViewBag.Brands">
+                        <option value="">@WebResource.Brand</option>
+                    </select>
+                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-1">
+                    <label asp-for="GroupId">@WebResource.Group</label>
+                    <select asp-for="GroupId" class="form-control lst2" asp-items="@ViewBag.Groups">
+                        <option value="">@WebResource.Group</option>
+                    </select>
+                    <span asp-validation-for="GroupId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-1">
+                    <label asp-for="YearId">@WebResource.Year</label>
+                    <select asp-for="YearId" class="form-control lst2" asp-items="@ViewBag.Years">
+                        <option value="">@WebResource.Year</option>
+                    </select>
+                    <span asp-validation-for="YearId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label asp-for="ProductNameEng">@WebResource.Product @WebResource.NameEng</label>
+                    <input asp-for="ProductNameEng" class="form-control" />
+                    <span asp-validation-for="ProductNameEng" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-4">
+                    <label asp-for="ProductNameArabic">@WebResource.Product @WebResource.NameArabic</label>
+                    <input asp-for="ProductNameArabic" class="form-control" />
+                    <span asp-validation-for="ProductNameArabic" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-2">
+                    <label asp-for="MfgDate">@WebResource.Manufacture @WebResource.Date</label>
+                    <input type="text" name="MfgDate" id="MfgDate" class="form-control datefield" aria-required="true" autocomplete="off" />
+                    <span asp-validation-for="MfgDate" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-floating col-md-2">
+                    <label asp-for="ExpDate">@WebResource.ExpireDate</label>
+                    <input type="text" name="ExpDate" id="ExpDate" class="form-control datefield" aria-required="true" autocomplete="off" />
+                    <span asp-validation-for="ExpDate" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="ProductInitialPrice">@WebResource.Initial @WebResource.Price</label>
+                    <input asp-for="ProductInitialPrice" class="form-control" />
+                    <span asp-validation-for="ProductInitialPrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="CostPrice">@WebResource.Cost @WebResource.Price</label>
+                    <input asp-for="CostPrice" class="form-control" />
+                    <span asp-validation-for="CostPrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="SalePrice">@WebResource.Sale @WebResource.Price</label>
+                    <input asp-for="SalePrice" class="form-control" />
+                    <span asp-validation-for="SalePrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Discount">@WebResource.Discount</label>
+                    <input asp-for="Discount" class="form-control" />
+                    <span asp-validation-for="Discount" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitBarcode">@WebResource.Unit @WebResource.Barcode</label>
+                    <input asp-for="UnitBarcode" class="form-control" />
+                    <span asp-validation-for="UnitBarcode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitDescription">@WebResource.Unit @WebResource.Description</label>
+                    <input asp-for="UnitDescription" class="form-control" />
+                    <span asp-validation-for="UnitDescription" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="QtyPerUnit">@WebResource.QtyPerUnit</label>
+                    <input asp-for="QtyPerUnit" class="form-control" />
+                    <span asp-validation-for="QtyPerUnit" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitSalePrice">@WebResource.Unit @WebResource.Sale @WebResource.Price</label>
+                    <input asp-for="UnitSalePrice" class="form-control" />
+                    <span asp-validation-for="UnitSalePrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="UnitCost">@WebResource.Unit @WebResource.Cost</label>
+                    <input asp-for="UnitCost" class="form-control" />
+                    <span asp-validation-for="UnitCost" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="BoxNo">@WebResource.Box @WebResource.No</label>
+                    <input asp-for="BoxNo" class="form-control" />
+                    <span asp-validation-for="BoxNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="MinQty">@WebResource.Min @WebResource.Qty</label>
+                    <input asp-for="MinQty" class="form-control" />
+                    <span asp-validation-for="MinQty" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackBarcode">@WebResource.Pack @WebResource.Barcode</label>
+                    <input asp-for="PackBarcode" class="form-control" />
+                    <span asp-validation-for="PackBarcode" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackDescription">@WebResource.Pack @WebResource.Description</label>
+                    <input asp-for="PackDescription" class="form-control" />
+                    <span asp-validation-for="PackDescription" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="QtyPerPack">@WebResource.QtyPerPack</label>
+                    <input asp-for="QtyPerPack" class="form-control" />
+                    <span asp-validation-for="QtyPerPack" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackPrice">@WebResource.Pack @WebResource.Price</label>
+                    <input asp-for="PackPrice" class="form-control" />
+                    <span asp-validation-for="PackPrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="PackCost">@WebResource.Pack @WebResource.Cost</label>
+                    <input asp-for="PackCost" class="form-control" />
+                    <span asp-validation-for="PackCost" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="OreginalPrice">@WebResource.Original @WebResource.Price</label>
+                    <input asp-for="OreginalPrice" class="form-control" />
+                    <span asp-validation-for="OreginalPrice" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Vat">@WebResource.VAT</label>
+                    <input asp-for="Vat" class="form-control" />
+                    <span asp-validation-for="Vat" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField1">@WebResource.Custom @WebResource.Field 1</label>
+                    <input asp-for="CustomField1" class="form-control" />
+                    <span asp-validation-for="CustomField1" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField2">@WebResource.Custom @WebResource.Field 2</label>
+                    <input asp-for="CustomField2" class="form-control" />
+                    <span asp-validation-for="CustomField2" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField3">@WebResource.Custom @WebResource.Field 3</label>
+                    <input asp-for="CustomField3" class="form-control" />
+                    <span asp-validation-for="CustomField3" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CustomField4">@WebResource.Custom @WebResource.Field 4</label>
+                    <input asp-for="CustomField4" class="form-control" />
+                    <span asp-validation-for="CustomField4" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="Image">@WebResource.Image</label>
+                    <input type="file" id="AttachedDoc" name="AttachedDoc" class="form-control" accept=".jpg, .jpeg, .png" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="WarrantyPeriod">@WebResource.WarrantyPeriod</label>
+                    <input asp-for="WarrantyPeriod" class="form-control" />
+                    <span asp-validation-for="WarrantyPeriod" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Currentstock">@WebResource.Current @WebResource.Stock</label>
+                    <input asp-for="Currentstock" class="form-control" />
+                    <span asp-validation-for="Currentstock" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-2">
+                    <label asp-for="Status">@WebResource.Status</label>
+                    <select asp-for="Status" class="form-control">
+                        @if(Model.Status == true)
+                        {
+                            <option value="true">@WebResource.Active</option>
+                            <option value="false">@WebResource.Disabled</option>
+                        }
+                        else
+                        {
+                            <option value="false">@WebResource.Disabled</option>
+                            <option value="true">@WebResource.Active</option>
+                        }
+
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+            </div>
+
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="updateSubmit" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/Products");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $('.lst2').select2();
+    </script>
+}

@@ -1,0 +1,214 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@{
+    ViewData["Title"] = WebResource.GRN + " " + WebResource.List;
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+    string documentPath = "/Docs/SupplierInvoice/";
+}
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <hr />
+
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.IBT @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Date
+                    </th>
+                    <th>
+                        @WebResource.From @WebResource.Store
+                    </th>
+                    <th>
+                        @WebResource.To @WebResource.Store
+                    </th>
+                    <th>
+                        @WebResource.Description
+                     </th>
+                    <th style="text-align:right;">
+                        @WebResource.Total
+                    </th>
+                    <th>
+                        @WebResource.Status
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+
+    <div id="ReturnDoc" title="Invoice Document">
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+        var allowed = "@allowed";
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 10,
+                    paging: true,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Warehouse/GRNList",
+                    sServerMethod: "POST",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "IbtId",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "StrDate",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "FromStoreName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ToStoreName",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "Description",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "Total",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "Status",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Id",
+                            searchable: false,
+                            orderable: false,
+                            class: "dtr-control",
+                            render: function (data, type, row) {
+                                var content = '<div style="display:flex">'
+                                content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Details" data-flag="edit" title="@WebResource.Details" data-Id="' + data + '" class="btn btn-primary btn-sm action viewInfo"> <i class="fa fa-info"></i></a>&nbsp;';
+                                if (row.Status != "Approved") {
+                                    content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Edit" data-flag="edit" data-Id="' + data + '" class="btn btn-primary btn-sm action editInfo"> <i class="fa fa-edit"></i></a>&nbsp;';
+                                    content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="edit" data-Id="' + data + '" class="btn btn-primary btn-sm btn-danger action removeInfo"> <i class="fa fa-times"></i></a>&nbsp;';
+                                }
+
+                                content += '&nbsp;</div>';
+
+                                return content;
+                            }
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+
+        $(document).on('click', '.viewInfo', function () {
+            var ItemId = $(this).attr('data-Id');
+            window.open('/Warehouse/GrnDetails/' + ItemId, "_self");
+
+        });
+
+        $(document).on('click', '.editInfo', function () {
+            var ItemId = $(this).attr('data-Id');
+            window.open('/Warehouse/EditGrn/' + ItemId, "_self");
+
+        });
+
+
+        function DeleteRecord(Id) {
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Warehouse/DeleteGrn/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        bindTableDataList(CurrentPageStart);
+                    },
+                    error: function (data) {
+                        HandleResponse(data);
+                    }
+                });
+            });
+        }
+
+        $(document).on('click', '.removeInfo', function () {
+            var ItemId = $(this).attr('data-Id');
+            DeleteRecord(ItemId);
+        });
+
+
+       
+
+
+    </script>
+}

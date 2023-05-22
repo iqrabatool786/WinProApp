@@ -1,0 +1,287 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Purchase.PurchaseAsset.DetailsViewModel;
+@{
+    ViewData["Title"] = @WebResource.Purchase + " " + @WebResource.Asset + " " + @WebResource.Details;
+    string documentPath = "/Docs/SupplierInvoice/" + Model.AttachedDoc;
+}
+
+<div class="row">
+    <div class="col-md-12">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Supplier @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    <div class="form-floating col-md-3">
+                        <label asp-for="SupplierId">@WebResource.Supplier</label>
+                        <select asp-for="SupplierId" class="form-control" asp-items="@ViewBag.Suppliers" disabled>
+                            <option value="0">@WebResource.Select @WebResource.Supplier</option>
+                        </select>
+                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating col-md-2">
+                        <label for="BpCode">@WebResource.Bpcode</label>
+                        <input id="BpCode" name="BpCode" class="form-control" readonly />
+                    </div>
+
+                    <div class="form-floating col-md-3">
+                        <label for="Address">@WebResource.Address</label>
+                        <input type="text" id="Address" name="Address" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="VatNo">@WebResource.VatNo</label>
+                        <input id="VatNo" name="VatNo" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="Balance">@WebResource.Balance</label>
+                        <input id="Balance" name="Balance" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Returns @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    <div class="form-floating col-md-2">
+                        <label asp-for="InvoiceNo">@WebResource.InvoiceNo</label>
+                        <input asp-for="InvoiceNo" class="form-control" aria-required="true" autocomplete="off" readonly />
+                        <span asp-validation-for="InvoiceNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="Date">@WebResource.Date</label>
+                        <input type="text" name="Date" id="Date" class="form-control datefield" aria-required="true" autocomplete="off" readonly />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating col-md-6">
+                        <label asp-for="Description">@WebResource.Description</label>
+                        <input asp-for="Description" class="form-control" aria-required="true" autocomplete="off" readonly />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="card-body col-md-12 row">
+                    <table id="tblItems" class="table table-striped table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="col-md-3">@WebResource.Barcode</th>
+                                <th class="col">@WebResource.Description</th>
+                                <th class="col">@WebResource.Cost</th>
+                                <th class="col">@WebResource.Qty</th>
+                                <th class="col">@WebResource.VAT</th>
+                                <th class="col">@WebResource.Total</th>
+                                <th class="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            
+
+
+    <div class="row card card-success" style="margin-top:20px; padding-top:7px;">
+        <div class="row col-md-12">
+            <div class="form-floating col-md-10" style="text-align:right;">
+                <label for="InvoiceVatTot" style="margin-left:7px;">@WebResource.VAT @WebResource.Total</label>
+            </div>
+            <div class="form-floating col-md-2">
+                    <input type="text" name="VatAmount" id="VatAmount" class="form-control" value="@Model.StrVatAmount" data-val="@Model.StrVatAmount" style="text-align:right;" readonly />
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-floating col-md-10" style="text-align:right;">
+                <label for="Discount" style="margin-left:7px;">@WebResource.Discount</label>
+            </div>
+            <div class="form-floating col-md-2">
+                    <input type="text" name="Discount" id="Discount" class="form-control" value="@Model.StrDiscount" data-val="@Model.StrDiscount" style="text-align:right;" readonly />
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-floating col-md-6">
+                <label for="ChargesDescription" style="margin-left:7px;">@WebResource.ChargesDescription</label>
+                    <input type="text" name="ChargesDescription" id="ChargesDescription" class="form-control" value="@Model.ChargesDescription" data-val="0" readonly />
+            </div>
+            <div class="form-floating col-md-4" style="text-align:right;">
+                <label for="OtherCharges" style="margin-left:7px;">@WebResource.Charges</label>
+            </div>
+            <div class="form-floating col-md-2">
+                    <input type="text" name="OtherCharges" id="OtherCharges" class="form-control" value="@Model.StrOtherCharges" data-val="@Model.StrOtherCharges" style="text-align:right;" readonly />
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-floating col-md-10" style="text-align:right;">
+                <label for="Total" style="margin-left:7px;">@WebResource.Total</label>
+            </div>
+            <div class="form-floating col-md-2">
+                    <input type="text" name="Total" id="Total" class="form-control" value="@Model.StrTotal" style="text-align:right;" readonly />
+            </div>
+        </div>
+
+    </div>
+
+            <div class="row col-md-12">
+                <div class="form-floating col-md-2">
+                    <label asp-for="Status">@WebResource.Status</label>
+                    <select asp-for="Status" class="form-control" disabled>
+                @if (Model.Status == "Approved")
+                        {
+                            <option value="true">@WebResource.Approved</option>
+                            <option value="false">@WebResource.OnHold</option>
+                        }
+                        else
+                        {
+                            <option value="false">@WebResource.OnHold</option>
+                            <option value="true">@WebResource.Approved</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+    </div>
+    <hr />
+
+    <div class="row col-md-12" style="margin-top:30px; margin-bottom:30px;">
+        <div class="form-floating col-md-3"></div>
+        <div id="ReturnDoc" class="form-floating col-md-6"></div>
+        <div class="form-floating col-md-3"></div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+      
+        var vatx = "@ViewBag.VatPercentage";
+        GetSupplierInfo("@Model.SupplierId");
+        GetItemDetails("@Model.Id");
+        $('#SupplierId').select2();
+         $("#Date").val("@Model.Date");
+
+        function GetSupplierInfo(Id) {
+            if (parseInt(Id) > 0) {
+                $.ajax({
+                    url: "/Purchase/GetSupplierInfo/" + Id,
+                    type: "GET",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        $("#BpCode").val(result.Bpcode);
+                        $("#Address").val(result.Address);
+                        $("#VatNo").val(result.VatNo);
+                        $('#Balance').val(result.Balance);
+                    },
+                    error: function () {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            }
+            else {
+                $("#Address").val('');
+                $("#VatNo").val('');
+                $('#Balance').val('');
+            }
+        }
+
+        function GetItemDetails(Id) {
+            if (parseInt(Id) > 0) {
+                $.ajax({
+                    url: "/Purchase/GetPurchaseAssetDetails/" + Id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        var result = JSON.parse(JSON.stringify(data));
+                        for (i = 0; i < result.length; i++) {
+                            let itemId = result[i].Id;
+                            let code = result[i].Barcode;
+                            let desc = result[i].DescriptionEnglish;
+                            let descab = result[i].DescriptionArabic;
+
+                            let qty = result[i].Qty;
+                            let cost = result[i].Price;
+                            let productVat = result[i].Vat;
+                            let vattot = 0;
+                            let total = 0;
+
+                            if (parseFloat(productVat) > 0) {
+                                productVat = parseFloat(productVat);
+                            }
+                            else {
+                                productVat = 0;
+                            }
+
+                            if (parseFloat(qty) > 0) {
+                                qty = parseFloat(qty);
+                            }
+                            else {
+                                qty = 0;
+                            }
+
+                           
+
+                            if (parseFloat(qty) > 0) {
+                                let totQty = (parseFloat(qty));
+                                total = (parseFloat(totQty) * parseFloat(cost));
+                                vattot = (parseFloat(productVat) * parseFloat(totQty));
+                            }
+
+
+
+                            let itemCode = '<input type="hidden" name="ItemId" value="' + itemId + '" /><input type="hidden" name="Barcode" value="' + code + '" />' + code;
+                            let itemDesc = '<input type="hidden" name="ItemDescription" value="' + desc + '" /><input type="hidden" name="ItemDescriptionAb" value="' + descab + '" />' + desc + "/ " + descab;
+                            let itemQty = '<input type="hidden" name="ItemQty" value="' + qty + '" />' + qty;
+                            let itemVat = '<input type="hidden" name="itemVat" value="' + productVat + '" /><input type="hidden" name="itemVatTotx" class="totVatx" value="' + vattot + '" />' + productVat;
+
+                            let itemCost = '<input type="hidden" name="itemCost" class="itemcostx" value="' + cost + '" />' + cost;
+                            let itemTotal = '<input type="hidden" name="itemTotal" class="itemtotx" value="' + total + '" />' + total;
+                            let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;" data-id="' + itemId + '"><i class="fa fa-times"></i></a>';
+
+                            let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                            var itemCell = "<tr id='" + rowId + "'>";
+                           // $('#tblItems tbody').append(itemRow);
+
+                            itemCell += '<td>' + itemCode + '</td>';
+                            itemCell += '<td>' + itemDesc + '</td>';
+                            itemCell += '<td>' + itemCost + '</td>';
+                            itemCell += '<td>' + itemQty + '</td>';
+                            itemCell += '<td>' + itemVat + '</td>';
+                            itemCell += '<td class="itemtotlx">' + itemTotal + '</td>';
+                            itemCell += '<td>' + btn + '</td>';
+                            itemCell += '</tr>';
+
+                            $('#tblItems tbody').append(itemCell);
+
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+            }
+        }
+
+     
+        function ViewDoc() {
+            var docPath = "@documentPath";
+
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+            $("#ReturnDoc").html(object);
+            $(".ui-dialog-titlebar-close").html("<span style='position: absolute;top: -2px;left: 3px;'>X</span>");
+        }
+
+        ViewDoc();
+
+    </script>
+}

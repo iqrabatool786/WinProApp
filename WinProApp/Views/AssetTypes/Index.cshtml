@@ -1,0 +1,254 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@using WinProApp.ViewModels.Warehouse.AssetTypes;
+@model AddEditViewModel;
+
+@{
+    ViewData["Title"] = @WebResource.Manage + " " + @WebResource.Asset + " " + @WebResource.Type;
+
+    string allowed = "No";
+    if (User.IsInRole("Administrator") || User.IsInRole("Warehouse") || User.IsInRole("Manager"))
+    {
+        allowed = "Yes";
+    }
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5 id="subTitle">@WebResource.Create @WebResource.Asset @WebResource.Type</h5>
+        <form id="manageForm" method="post" asp-action="CreateUpdateAssetType" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-6">
+                    <label for="AssetTypeEng">@WebResource.Asset @WebResource.Type @WebResource.English</label>
+                    <input asp-for="AssetTypeEng" class="form-control" />
+                    <span asp-validation-for="AssetTypeEng" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="AssetTypeArabic">@WebResource.Asset @WebResource.Type @WebResource.Arabic</label>
+                    <input asp-for="AssetTypeArabic" class="form-control" />
+                    <span asp-validation-for="AssetTypeArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <hr />
+        <h3>@WebResource.Asset @WebResource.Type @WebResource.List</h3>
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Type @WebResource.Name @WebResource.English
+                    </th>
+                    <th>
+                        @WebResource.Asset @WebResource.Type @WebResource.Name @WebResource.English
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var curId = $("#Id").val();
+        var msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+        var msg2 = "@Html.Raw(WebResource.RecordCreated)";
+
+
+
+        function OnSuccess(data, status, xhr) {
+            if (parseInt(curId) > 0) {
+                msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+            }
+            else {
+                msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordCreated)";
+            }
+            swal({
+                type: 'success',
+                title: msg1,
+                text: msg2,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/AssetTypes");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        var allowed = "@allowed";
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 20,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Warehouse/AssetTypeList",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetTypeEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "AssetTypeArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "Id",
+                            searchable: false,
+                            orderable: false,
+                            class: "dtr-control",
+                            render: function (data, type, row) {
+                                var content = '<div style="display:flex">'
+                                content += '<a href="JavaScript:" data-toggle="tooltip" data-original-title="Edit" data-flag="edit" title="@WebResource.Edit" data-Id="' + data + '" class="btn btn-primary btn-sm action editInfo"> <i class="fa fa-edit"></i></a>';
+                                if (allowed == "Yes") {
+                                    content += '&nbsp;<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" title="@WebResource.Delete" data-Id="' + data + '" class="btn btn-danger btn-sm action removeInfo"><i class="fa fa-times"></i></a>';
+                                }
+                                content += '&nbsp;</div>';
+
+                                return content;
+                            }
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+        $(document).on("click", ".editInfo", function () {
+            var subtitle = "@WebResource.Edit" + " " + "@WebResource.Store";
+            $("#subTitle").text(subtitle);
+            var Id = $(this).attr("data-id");
+            curId = Id;
+            $.ajax({
+                url: "/Warehouse/GetAssetTypeInfo/" + Id,
+                type: "GET",
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#Id").val(Id);
+                    $("#AssetTypeEng").val(result.AssetTypeEng);
+                    $("#AssetTypeArabic").val(result.AssetTypeArabic);
+                },
+                error: function () {
+                    swal({
+                        type: 'error',
+                        title: "@Html.Raw(WebResource.Oops)",
+                        text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                    });
+                }
+            });
+        });
+
+        $(document).on("click", ".removeInfo", function () {
+            var Id = $(this).attr("data-id");
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Warehouse/DeleteAssetType/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

@@ -1,0 +1,105 @@
+﻿@page "/Login"
+@model LoginModel
+
+@{
+    Layout = "/Views/Shared/_LoginLayout.cshtml";
+    ViewData["Title"] = "WinPro User Login";
+}
+<style>
+    .leftCss{left:30px;}
+    .rightCss{left:90%;}
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h3 id="loginTitle" style="padding:10px 20px; background-color:#93abce;">WinPro User Login</h3>
+        <section>
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating" style="padding-right:5px; min-height:20px; margin-bottom:5px; width:100%; text-align:right;">
+                    <div style="width:50%; float:right;">
+                        <span id="lngArb" style="cursor:pointer; margin-right:5px; font-size: 16px; font-weight:bold;">عربي</span>
+                        <span id="lngEn" style="cursor:pointer; font-size: 14px; font-weight:bold;">English</span>
+                        <input type="hidden" name="UserLanguage" id="UserLanguage" value="en" />
+                    </div>
+                </div>
+
+                <div class="form-floating">
+                    <label id="nameLabel" asp-for="Input.UserName" class="form-label"></label>
+                    <input asp-for="Input.UserName" class="form-control" placeholder="Username" autocomplete="username" aria-required="true" />
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <label id="passwordLabel" asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" class="form-control" placeholder="Password" autocomplete="current-password" aria-required="true" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div>
+                    <div id="rememberBlock" class="checkbox" style="padding-left:20px; margin-top:15px;">
+                        <label id="rememberLabel" asp-for="Input.RememberMe" class="form-label">@Html.DisplayNameFor(m => m.Input.RememberMe)</label>
+                            <input class="form-check-input leftCss" asp-for="Input.RememberMe"/>
+           
+                    </div>
+                </div>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary" style="background-color:#93abce;">Log in</button>
+                </div>
+                <div>
+                    <p id="forgotBlock">
+                        <a id="forgot-password" href="/ForgotPassword" style="color:#859cbd;">Forgot your password?</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+    
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+
+        $("#lngEn").click(function(){
+            $("#UserLanguage").val("en");
+            $("#loginTitle").text("WinPro User Login");
+            $("#loginTitle").css("text-align","left");
+            $("#nameLabel").text("UserName");
+            $("#nameLabel").css("float","left");
+            $("#Input_UserName").attr("placeholder", "UserName");
+            $("#Input_UserName").css("text-align", "left");
+            $("#passwordLabel").text("Password");
+            $("#passwordLabel").css("float", "left");
+            $("#Input_Password").attr("placeholder", "Password");
+            $("#Input_Password").css("text-align", "left");
+            $("#rememberBlock").css("text-align", "left");
+            $("#rememberLabel").text("Remember me?");
+            $("#login-submit").text("Log in");
+            $("#login-submit").css("text-align","center");
+            $("#forgot-password").text("Forgot your password?");
+            $("#forgotBlock").css("text-align", "left");
+            $("#Input_RememberMe").removeClass("rightCss");
+            $("#Input_RememberMe").addClass("leftCss");
+        });
+        $("#lngArb").click(function () {
+            $("#UserLanguage").val("ar");
+            $("#loginTitle").text("وينبورو المستخدم  تسجيل الدخول");
+            $("#loginTitle").css("text-align", "right");
+            $("#nameLabel").text("اسم المستخدم");
+            $("#nameLabel").css("float", "right");
+            $("#Input_UserName").attr("placeholder", "اسم المستخدم");
+            $("#Input_UserName").css("text-align", "right");
+            $("#passwordLabel").text("كلمه السر");
+            $("#passwordLabel").css("float", "right");
+            $("#Input_Password").attr("placeholder", "كلمه السر");
+            $("#Input_Password").css("text-align", "right");
+            $("#rememberLabel").text("تذكرني");
+            $("#rememberBlock").css("text-align", "right");
+            $("#login-submit").text("تسجيل الدخول");
+            $("#login-submit").css("text-align", "right");
+            $("#forgot-password").text("هل نسيت كلمة السر؟");
+            $("#forgotBlock").css("text-align", "right");
+            $("#Input_RememberMe").removeClass("leftCss");
+            $("#Input_RememberMe").addClass("rightCss");
+
+        });
+    </script>
+}

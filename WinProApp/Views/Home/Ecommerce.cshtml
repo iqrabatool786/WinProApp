@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Ecommerce Dashboard";
+    Layout = "~/Views/Shared/_DashBoardLayout.cshtml";
+}
+
+<div class="row" style="margin-top:5px;">
+    <div class="col-md-12"><h3>Ecommerce Dashboard</h3></div>
+    <div class="row col-md-12" style="margin-bottom:25px;">
+        <div class="col-md-3"></div>
+        <div class="col-md-1" style="text-align:right; padding-top:7px;"><label>Filter By</label> </div>
+        <div class="col-md-2">
+            <input type="text" name="txtDate1" id="txtDate1" class="form-control datefield" placeholder="From Date" />
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="txtDate2" id="txtDate2" class="form-control datefield" placeholder="To Date" />
+        </div>
+        <div class="col-md-1">
+            <input type="button" id="btnSearch" name="btnSearch" class="btn btn-info" value="Search" />
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-success">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>No Of Order</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-green">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>No Of Order Dispathed</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>No Of Order Failed</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-eye-slash" aria-hidden="true"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-orange">
+            <div class="inner">
+                <h3>0</h3>
+
+                <p>No Of Delivery Van Works</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-truck"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>

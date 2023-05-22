@@ -1,0 +1,409 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Administrator.ReportHeadAddEditViewModel;
+@{
+    ViewData["Title"] = @WebResource.PrintHeaderAndFooter;
+    string logoImgPath = "/Images/Logo/";
+    string allowed = "No";
+    if (User.IsInRole("Administrator"))
+    {
+        allowed = "Yes";
+    }
+}
+
+<style>
+    #tblDataTable_filter > label {
+        width: 60%;
+    }
+
+        #tblDataTable_filter > label > .form-control-sm {
+            width: 87%;
+        }
+
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5 id="subTitle">@WebResource.PrintHeaderAndFooter</h5>
+        <form id="manageForm" enctype="multipart/form-data" asp-action="CreateUpdateReportHead" asp-controller="Administrator" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="0" />
+            <div class="row">
+                <div class="form-floating col-md-2">
+                    <label asp-for="StoreId">@WebResource.Store</label>
+                    <select asp-for="StoreId" class="form-control" asp-items="@ViewBag.Stores">
+                        <option value="">@WebResource.Store</option>
+                    </select>
+                    <span asp-validation-for="StoreId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="StoreCode">@WebResource.Store @WebResource.Code</label>
+                    <input asp-for="StoreCode" class="form-control" readonly />
+                    <span asp-validation-for="StoreCode" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4">
+                    <label asp-for="StoreAddress">@WebResource.Store @WebResource.Address</label>
+                    <input asp-for="StoreAddress" class="form-control" readonly />
+                    <span asp-validation-for="StoreAddress" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="VatNo">@WebResource.Store @WebResource.VatNo</label>
+                    <input asp-for="VatNo" class="form-control" readonly />
+                    <span asp-validation-for="VatNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-1">
+                    <label for="CurrentLogo">@WebResource.Current @WebResource.Logo</label>
+                    <img src="" id="CurrentLogo" style="max-width:80px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-6">
+                    <label asp-for="ReportHeaderEng">@WebResource.Report @WebResource.Header @WebResource.English</label>
+                    <input asp-for="ReportHeaderEng" class="form-control" />
+                    <span asp-validation-for="ReportHeaderEng" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="ReportHeaderArabic">@WebResource.Report @WebResource.Header @WebResource.Arabic</label>
+                    <input asp-for="ReportHeaderArabic" class="form-control" />
+                    <span asp-validation-for="ReportHeaderArabic" class="text-danger"></span>
+                </div>                
+            </div>
+
+             <div class="row">
+                <div class="form-floating col-md-6">
+                    <label asp-for="ReportFooterEng">@WebResource.Report @WebResource.Footer @WebResource.English</label>
+                    <input asp-for="ReportFooterEng" class="form-control" />
+                    <span asp-validation-for="ReportFooterEng" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="ReportFooterArabic">@WebResource.Report @WebResource.Footer @WebResource.Arabic</label>
+                    <input asp-for="ReportFooterArabic" class="form-control" />
+                    <span asp-validation-for="ReportFooterArabic" class="text-danger"></span>
+                </div>                
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-4">
+                    <label asp-for="LogoImg">@WebResource.Logo</label>
+                    <input type="file" id="LogoImg" name="LogoImg" class="form-control" accept=".jpg, .jpeg, .png" />
+                    <span asp-validation-for="LogoImg" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-4" style="padding-top:40px;">
+                    <input asp-for="DefaultStore" />
+                    <label asp-for="DefaultStore">@WebResource.Current @WebResource.Store</label>
+                    <span asp-validation-for="DefaultStore" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+</div>
+
+
+<div class="row card p-xl-5">
+    <div class="col-sm-12">
+        <hr />
+        <h3>@WebResource.PrintHeaderAndFooter @WebResource.List</h3>
+        <table id="tblDataTable" class="table table-striped table-bordered dataTable table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @WebResource.ID
+                    </th>
+                    <th>
+                        @WebResource.Store @WebResource.Name
+                    </th>
+                    <th>
+                        @WebResource.Store @WebResource.Address
+                    </th>
+                    <th>
+                         @WebResource.Store @WebResource.VatNo
+                    </th>
+                    <th>
+                        @WebResource.Header @WebResource.English
+                    </th>
+                    <th>
+                       @WebResource.Header @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Footer @WebResource.English
+                    </th>
+                    <th>
+                         @WebResource.Footer @WebResource.Arabic
+                    </th>
+                    <th>
+                        @WebResource.Current @WebResource.Store
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var curId = $("#Id").val();
+        var msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+        var msg2 = "@Html.Raw(WebResource.RecordCreated)";
+
+
+
+        function OnSuccess(data, status, xhr) {
+            if (parseInt(curId) > 0) {
+                msg1 = "@Html.Raw(WebResource.UpdatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordUpdated)";
+            }
+            else {
+                msg1 = "@Html.Raw(WebResource.CreatedSuccessfully)";
+                msg2 = "@Html.Raw(WebResource.RecordCreated)";
+            }
+            swal({
+                type: 'success',
+                title: msg1,
+                text: msg2,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Administrator/ReportHeads");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $("#StoreId").select2();
+
+        $(document).ready(function () {
+            bindDataTable(0);
+        });
+
+        var allowed = "@allowed";
+        function bindDataTable(start) {
+            if ($.fn.DataTable.isDataTable("#tblDataTable")) {
+                $('#tblDataTable').DataTable().destroy();
+            }
+
+            var table = $('#tblDataTable').DataTable(
+                {
+                    serverSide: true,
+                    responsive: true,
+                    displayStart: start,
+                    iDisplayLength: 20,
+                    order: [[1, 'desc']],
+                    lengthMenu: [10, 20, 30, 50, 100],
+                    sAjaxSource: "/Administrator/ReportHeadsList",
+                    sServerMethod: "POST",
+                    "columns": [
+                        {
+                            data: "Id",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "StoreName",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "StoreAddress",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "VatNo",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ReportHeaderEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ReportHeaderArabic",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ReportFooterEng",
+                            searchable: true,
+                            class: "dtr-control"
+                        },
+                        {
+                            data: "ReportFooterArabic",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "DefaultStore",
+                            searchable: true,
+                            class: "dtr-control rightText"
+                        },
+                        {
+                            data: "Id",
+                            searchable: false,
+                            orderable: false,
+                            class: "dtr-control",
+                            render: function (data, type, row) {
+                                var content = '<div style="display:flex">'
+                                if (allowed == "Yes") {
+                                    content += '&nbsp;<a href="JavaScript:" data-toggle="tooltip" data-original-title="Delete" data-flag="Activate" title="@WebResource.Delete" data-Id="' + data + '" class="btn btn-danger btn-sm action removeInfo"><i class="fa fa-times"></i></a>';
+                                }
+                                content += '&nbsp;</div>';
+
+                                return content;
+                            }
+                        }
+                    ],
+                });
+
+            // new $.fn.dataTable.FixedHeader(table);
+        };
+
+
+        function CurrentPageStart() {
+            var table = $('#tblDataTable').DataTable();
+            var info = table.page.info();
+            return info.start;
+        }
+
+
+        function GetLogoInfo(StoreId)
+        {
+            $.ajax({
+                url: "/Administrator/GetHeaderInfo/" + StoreId,
+                type: "POST",
+                dataType: "json",
+                data: { id: StoreId },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    if (result != null)
+                    {
+                        $("#Id").val(result.Id);
+                        $("#StoreCode").val(result.StoreCode);
+                        $("#StoreAddress").val(result.StoreAddress);
+                        $("#VatNo").val(result.VatNo);
+                        $("#ReportHeaderEng").val(result.ReportHeaderEng);
+                        $("#ReportHeaderArabic").val(result.ReportHeaderArabic);
+                        $("#ReportFooterEng").val(result.ReportFooterEng);
+                        $("#ReportFooterArabic").val(result.ReportFooterArabic);
+                        let logo = "@logoImgPath" + result.Logo;
+                        $("#CurrentLogo").attr('src', logo);
+                        if (result.DefaultStore == true){
+                            $("#DefaultStore").prop("checked",true);
+                        }
+                        else{
+                            $("#DefaultStore").prop("checked", false);
+                        }
+                    }
+                    else {
+                        $("#Id").val("0");
+                        $("#StoreCode").val('');
+                        $("#StoreAddress").val('');
+                        $("#VatNo").val('');
+                        $("#ReportHeaderEng").val('');
+                        $("#ReportHeaderArabic").val('');
+                        $("#ReportFooterEng").val('');
+                        $("#ReportFooterArabic").val('');
+                        $("#CurrentLogo").attr('src', '');
+                        $("#DefaultStore").prop("checked", false);
+                    }
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+                $("#StoreId").change(function(){
+                    let Id = $(this).val();
+                    if (parseFloat(Id) > 0)
+                    {
+                        GetLogoInfo(Id);
+                    }
+                    else{
+                        $("#Id").val("0");
+                        $("#StoreCode").val('');
+                        $("#StoreAddress").val('');
+                        $("#VatNo").val('');
+                        $("#ReportHeaderEng").val('');
+                        $("#ReportHeaderArabic").val('');
+                        $("#ReportFooterEng").val('');
+                        $("#ReportFooterArabic").val('');
+                        $("#CurrentLogo").attr('src', '');
+                    }
+                });
+
+        
+        $(document).on("click", ".removeInfo", function () {
+            var Id = $(this).attr("data-id");
+            swal({
+                title: "@Html.Raw(WebResource.Confirm)",
+                text: "@Html.Raw(WebResource.DeleteConfirmMessage)",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: " @Html.Raw(WebResource.Yes) ",
+                cancelButtonText: " @Html.Raw(WebResource.No) ",
+            });
+
+            $(".swal2-confirm").on("click", function () {
+                $.ajax({
+                    url: "/Administrator/DeleteReportHead/" + Id,
+                    type: "POST",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.id != "0") {
+                            swal({
+                                type: 'error',
+                                title: "@Html.Raw(WebResource.Oops)",
+                                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                            });
+                        }
+                        else {
+                            location.reload();
+                        }
+                    },
+                    error: function (data) {
+                        swal({
+                            type: 'error',
+                            title: "@Html.Raw(WebResource.Oops)",
+                            text: "@Html.Raw(WebResource.SomethingWentWrong)",
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

@@ -1,0 +1,41 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.bottomright {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 300px;
+    max-height: 600px;
+    overflow-y: scroll;
+    background-color: #fff;
+    padding: 5px;
+}
+
+.removeRow {
+    color: #ff6a00;
+}
+
+    .removeRow:hover {
+        color: #ff0000;
+    }
+
+.rightText {
+    text-align: right;
+}

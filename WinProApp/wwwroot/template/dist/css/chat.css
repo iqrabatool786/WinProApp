@@ -1,0 +1,19 @@
+﻿body {
+}
+
+.bottomright {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    width: 200px;
+    height: 40px;
+    background-color: lightblue;
+    padding: 5px;
+}
+
+.large {
+    width: 2000px;
+    height: 500px;
+    background-color: lightgray;
+}
+

@@ -1,0 +1,193 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Customers.EditViewModel
+@{
+    ViewData["Title"] = @WebResource.Customer + " " + @WebResource.Edit;
+    string crDocPath = "/Images/Customers/" + Model.CRDocument;
+    string taxDocPath = "/Images/Customers/" + Model.TaxDocument;
+    string otherDocPath = "/Images/Customers/" + Model.OtherDocument;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="editForm" enctype="multipart/form-data" asp-action="EditCustomer" asp-controller="Finance" asp-route-id="@Model.Id" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="form-floating col-md-6">
+                    <label asp-for="FullName">@WebResource.FullName</label>
+                    <input asp-for="FullName" class="form-control" autocomplete="CompanyName" aria-required="true" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="Address">@WebResource.Address</label>
+                    <textarea asp-for="Address" class="form-control"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="MobileNumber">@WebResource.MobileNumber</label>
+                    <input asp-for="MobileNumber" class="form-control" autocomplete="InvAmount" />
+                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="PhoneNumber">@WebResource.PhoneNo</label>
+                    <input asp-for="PhoneNumber" class="form-control" autocomplete="InvoiceNo" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Email">@WebResource.Email</label>
+                    <input type="email" asp-for="Email" class="form-control" autocomplete="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CompanyName">@WebResource.CompanyName</label>
+                    <input asp-for="CompanyName" class="form-control" autocomplete="CompanyName" aria-required="true" />
+                    <span asp-validation-for="CompanyName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="Balance">@WebResource.Balance</label>
+                    <input asp-for="Balance" class="form-control" autocomplete="Balance" />
+                    <span asp-validation-for="Balance" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="OpeningBalance">@WebResource.OpeningBalance</label>
+                    <input asp-for="OpeningBalance" class="form-control" autocomplete="OpeningBalance" />
+                    <span asp-validation-for="OpeningBalance" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CreditLimit">@WebResource.Credit @WebResource.Limit</label>
+                    <input asp-for="CreditLimit" class="form-control" autocomplete="OpeningBalance" />
+                    <span asp-validation-for="CreditLimit" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="CRNo">@WebResource.CRNo</label>
+                    <input asp-for="CRNo" class="form-control datefield" autocomplete="PaymentDate" />
+                    <span asp-validation-for="CRNo" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-3">
+                    <label asp-for="VatNo">@WebResource.VatNo</label>
+                    <input asp-for="VatNo" class="form-control datefield" autocomplete="PaymentDate" />
+                    <span asp-validation-for="VatNo" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating col-md-3">
+                    <label asp-for="LedgerNo">@WebResource.Ledger @WebResource.No</label>
+                    <input asp-for="LedgerNo" class="form-control datefield" autocomplete="PaymentDate" />
+                    <span asp-validation-for="LedgerNo" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="BookNo">@WebResource.Book @WebResource.No</label>
+                    <input asp-for="BookNo" class="form-control datefield" autocomplete="PaymentDate" />
+                    <span asp-validation-for="BookNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label for="Upload">@WebResource.CRDocument</label>
+                    <input type="file" name="Upload" id="Upload" class="form-control" accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="TaxDocUpload">@WebResource.Tax @WebResource.Document</label>
+                    <input type="file" name="TaxDocUpload" id="TaxDocUpload" class="form-control" accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+                <div class="form-floating col-md-3">
+                    <label for="OtherDocUpload">@WebResource.Other @WebResource.Document</label>
+                    <input type="file" name="OtherDocUpload" id="OtherDocUpload" class="form-control" accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <button id="updateSubmit" type="submit" class="w-100 btn btn-lg btn-primary col-md-3">@WebResource.Save</button>
+        </form>
+    </div>
+
+    <div class="row" style="margin-top:30px; margin-bottom:30px;">
+         <div class="form-floating col-md-4">
+             <label for="CRDoc">@WebResource.CRDocument</label>
+                <div id="Doc1" style="padding:10px;"></div>
+          </div>
+          <div class="form-floating col-md-4">
+            <label for="TaxDoc">@WebResource.Tax @WebResource.Document</label>
+             <div id="Doc2" style="padding:10px;"></div>
+          </div>
+        <div class="form-floating col-md-4">
+            <label for="OtherDoc">@WebResource.Other @WebResource.Document</label>
+            <div id="Doc3" style="padding:10px;"></div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.UpdatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordUpdated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Finance/Customers");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+        function ShowDoc1()
+        {
+            var docPath = "@crDocPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+                        object += "</object>";
+                        object = object.replace(/{FileName}/g, docPath);
+
+            $("#Doc1").html(object);
+        }
+
+        function ShowDoc2() {
+            var docPath = "@taxDocPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#Doc2").html(object);
+        }
+
+        function ShowDoc3() {
+            var docPath = "@otherDocPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#Doc3").html(object);
+        }
+
+        ShowDoc1();
+        ShowDoc2();
+        ShowDoc3();
+
+    </script>
+}

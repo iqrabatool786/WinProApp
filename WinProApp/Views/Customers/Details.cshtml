@@ -1,0 +1,134 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Customers.DetailsViewModel
+@{
+    ViewData["Title"] = @WebResource.Customer + " " + @WebResource.Create;
+    string crDocPath = "/Images/Customers/" + Model.CRDocument;
+    string taxDocPath = "/Images/Customers/" + Model.TaxDocument;
+    string otherDocPath = "/Images/Customers/" + Model.OtherDocument;
+}
+
+<div class="row">
+    <div class="col-md-12">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="form-floating col-md-6">
+                    <label asp-for="FullName">@WebResource.FullName</label>
+                : @Model.FullName
+                </div>
+                <div class="form-floating col-md-6">
+                    <label asp-for="Address">@WebResource.Address</label>
+                : @Model.Address
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="MobileNumber">@WebResource.MobileNumber</label>
+                : @Model.MobileNumber
+                </div>
+                <div class="form-floating col-md-3">
+                <label asp-for="PhoneNumber">@WebResource.PhoneNo</label>
+                : @Model.PhoneNumber
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="Email">@WebResource.Email</label>
+                : @Model.Email
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="CompanyName">@WebResource.CompanyName</label>
+                : @Model.CompanyName
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="Balance">@WebResource.Balance</label>
+                : @Model.Balance
+                </div>
+                <div class="form-floating col-md-3">
+                    <label asp-for="OpeningBalance">@WebResource.OpeningBalance</label>
+                : @Model.OpeningBalance
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-floating col-md-3">
+                    <label asp-for="CRNo">@WebResource.CRNo</label>
+                : @Model.CRNo
+                </div>
+
+                <div class="form-floating col-md-3">
+                <label asp-for="VatNo">@WebResource.VatNo</label>
+                : @Model.VatNo
+                </div>
+
+            <div class="form-floating col-md-3">
+                <label asp-for="LedgerNo">@WebResource.Ledger @WebResource.No</label>
+                : @Model.LedgerNo
+            </div>
+
+            <div class="form-floating col-md-3">
+                <label asp-for="BookNo">@WebResource.Book @WebResource.No</label>
+                : @Model.BookNo
+            </div>
+
+                
+            </div>
+    </div>
+
+    <div class="row" style="margin-top:30px; margin-bottom:30px;">
+        <div class="form-floating col-md-4">
+            <label for="CRDoc">@WebResource.CRDocument</label>
+               <div id="Doc1" style="padding:10px;"></div>
+        </div>
+        <div class="form-floating col-md-4">
+            <label for="TaxDoc">@WebResource.Tax @WebResource.Document</label>
+            <div id="Doc2" style="padding:10px;"></div>
+        </div>
+        <div class="form-floating col-md-4">
+            <label for="OtherDoc">@WebResource.Other @WebResource.Document</label>
+            <div id="Doc3" style="padding:10px;"></div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+
+        function ShowDoc1() {
+            var docPath = "@crDocPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#Doc1").html(object);
+        }
+
+        function ShowDoc2() {
+            var docPath = "@taxDocPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#Doc2").html(object);
+        }
+
+        function ShowDoc3() {
+            var docPath = "@otherDocPath";
+            var object = "<object data=\"{FileName}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            object += "</object>";
+            object = object.replace(/{FileName}/g, docPath);
+
+            $("#Doc3").html(object);
+        }
+
+        ShowDoc1();
+        ShowDoc2();
+        ShowDoc3();
+        
+    </script>
+}

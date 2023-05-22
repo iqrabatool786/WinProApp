@@ -1,0 +1,494 @@
+﻿@using WinProApp.Resources
+@using Microsoft.AspNetCore.Localization;
+@model WinProApp.ViewModels.Warehouse.DamageReturns.AddViewModel;
+@{
+    ViewData["Title"] = @WebResource.Create + " " + @WebResource.Damage;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="createForm" enctype="multipart/form-data" asp-action="DamageReturnCreate" asp-controller="Warehouse" method="post" data-ajax-method="post" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Supplier @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    <div class="form-floating col-md-3">
+                        <label asp-for="SupplierId">@WebResource.Supplier</label>
+                        <select asp-for="SupplierId" class="form-control" asp-items="@ViewBag.Suppliers">
+                            <option value="0">@WebResource.Select @WebResource.Supplier</option>
+                        </select>
+                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating col-md-2">
+                        <label for="BpCode">@WebResource.Bpcode</label>
+                        <input id="BpCode" name="BpCode" class="form-control" readonly />
+                    </div>
+
+                    <div class="form-floating col-md-3">
+                        <label for="Address">@WebResource.Address</label>
+                        <input type="text" id="Address" name="Address" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="VatNo">@WebResource.VatNo</label>
+                        <input id="VatNo" name="VatNo" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="Balance">@WebResource.Balance</label>
+                        <input id="Balance" name="Balance" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>*@
+            <hr />
+            <div class="row card card-success">
+                <div class="card-header"><h3 class="card-title">@WebResource.Damage @WebResource.Details</h3></div>
+                <div class="card-body col-md-12 row">
+                    @*<div class="form-floating col-md-3">
+                        <label for="InvoiceId">@WebResource.InvoiceNo</label>
+                        <select asp-for="InvoiceId" class="form-control">
+                            <option value="">@WebResource.Select @WebResource.InvoiceNo</option>
+                        </select>
+                        <span asp-validation-for="InvoiceId" class="text-danger"></span>
+                    </div>*@
+                    <div class="form-floating col-md-2">
+                        <label for="Date">@WebResource.Date</label>
+                        <input type="text" name="Date" id="Date" class="form-control datefield" aria-required="true" autocomplete="off" required />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating col-md-6">
+                        <label asp-for="Description">@WebResource.Description</label>
+                        <input asp-for="Description" class="form-control" aria-required="true" autocomplete="off" required />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating col-md-3">
+                        <label for="ReturneDoc">@WebResource.AttachedDoc</label>
+                        <input type="file" name="ReturneDoc" id="ReturneDoc" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row card card-success" style="margin-top:20px;">
+                <div class="row" style="margin-top:20px;">
+                    <div class="form-floating col-md-4">
+                        <label for="txtBarcode">@WebResource.Barcode</label>
+                        <input type="text" name="txtBarcode" id="txtBarcode" class="form-control" />
+                        <input type="hidden" name="curBarcodeProductId" id="curBarcodeProductId" value="" />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="txtQtyD">@WebResource.Cost</label>
+                        <input type="number" name="txtCost" id="txtCost" class="form-control" />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="txtQtyD">@WebResource.Damage @WebResource.QtyDozen</label>
+                        <input type="text" name="txtQtyD" id="txtQtyD" class="form-control numberonly" />
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <label for="txtQtyP">@WebResource.Damage @WebResource.QtyPices</label>
+                        <input type="text" name="txtQtyP" id="txtQtyP" class="form-control numberonly" />
+                    </div>
+                  @*  <div class="form-floating col-md-1">
+                        <label for="txtVat">@WebResource.VAT</label>
+                        <input type="number" name="txtVat" id="txtVat" class="form-control" style="text-align:right;" readonly />
+                        <input type="hidden" name="TotItemVat" id="TotItemVat" value="0" />
+                    </div>*@
+                    <div class="form-floating col-md-1">
+                        <label for="txtTot">@WebResource.Total</label>
+                        <input type="number" name="txtTot" id="txtTot" class="form-control" style="text-align:right;" readonly />
+                    </div>
+                    <div class="form-floating col-md-1">
+                        <label for="btnAddItem">&nbsp;</label>
+                        <input type="button" id="btnAddItem" name="btnAddItem" value="@WebResource.Add" class="btn btn-flat btn-sm btn-secondary" style="margin-top:37px;" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:20px;">
+                    <div class="form-floating col-md-4">
+                        <label for="txtDesc">@WebResource.Description @WebResource.English</label>
+                        <input type="text" name="txtDesc" id="txtDesc" class="form-control" readonly />
+                    </div>
+                    <div class="form-floating col-md-4">
+                        <label for="txtDesc1">@WebResource.Description @WebResource.Arabic</label>
+                        <input type="text" name="txtDesc1" id="txtDesc1" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="card-body col-md-12 row">
+                    <table id="tblItems" class="table table-striped table-bordered table-responsive" style="height:550px">
+                        <thead>
+                            <tr>
+                                <th class="col-md-3">@WebResource.Barcode</th>
+                                <th class="col">@WebResource.Description</th>
+                                <th class="col">@WebResource.Cost</th>
+                                <th class="col">@WebResource.QtyDozen</th>
+                                <th class="col">@WebResource.QtyPices</th>
+                               @* <th class="col">@WebResource.VAT</th>*@
+                                <th class="col">@WebResource.Total</th>
+                                <th class="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row card card-success" style="margin-top:20px; padding-top:7px;">
+                <div class="row col-md-12">
+                    @*<div class="form-floating col-md-10" style="text-align:right;">
+                        <label for="InvoiceVatTot" style="margin-left:7px;">@WebResource.VAT @WebResource.Total</label>
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <input type="text" name="VatAmount" id="VatAmount" class="form-control" value="" data-val="0" style="text-align:right;" />
+                    </div>*@
+                </div>
+                <div class="row col-md-12">
+                    <div class="form-floating col-md-10" style="text-align:right;">
+                        <label for="Total" style="margin-left:7px;">@WebResource.Total</label>
+                    </div>
+                    <div class="form-floating col-md-2">
+                        <input readonly type="text" name="Total" id="Total" class="form-control" value="" style="text-align:right;" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row col-md-12">
+                <div class="form-floating col-md-3">
+                    <label asp-for="StoreId">@WebResource.Supplier</label>
+                    <select asp-for="StoreId" class="form-control" asp-items="@ViewBag.Stores">
+                        <option value="">@WebResource.Select @WebResource.Store</option>
+                    </select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-md-2">
+                    <label asp-for="Status">@WebResource.Status</label>
+                    <select asp-for="Status" class="form-control">
+                        <option value="false">@WebResource.OnHold</option>
+                        <option value="true">@WebResource.Approved</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="width:100%; padding:5px; height:10px;">&nbsp;</div>
+            <input id="saveBtn" type="submit" class="w-100 btn btn-lg btn-primary col-md-3" value="@WebResource.Create" />
+        </form>
+    </div>
+    <hr />
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("form").attr('autocomplete', 'off');
+
+        function OnSuccess(data, status, xhr) {
+            swal({
+                type: 'success',
+                title: "@Html.Raw(WebResource.CreatedSuccessfully)",
+                text: "@Html.Raw(WebResource.RecordCreated)",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                button: {
+                    className: "btn theme waves-effect waves-light"
+                }
+            }).then((value) => {
+                window.location.replace("/Warehouse/DamageReturns");
+            });
+        }
+
+        function OnFailure(xhr, status, error) {
+            swal({
+                type: 'error',
+                title: "@Html.Raw(WebResource.Oops)",
+                text: "@Html.Raw(WebResource.SomethingWentWrong)",
+            }).then(x => {
+                Ladda.stopAll();
+            });
+        }
+
+
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+
+        $(document).ready(function () {
+            $('.numberonly').keypress(function (e) {
+                var charCode = (e.which) ? e.which : event.keyCode
+                if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                    return false;
+            });
+        });
+
+
+        $(".datefield").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+
+        var vatx = "@ViewBag.VatPercentage";
+      //  $('#SupplierId').select2();
+        $('#InvoiceId').select2();
+        $('#StoreId').select2();
+
+        //$(document).on("change", "#SupplierId", function () {
+        //    var Id = $(this).val();
+        //    if (parseInt(Id) > 0) {
+        //        $.ajax({
+        //            url: "/Purchase/GetSupplierInfo/" + Id,
+        //            type: "GET",
+        //            success: function (data) {
+        //                var result = JSON.parse(JSON.stringify(data));
+        //                $("#BpCode").val(result.Bpcode);
+        //                $("#Address").val(result.Address);
+        //                $("#VatNo").val(result.VatNo);
+        //                $('#Balance').val(result.Balance);
+        //            },
+        //            error: function () {
+        //                swal({
+        //                    type: 'error',
+        //                    title: "@Html.Raw(WebResource.Oops)",
+        //                    text: "@Html.Raw(WebResource.SomethingWentWrong)",
+        //                });
+        //            }
+        //        });
+        //        GetInvoiceListBySupplier(Id);
+        //    }
+        //    else {
+        //        $("#Address").val('');
+        //        $("#VatNo").val('');
+        //        $('#Balance').val('');
+        //        $("#InvoiceId option").remove();
+        //    }
+        //});
+
+        $("#txtBarcode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Purchase/GetBarcodes",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+                            var result = [
+                                {
+                                    label: 'No matches found',
+                                    value: response.term
+                                }
+                            ];
+                            response(result);
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.ProductId, value: item.ProductId, title: item.Id };
+                            }))
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $("#curBarcodeProductId").val('');
+                $("#txtBarcode").val(ui.item.value);
+                $("#curBarcodeProductId").val(ui.item.title);
+                GetProductInfoById(ui.item.title);
+            }
+        });
+
+
+        function GetProductInfoById(Id) {
+            $.ajax({
+                url: "/Purchase/GetProductInfoById",
+                type: "POST",
+                dataType: "json",
+                data: { id: Id },
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#txtCost").val(result.UnitCost);
+                    $("#txtDesc").val(result.ProductNameEng);
+                    $("#txtDesc1").val(result.ProductNameArabic);
+
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        function GetInvoiceListBySupplier(Id) {
+            $.ajax({
+                url: "/Warehouse/GetInvoiceNoListBySupplier/" + Id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var result = JSON.parse(JSON.stringify(data));
+                    $("#InvoiceId option").remove();
+                    var options = '<option value="">@WebResource.Select @WebResource.InvoiceNo</option>';
+                    for (i = 0; i < result.length; i++) {
+                        options += "<option valur='" + result[i].Id + "'>" + result[i].InvoiceNo + "</option>";
+                    }
+                    $("#InvoiceId").append(options);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        function CalculateRow() {
+            let cost = $("#txtCost").val();
+            let qtyd = $("#txtQtyD").val();
+            let qtyp = $("#txtQtyP").val();
+
+            let vat = (parseFloat(vatx) / 100);
+            let totQty = 0;
+            let tot = 0;
+            let totVat = 0;
+            let itemVat = 0;
+
+            if (parseFloat(qtyd) > 0 && parseFloat(qtyp) > 0) {
+                totQty = (parseFloat(parseFloat(qtyd) * 12) + parseFloat(qtyp));
+            }
+            else {
+                if (parseFloat(qtyd) > 0) {
+                    totQty = qtyd;
+                }
+                if (parseFloat(qtyp) > 0) {
+                    totQty = qtyp;
+                }
+            }
+
+            if (parseFloat(cost) > 0) {
+                tot = (parseFloat(cost) * parseFloat(totQty));
+               // itemVat = (parseFloat(cost) * parseFloat(vat));
+               // totVat = (parseFloat(tot) * parseFloat(vat));
+            }
+
+         //   $("#txtVat").val(itemVat.toFixed(2));
+         //   $("#TotItemVat").val(totVat.toFixed(2))
+            $("#txtTot").val(tot.toFixed(2));
+        }
+
+        $("#txtCost").keyup(function () {
+            CalculateRow();
+        });
+
+        $("#txtQtyD").keyup(function () {
+            CalculateRow();
+        });
+
+        $("#txtQtyP").keyup(function () {
+            CalculateRow();
+        });
+
+        function AddItemRows() {
+            let vatamoutX = (parseFloat(vatx) / parseFloat(100));
+            let code = $("#txtBarcode").val();
+            let productId = $("#curBarcodeProductId").val();
+            let desc = $("#txtDesc").val();
+            let descab = $("#txtDesc1").val();
+
+            let qtyd = $("#txtQtyD").val();
+            let qtyp = $("#txtQtyP").val();
+            let cost = $("#txtCost").val();
+           // let itemVatx = $("#txtVat").val();
+          //  let vattot = $("#TotItemVat").val();
+            let total = $("#txtTot").val();
+
+            let productVat = (parseFloat(cost) * parseFloat(vatamoutX));
+
+
+
+            if ($.trim(code) != "" && parseInt(productId) > 0 && parseFloat(cost) > 0 && parseFloat(total) && (parseFloat(qtyd) > 0 || parseFloat(qtyp) > 0)) {
+                let itemCode = '<input type="hidden" name="ItemProductId" value="' + productId + '" /><input type="hidden" name="Barcode" value="' + code + '" />' + code;
+                let itemDesc = '<input type="hidden" name="ItemDescription" value="' + desc + '" /><input type="hidden" name="ItemDescriptionAb" value="' + descab + '" />' + desc + "/ " + descab;
+                let itemQtyD = '<input type="hidden" name="QtyDozen" value="' + qtyd + '" />' + qtyd;
+                let itemQtyP = '<input type="hidden" name="QtyPices" value="' + qtyp + '" />' + qtyp;
+              //  let itemVat = '<input type="hidden" name="itemVat" value="' + itemVatx + '" /><input type="hidden" name="itemVatTotx" class="totVatx" value="' + vattot + '" />' + itemVatx;
+
+                let itemCost = '<input type="hidden" name="itemCost" class="itemcostx" value="' + cost + '" />' + cost;
+                let itemTotal = '<input type="hidden" name="itemTotal" class="itemtotx" value="' + total + '" />' + total;
+                let btn = '<a class="removeRow" style="font-size:22px; padding:5px; cursor:pointer;"><i class="fa fa-times"></i></a>';
+
+                let rowId = "Row_" + Date.now() + "_" + new Date().getMilliseconds();
+                var itemRow = "<tr id='" + rowId + "'></tr>";
+                $('#tblItems tbody').append(itemRow);
+
+                var itemCell = '<td>' + itemCode + '</td>';
+                itemCell += '<td>' + itemDesc + '</td>';
+                itemCell += '<td>' + itemCost + '</td>';
+                itemCell += '<td>' + itemQtyD + '</td>';
+                itemCell += '<td>' + itemQtyP + '</td>';
+               // itemCell += '<td>' + itemVat + '</td>';
+                itemCell += '<td class="itemtotlx">' + itemTotal + '</td>';
+                itemCell += '<td>' + btn + '</td>';
+
+                $('#tblItems #' + rowId).append(itemCell);
+
+                $("#txtBarcode").val('');
+                $("#curBarcodeProductId").val('');
+                $("#txtDesc").val('');
+                $("#txtDesc").val('');
+                $("#txtQtyD").val('');
+                $("#txtQtyP").val('');
+                $("#txtCost").val('');
+              //  $("#TotItemVat").val('0');
+              //  $("#txtVat").val('');
+                $("#txtTotal").val('');
+
+
+                $("#txtBarcode").focus();
+            }
+        }
+
+        function CalculateTotal() {
+            let tot = 0;
+            let totwithoutVat = 0;
+            let totVat = 0;
+
+            //$(".totVatx").each(function () {
+            //    let curVat = $(this).val();
+            //    if (parseFloat(curVat) > 0) {
+            //        totVat = (parseFloat(totVat) + parseFloat(curVat));
+            //    }
+            //});
+
+            $(".itemtotx").each(function () {
+                let curtot = $(this).val();
+                if (parseFloat(curtot) > 0) {
+                    totwithoutVat = (parseFloat(totwithoutVat) + parseFloat(curtot));
+                }
+            });
+
+            tot = (parseFloat(totwithoutVat));
+
+         //    $("#VatAmount").val(totVat.toFixed(2));
+            $("#Total").val(tot.toFixed(2));
+
+        }
+
+        $("#btnAddItem").click(function () {
+            AddItemRows();
+            CalculateTotal();
+        });
+
+        $(document).on("click", ".removeRow", function () {
+            $(this).parent().parent().remove();
+            CalculateTotal();
+        })
+
+    </script>
+}

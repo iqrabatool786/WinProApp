@@ -1,0 +1,192 @@
+.fs-wrap {
+    display: inline-block;
+    cursor: pointer;
+    line-height: 1;
+    width: 100%;
+    background-color: transparent;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: none;
+    border-bottom: 1px solid;
+    border-bottom-color: #9e9e9e;
+    border-radius: 0;
+    padding: 0;
+}
+
+.fs-label-wrap,
+.fs-dropdown {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    .fs-label-wrap .fs-label {
+        padding: 6px 22px 8px 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+
+.fs-arrow {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #333;
+    position: absolute;
+    top: 0;
+    right: 5px;
+    bottom: 0;
+    margin: auto;
+    transition: ease-in 0.15s;
+}
+
+.fs-open .fs-arrow {
+    transform: rotate(-180deg);
+}
+
+.fs-dropdown {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin-top: 0px;
+    z-index: 996;
+    transition: all .3s linear;
+    border: none;
+    -webkit-box-shadow: 0 5px 11px 0 rgb(0 0 0 / 18%), 0 4px 15px 0 rgb(0 0 0 / 15%);
+    box-shadow: 0 5px 11px 0 rgb(0 0 0 / 18%), 0 4px 15px 0 rgb(0 0 0 / 15%);
+}
+
+    .fs-dropdown .fs-options {
+        max-height: 350px;
+        overflow: auto;
+    }
+
+.fs-search input {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none;
+    padding: 6px 0;
+    width: 100%;
+}
+
+.fs-option,
+.fs-search,
+.fs-optgroup-label {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 15px 10px 12px;
+    list-style: none;
+    min-height: 40px;
+    line-height: normal;
+}
+
+.fs-wrap button {
+    display: none;
+}
+
+.fs-option:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.fs-option:last-child {
+    border-bottom: none;
+}
+
+.fs-search {
+    padding: 0 8px;
+    padding-right: 40px;
+    border-bottom: 1px solid #9e9e9e;
+    position: relative;
+}
+
+    .fs-search:after {
+        content: "\f349";
+        font-family: MaterialDesignIcons;
+        position: absolute;
+        top: 9px;
+        right: 8px;
+        font-size: 22px;
+    }
+
+.fs-no-results {
+    padding: 6px 8px;
+}
+
+
+.fs-option {
+    cursor: pointer;
+    word-break: break-all;
+}
+
+    .fs-option.disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+
+
+    .fs-option.hl {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+
+.fs-wrap.multiple .fs-option {
+    position: relative;
+    padding-left: 30px;
+}
+
+.fs-wrap.multiple .fs-checkbox {
+    position: absolute;
+    display: block;
+    width: 30px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.fs-wrap.multiple .fs-option .fs-checkbox i {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #aeaeae;
+    border-radius: 2px;
+    background-color: #fff;
+}
+
+.fs-wrap.multiple .fs-option.selected .fs-checkbox i {
+    background-color: rgb(63 81 181);
+    border-color: transparent;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAABMSURBVAiZfc0xDkAAFIPhd2Kr1WRjcAExuIgzGUTIZ/AkImjSofnbNBAfHvzAHjOKNzhiQ42IDFXCDivaaxAJd0xYshT3QqBxqnxeHvhunpu23xnmAAAAAElFTkSuQmCC');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.fs-optgroup-label {
+    font-weight: bold;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.cusFieldSec .fs-wrap .fs-wrap {
+    border-bottom: 0;
+    margin-top: 2px;
+    line-height: .7;
+}
+
+.fs-wrap:focus-visible {
+    outline: none;
+    border-bottom: 2px solid #3f51b5;
+}
