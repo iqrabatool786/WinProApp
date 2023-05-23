@@ -261,7 +261,7 @@
                 {
                     <partial name="_LeftMenuHRMS" />
                 }
-                @if (urlPath.Contains("Finance"))
+                @if (urlPath.Contains("Finance") || urlPath.Contains("Sales"))
                 {
                     <partial name="_LeftMenuFinance" />
                 }
@@ -273,7 +273,7 @@
                 {
                     <partial name="_LeftMenuWarehouse" />
                 }
-                @if (urlPath.Contains("Purchase") || urlPath.Contains("Shipping") || urlPath.Contains("Sales"))
+                @if (urlPath.Contains("Purchase") || urlPath.Contains("Shipping"))
                 {
                     <partial name="_LeftMenuPurcahse" />
                 }

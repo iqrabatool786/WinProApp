@@ -11,5 +11,6 @@
         public string? ReportFooterArabic { get; set; }
         public int TotalRecordCount { get; set; }
         public bool DefaultStore { get; set; }
+        public string Vatnum { get; set; }
     }
 }

@@ -139,6 +139,8 @@ namespace WinProApp.DataModels.DataBase
         public virtual DbSet<GetLoyaityPointInfo> GetLoyaityPointInfo { get; set; } = null!;
         public virtual DbSet<Company> Company { get; set; } = null!;
 
+       
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

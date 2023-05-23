@@ -22,7 +22,16 @@ namespace WinProApp.Services.Domain
 
         public async Task<ReportHeads> GetByStoreIdAsync(int id)
         {
-            return await _DbContext.ReportHeads.FirstOrDefaultAsync(s => s.StoreId == id);
+            try
+            {
+                return await _DbContext.ReportHeads.FirstOrDefaultAsync(s => s.StoreId == id);
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         public async Task<string> GetByStoreLogoByIdAsync(int id)
@@ -91,23 +100,32 @@ namespace WinProApp.Services.Domain
 
         public async Task<List<GetReportHeads>> GetList(JQueryDataTableParamModel param)
         {
-            string strSearch = param.sSearch == null ? " " : param.sSearch;
-            int start = param.iDisplayStart > 0 ? (param.iDisplayLength > 0 ? ((param.iDisplayStart / param.iDisplayLength) + 1) : 1) : 1;
-            int recordsPerPage = param.iDisplayLength > 0 ? param.iDisplayLength : 20;
-            string strSort = param.sSortDir_0 != null ? param.sSortDir_0 : "asc";
+            try
+            {
+                string strSearch = param.sSearch == null ? " " : param.sSearch;
+                int start = param.iDisplayStart > 0 ? (param.iDisplayLength > 0 ? ((param.iDisplayStart / param.iDisplayLength) + 1) : 1) : 1;
+                int recordsPerPage = param.iDisplayLength > 0 ? param.iDisplayLength : 20;
+                string strSort = param.sSortDir_0 != null ? param.sSortDir_0 : "asc";
 
-            List<GetReportHeads> rows = null;
-            await _DbContext.LoadStoredProc("sp-GetReportHeads")
-                  .AddParam("Search", strSearch)
-                  .AddParam("PageIndex", start)
-                  .AddParam("PageSize", recordsPerPage)
-                  .AddParam("Sort", strSort)
-                  .ExecAsync(async r =>
-                  {
-                      rows = await r.ToListAsync<GetReportHeads>().ConfigureAwait(false);
-                  }).ConfigureAwait(false);
+                List<GetReportHeads> rows = null;
+                await _DbContext.LoadStoredProc("sp-GetReportHeads")
+                      .AddParam("Search", strSearch)
+                      .AddParam("PageIndex", start)
+                      .AddParam("PageSize", recordsPerPage)
+                      .AddParam("Sort", strSort)
+                      .ExecAsync(async r =>
+                      {
+                          rows = await r.ToListAsync<GetReportHeads>().ConfigureAwait(false);
+                      }).ConfigureAwait(false);
 
-            return rows;
+                return rows;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

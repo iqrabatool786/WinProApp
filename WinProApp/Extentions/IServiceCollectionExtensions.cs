@@ -54,6 +54,7 @@ namespace WinProApp.Extentions
             services.AddScoped<BuyQtyGetAmountOffDiscountService>();
             services.AddScoped<DiscountVouchersService>();
             services.AddScoped<LoyaltyCardsInfoService>();
+            services.AddScoped<SalesService>();
         }
     }
 }

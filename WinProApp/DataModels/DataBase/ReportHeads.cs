@@ -16,5 +16,6 @@ namespace WinProApp.DataModels.DataBase
         public string? ReportFooterEng { get; set; }
         public string? ReportFooterArabic { get; set; }
         public bool DefaultStore { get; set; }
+        public long Vatnum { get; set; }
     }
 }
