@@ -253,9 +253,9 @@ namespace WinProApp.Controllers
             {
                 Id = x.Id,
                 StoreId = x.StoreId,
-                StoreName = x.StoreId != null ? _reportHeadService.GetStoreNameByIdAsync(x.StoreId.Value).Result : null,
-                StoreAddress = x.StoreId != null ? _storeService.GetByIdAsync(x.StoreId.Value).Result.Address : null,
-                VatNo = x.StoreId != null ? _storeService.GetByIdAsync(x.StoreId.Value).Result.VatNo : null,
+                StoreName = x.StoreId != null ? _reportHeadService.GetStoreNameByIdAsync(x.StoreId.Value)?.Result : null,
+                StoreAddress = x.StoreId != null ? _storeService.GetByIdAsync(x.StoreId.Value)?.Result?.Address : null,
+                VatNo = x.StoreId != null ? _storeService.GetByIdAsync(x.StoreId.Value)?.Result?.VatNo : null,
                 Logo = x.Logo,
                 ReportHeaderEng = x.ReportHeaderEng,
                 ReportHeaderArabic = x.ReportHeaderArabic,

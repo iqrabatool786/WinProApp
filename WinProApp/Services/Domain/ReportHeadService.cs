@@ -51,7 +51,7 @@ namespace WinProApp.Services.Domain
 
         public async Task<string> GetStoreNameByIdAsync(int id)
         {
-            string storeName = _DbContext.Store.FirstOrDefaultAsync(s => s.Id == id).Result.Name;
+            string storeName = _DbContext.Store.FirstOrDefaultAsync(s => s.Id == id)?.Result?.Name;
             return storeName;
         }
 
