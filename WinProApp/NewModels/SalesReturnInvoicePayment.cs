@@ -14,5 +14,6 @@ namespace WinProApp.NewModels
         public string CreatedBy { get; set; } = null!;
         public DateTime CratedDate { get; set; }
         public long? CashBoxId { get; set; }
+        public string? BranchName { get; set; }
     }
 }

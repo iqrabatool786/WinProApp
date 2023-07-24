@@ -8,5 +8,6 @@ namespace WinProApp.NewModels
         public int Id { get; set; }
         public string? AssetTypeEng { get; set; }
         public string? AssetTypeArabic { get; set; }
+        public string? BranchName { get; set; }
     }
 }

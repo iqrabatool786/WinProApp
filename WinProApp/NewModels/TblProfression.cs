@@ -10,6 +10,7 @@ namespace WinProApp.NewModels
         public decimal? Salaryfromsaudi { get; set; }
         public decimal? Id { get; set; }
         public decimal Pkid { get; set; }
+        public string? BranchName { get; set; }
         public decimal? SalaryTosaudi { get; set; }
         public decimal? Salaryfromarab { get; set; }
         public decimal? Salarytoarab { get; set; }

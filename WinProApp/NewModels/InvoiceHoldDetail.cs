@@ -17,5 +17,6 @@ namespace WinProApp.NewModels
         public string? Storeid { get; set; }
         public double? Freeqty { get; set; }
         public double? Freeprice { get; set; }
+        public string? BranchName { get; set; }
     }
 }

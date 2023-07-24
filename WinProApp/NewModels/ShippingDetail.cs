@@ -31,5 +31,6 @@ namespace WinProApp.NewModels
         public decimal? SaleVat { get; set; }
         public decimal? OriginalPrice { get; set; }
         public string? ImageUrl { get; set; }
+        public string? BranchName { get; set; }
     }
 }

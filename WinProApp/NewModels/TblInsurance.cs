@@ -12,6 +12,7 @@ namespace WinProApp.NewModels
         public double? Deduct { get; set; }
         public string? DeductReason { get; set; }
         public double? Balance { get; set; }
+        public string? BranchName { get; set; }
         public DateTime? ReceiveDate { get; set; }
     }
 }

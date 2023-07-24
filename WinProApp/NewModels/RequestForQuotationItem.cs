@@ -11,5 +11,6 @@ namespace WinProApp.NewModels
         public string? Reason { get; set; }
         public decimal? Qty { get; set; }
         public string? Mfcompany { get; set; }
+        public string? BranchName { get; set; }
     }
 }

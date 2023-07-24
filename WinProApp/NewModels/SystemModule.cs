@@ -9,5 +9,6 @@ namespace WinProApp.NewModels
         public string? ModuleName { get; set; }
         public string? ModuleSystemMenueName { get; set; }
         public string? MenueName { get; set; }
+        public string? BranchName { get; set; }
     }
 }

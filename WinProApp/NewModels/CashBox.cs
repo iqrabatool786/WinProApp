@@ -22,6 +22,7 @@ namespace WinProApp.NewModels
         public decimal? CloseCash { get; set; }
         public decimal? CloseBank { get; set; }
         public decimal? CloseCredit { get; set; }
+        public string? BranchName { get; set; }
         public DateTime OpenAt { get; set; }
         public DateTime? CloseAt { get; set; }
         public DateTime Created { get; set; }

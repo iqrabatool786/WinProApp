@@ -9,5 +9,6 @@ namespace WinProApp.NewModels
         public decimal? FormDetailId { get; set; }
         public decimal PermissionId { get; set; }
         public bool? BVisible { get; set; }
+        public string? BranchName { get; set; }
     }
 }

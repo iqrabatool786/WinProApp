@@ -15,6 +15,7 @@ namespace WinProApp.NewModels
         public string? DesignationOfStaff { get; set; }
         public string? ManufactureName { get; set; }
         public string? WarrentyPeriod { get; set; }
+        public string? BranchName { get; set; }
         public string? Temp { get; set; }
         public DateTime? ManufactureDate { get; set; }
         public DateTime? ExpireDate { get; set; }

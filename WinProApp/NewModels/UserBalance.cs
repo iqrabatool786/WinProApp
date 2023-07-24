@@ -11,5 +11,6 @@ namespace WinProApp.NewModels
         public string? Transactiontype { get; set; }
         public DateTime? Tdate { get; set; }
         public string? TransactionDesc { get; set; }
+        public string? BranchName { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace WinProApp.NewModels
         public decimal? BankAmount { get; set; }
         public decimal? BalanceAmount { get; set; }
         public decimal? PointEarn { get; set; }
+        public string? BranchName { get; set; }
         public bool CashBoxClose { get; set; }
         public long CashBoxId { get; set; }
         public long ShiftId { get; set; }

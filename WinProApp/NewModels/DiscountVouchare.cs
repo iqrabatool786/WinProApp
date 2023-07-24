@@ -11,6 +11,7 @@ namespace WinProApp.NewModels
         public DateTime EndDate { get; set; }
         public bool IsMembersOnly { get; set; }
         public bool Approved { get; set; }
+        public string? BranchName { get; set; }
         public string CreatedBy { get; set; } = null!;
         public DateTime CratedDate { get; set; }
         public string UpdatedBy { get; set; } = null!;

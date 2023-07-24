@@ -10,6 +10,7 @@ namespace WinProApp.NewModels
         public string? ReferenceName { get; set; }
         public decimal? Amount { get; set; }
         public DateTime? Date { get; set; }
+        public string? BranchName { get; set; }
         public string? Purpose { get; set; }
         public string? TransactionType { get; set; }
         public string? CompanyName { get; set; }

@@ -11,5 +11,6 @@ namespace WinProApp.NewModels
         public string? ServerPwd { get; set; }
         public byte? Status { get; set; }
         public string? Dbname { get; set; }
+        public string? BranchName { get; set; }
     }
 }

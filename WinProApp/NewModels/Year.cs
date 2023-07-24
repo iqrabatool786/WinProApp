@@ -7,5 +7,6 @@ namespace WinProApp.NewModels
     {
         public int Id { get; set; }
         public int? YearName { get; set; }
+        public string? BranchName { get; set; }
     }
 }

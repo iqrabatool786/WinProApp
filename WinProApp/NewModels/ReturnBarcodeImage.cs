@@ -8,5 +8,6 @@ namespace WinProApp.NewModels
         public decimal? Returnid { get; set; }
         public byte[]? Image { get; set; }
         public byte[]? ImageI { get; set; }
+        public string? BranchName { get; set; }
     }
 }

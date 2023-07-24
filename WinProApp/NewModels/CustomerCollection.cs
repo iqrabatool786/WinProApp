@@ -18,6 +18,7 @@ namespace WinProApp.NewModels
         public int? StoreId { get; set; }
         public decimal? Vat { get; set; }
         public string? BankName { get; set; }
+        public string? BranchName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }

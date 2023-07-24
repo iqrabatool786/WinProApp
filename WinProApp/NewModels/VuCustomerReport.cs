@@ -32,5 +32,6 @@ namespace WinProApp.NewModels
         public string? Logo { get; set; }
         public string? HeaderText { get; set; }
         public string? Vatnum { get; set; }
+        public string? BranchName { get; set; }
     }
 }

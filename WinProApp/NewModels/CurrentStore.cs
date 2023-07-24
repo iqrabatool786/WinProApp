@@ -16,6 +16,7 @@ namespace WinProApp.NewModels
         public string? VatNo { get; set; }
         public string? Crno { get; set; }
         public string? Logo { get; set; }
+        public string? BranchName { get; set; }
         public string? FooterA { get; set; }
         public string? FooterE { get; set; }
     }

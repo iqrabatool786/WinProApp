@@ -15,6 +15,7 @@ namespace WinProApp.NewModels
         public decimal? PurOutQty { get; set; }
         public decimal? DamageQty { get; set; }
         public string? SalesType { get; set; }
+        public string? BranchName { get; set; }
         public DateTime? Date { get; set; }
         public string? BarCode { get; set; }
         public decimal? ShipInQty { get; set; }

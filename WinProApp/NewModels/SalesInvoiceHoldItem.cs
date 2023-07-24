@@ -19,5 +19,6 @@ namespace WinProApp.NewModels
         public decimal ItemTotalInVat { get; set; }
         public decimal ItemOrgSalePrice { get; set; }
         public decimal ItemOrgSaleVat { get; set; }
+        public string? BranchName { get; set; }
     }
 }

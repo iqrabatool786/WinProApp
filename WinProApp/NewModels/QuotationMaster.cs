@@ -20,6 +20,7 @@ namespace WinProApp.NewModels
         public decimal InvoiceNoRegisterWise { get; set; }
         public int? Storeid { get; set; }
         public decimal? Vat { get; set; }
+        public string? BranchName { get; set; }
         public string? Companyname { get; set; }
         public string? Customername { get; set; }
         public string? Transport { get; set; }

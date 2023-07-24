@@ -17,5 +17,6 @@ namespace WinProApp.NewModels
         public DateTime? UsedDate { get; set; }
         public bool IsUsed { get; set; }
         public string? VocherType { get; set; }
+        public string? BranchName { get; set; }
     }
 }

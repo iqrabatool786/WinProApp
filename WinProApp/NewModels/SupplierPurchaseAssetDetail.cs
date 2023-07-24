@@ -14,6 +14,7 @@ namespace WinProApp.NewModels
         public decimal? Qty { get; set; }
         public decimal? Price { get; set; }
         public decimal? Vat { get; set; }
+        public string? BranchName { get; set; }
         public DateTime? ExpireDate { get; set; }
         public DateTime? ProductDate { get; set; }
     }

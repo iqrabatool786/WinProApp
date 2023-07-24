@@ -12,5 +12,6 @@ namespace WinProApp.NewModels
         public DateTime? Replicateddate { get; set; }
         public string? Replicatedby { get; set; }
         public string? ReplicationStatus { get; set; }
+        public string? BranchName { get; set; }
     }
 }

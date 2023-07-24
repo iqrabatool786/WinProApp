@@ -23,6 +23,7 @@ namespace WinProApp.NewModels
         public double? Donation { get; set; }
         public double? VatBank { get; set; }
         public string? Storeid { get; set; }
+        public string? BranchName { get; set; }
         public string? PostingCash { get; set; }
         public decimal? Discount { get; set; }
     }

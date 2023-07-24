@@ -15,6 +15,7 @@ namespace WinProApp.NewModels
         public string? ReturnVoucherNo { get; set; }
         public decimal? VoucherAmount { get; set; }
         public decimal? PointReduce { get; set; }
+        public string? BranchName { get; set; }
         public long CashBoxId { get; set; }
         public long ShiftId { get; set; }
         public string ReturnType { get; set; } = null!;

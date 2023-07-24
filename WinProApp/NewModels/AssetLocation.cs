@@ -8,5 +8,6 @@ namespace WinProApp.NewModels
         public int Id { get; set; }
         public string? LocationEng { get; set; }
         public string? LocationArabic { get; set; }
+        public string? BranchName { get; set; }
     }
 }

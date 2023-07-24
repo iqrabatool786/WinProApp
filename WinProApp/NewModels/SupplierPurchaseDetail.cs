@@ -21,6 +21,7 @@ namespace WinProApp.NewModels
         public int? GroupId { get; set; }
         public int? VendorId { get; set; }
         public int? YearId { get; set; }
+        public string? BranchName { get; set; }
         public string? DescriptionEng { get; set; }
         public string? DescriptionArabic { get; set; }
         public decimal? QtyDozen { get; set; }

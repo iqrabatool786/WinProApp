@@ -8,5 +8,6 @@ namespace WinProApp.NewModels
         public decimal FormDetailId { get; set; }
         public decimal? FormId { get; set; }
         public string? FormDetailControlName { get; set; }
+        public string? BranchName { get; set; }
     }
 }

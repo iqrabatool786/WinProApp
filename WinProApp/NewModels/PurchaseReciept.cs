@@ -22,6 +22,7 @@ namespace WinProApp.NewModels
         public decimal? Total { get; set; }
         public int? StoreId { get; set; }
         public bool IsReturn { get; set; }
+        public string? BranchName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }

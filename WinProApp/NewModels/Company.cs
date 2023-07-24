@@ -17,6 +17,7 @@ namespace WinProApp.NewModels
         public string? Bpcode { get; set; }
         public decimal? Balance { get; set; }
         public double? OpeningBalance { get; set; }
+        public string? BranchName { get; set; }
         public double? VatNo { get; set; }
         public string? BankName { get; set; }
         public string? BankAccountNumber { get; set; }

@@ -18,6 +18,7 @@ namespace WinProApp.NewModels
         public string? Field3 { get; set; }
         public string? Field4 { get; set; }
         public double? Vat { get; set; }
+        public string? BranchName { get; set; }
         public byte[]? ImageI { get; set; }
     }
 }

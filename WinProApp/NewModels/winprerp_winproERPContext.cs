@@ -30,6 +30,7 @@ namespace WinProApp.NewModels
         public virtual DbSet<BankInfo> BankInfos { get; set; } = null!;
         public virtual DbSet<BankPaymentReciept> BankPaymentReciepts { get; set; } = null!;
         public virtual DbSet<BankReconcile> BankReconciles { get; set; } = null!;
+        public virtual DbSet<BranchNameModel> BranchNameModels { get; set; } = null!;
         public virtual DbSet<Boxopen> Boxopens { get; set; } = null!;
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<BuyGetLowestDiscount> BuyGetLowestDiscounts { get; set; } = null!;

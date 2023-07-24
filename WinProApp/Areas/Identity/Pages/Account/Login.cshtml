@@ -29,6 +29,15 @@
                     <span asp-validation-for="Input.UserName" class="text-danger"></span>
                 </div>
                 <div class="form-floating">
+                    <label id="nameLabel" asp-for="Input.BranchName" class="form-label"></label>
+                    @Html.DropDownList("branchname", new List<SelectListItem>
+                    { new SelectListItem { Text = "Abraj", Value = "1", Selected=true},
+                    new SelectListItem { Text = "ABC", Value = "2"},
+                    new SelectListItem { Text = "XYZ", Value = "3"}
+                    }, "Select Branch", new { @class = "form-control" })
+                    <span asp-validation-for="Input.BranchName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
                     <label id="passwordLabel" asp-for="Input.Password" class="form-label"></label>
                     <input asp-for="Input.Password" class="form-control" placeholder="Password" autocomplete="current-password" aria-required="true" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>

@@ -11,5 +11,6 @@ namespace WinProApp.NewModels
         public string? Systemname { get; set; }
         public int? Entrybyuser { get; set; }
         public DateTime? Entrydate { get; set; }
+        public string? BranchName { get; set; }
     }
 }

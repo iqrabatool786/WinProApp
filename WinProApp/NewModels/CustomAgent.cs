@@ -11,6 +11,7 @@ namespace WinProApp.NewModels
         public decimal? CommissionPersent { get; set; }
         public decimal? CommissionAmountDr { get; set; }
         public decimal? CommissionAmountCr { get; set; }
+        public string? BranchName { get; set; }
         public decimal? Balance { get; set; }
     }
 }

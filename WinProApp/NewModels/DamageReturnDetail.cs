@@ -12,5 +12,6 @@ namespace WinProApp.NewModels
         public decimal? QtyDozen { get; set; }
         public decimal? QtyPices { get; set; }
         public decimal? Price { get; set; }
+        public string? BranchName { get; set; }
     }
 }

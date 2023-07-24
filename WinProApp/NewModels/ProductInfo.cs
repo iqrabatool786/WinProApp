@@ -20,6 +20,7 @@ namespace WinProApp.NewModels
         public int? YearId { get; set; }
         public int? BrandId { get; set; }
         public int? GroupId { get; set; }
+        public string? BranchName { get; set; }
         public string? ProductNameEng { get; set; }
         public string? ProductNameArabic { get; set; }
         public DateTime? MfgDate { get; set; }

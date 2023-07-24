@@ -19,6 +19,7 @@ namespace WinProApp.NewModels
         public decimal? VatAmount { get; set; }
         public decimal? Total { get; set; }
         public string? VatNo { get; set; }
+        public string? BranchName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }

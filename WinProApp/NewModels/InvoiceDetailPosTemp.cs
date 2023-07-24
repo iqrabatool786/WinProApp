@@ -10,5 +10,6 @@ namespace WinProApp.NewModels
         public double? Saleprice { get; set; }
         public double? Qty { get; set; }
         public string? Productname { get; set; }
+        public string? BranchName { get; set; }
     }
 }

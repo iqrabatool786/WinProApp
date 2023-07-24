@@ -14,5 +14,6 @@ namespace WinProApp.NewModels
         public decimal? Price { get; set; }
         public decimal? Tax { get; set; }
         public decimal? Total { get; set; }
+        public string? BranchName { get; set; }
     }
 }

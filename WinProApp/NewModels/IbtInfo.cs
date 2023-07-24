@@ -12,6 +12,7 @@ namespace WinProApp.NewModels
         public string? Description { get; set; }
         public decimal? Total { get; set; }
         public bool? Status { get; set; }
+        public string? BranchName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }

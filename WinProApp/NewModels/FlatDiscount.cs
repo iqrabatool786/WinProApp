@@ -17,6 +17,7 @@ namespace WinProApp.NewModels
         public bool Approved { get; set; }
         public string CreatedBy { get; set; } = null!;
         public DateTime CratedDate { get; set; }
+        public string? BranchName { get; set; }
         public string UpdatedBy { get; set; } = null!;
         public DateTime UpdatedDate { get; set; }
     }

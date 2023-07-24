@@ -8,5 +8,6 @@ namespace WinProApp.NewModels
         public int Id { get; set; }
         public string TypeCode { get; set; } = null!;
         public string TypeDescription { get; set; } = null!;
+        public string? BranchName { get; set; }
     }
 }

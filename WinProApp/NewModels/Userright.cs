@@ -9,5 +9,6 @@ namespace WinProApp.NewModels
         public int? Moduleid { get; set; }
         public int? Entryby { get; set; }
         public DateTime? Entrydate { get; set; }
+        public string? BranchName { get; set; }
     }
 }

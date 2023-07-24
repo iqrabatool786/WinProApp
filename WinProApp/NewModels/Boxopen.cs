@@ -11,5 +11,6 @@ namespace WinProApp.NewModels
         public decimal? OpenCount { get; set; }
         public decimal? Storeid { get; set; }
         public decimal? Posno { get; set; }
+        public string? BranchName { get; set; }
     }
 }

@@ -15,5 +15,6 @@ namespace WinProApp.NewModels
         public bool DefaultStore { get; set; }
         public string? Vatnum { get; set; }
         public string? Storename { get; set; }
+        public string? BranchName { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace WinProApp.NewModels
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public bool? FunctionalStatus { get; set; }
+        public string? BranchName { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace WinProApp.NewModels
         public DateTime? PaymentDate { get; set; }
         public string? PaymentArabic { get; set; }
         public string? Suppliername { get; set; }
+        public string? BranchName { get; set; }
     }
 }

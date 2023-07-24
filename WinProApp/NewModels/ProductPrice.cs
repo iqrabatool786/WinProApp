@@ -19,5 +19,6 @@ namespace WinProApp.NewModels
         public decimal? Discount1 { get; set; }
         public decimal? Discount2 { get; set; }
         public decimal? Discount3 { get; set; }
+        public string? BranchName { get; set; }
     }
 }

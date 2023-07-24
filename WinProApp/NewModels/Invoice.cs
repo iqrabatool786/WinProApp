@@ -22,6 +22,7 @@ namespace WinProApp.NewModels
         public double? Amountpaidbank { get; set; }
         public string? BankcardNo { get; set; }
         public string? Backbranch { get; set; }
+        public string? BranchName { get; set; }
         public double? Invoicediscount { get; set; }
         public string? Closed { get; set; }
         public double? ClosingBankAmount { get; set; }

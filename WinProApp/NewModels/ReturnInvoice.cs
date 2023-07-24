@@ -14,6 +14,7 @@ namespace WinProApp.NewModels
         public double? Returnprice { get; set; }
         public string? Returnby { get; set; }
         public string? Customerid { get; set; }
+        public string? BranchName { get; set; }
         public DateTime? Returndate { get; set; }
         public string? Statuss { get; set; }
         public double? Storeid { get; set; }

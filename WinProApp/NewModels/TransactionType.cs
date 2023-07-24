@@ -8,5 +8,6 @@ namespace WinProApp.NewModels
         public int Id { get; set; }
         public string? TrantypeId { get; set; }
         public string? TrantypeDisplay { get; set; }
+        public string? BranchName { get; set; }
     }
 }

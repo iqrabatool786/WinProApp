@@ -13,6 +13,7 @@ namespace WinProApp.NewModels
         public decimal? AddMoney { get; set; }
         public decimal? PointRadium { get; set; }
         public string CreatedBy { get; set; } = null!;
+        public string? BranchName { get; set; }
         public DateTime CratedDate { get; set; }
     }
 }

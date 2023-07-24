@@ -7,5 +7,6 @@ namespace WinProApp.NewModels
     {
         public string? AccountCode { get; set; }
         public string? AccountName { get; set; }
+        public string? BranchName { get; set; }
     }
 }

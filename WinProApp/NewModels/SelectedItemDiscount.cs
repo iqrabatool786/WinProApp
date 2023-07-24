@@ -13,6 +13,7 @@ namespace WinProApp.NewModels
         public decimal? DiscountPercentage { get; set; }
         public decimal? FixedDiscount { get; set; }
         public decimal? StartAmount { get; set; }
+        public string? BranchName { get; set; }
         public bool Approved { get; set; }
         public string CreatedBy { get; set; } = null!;
         public DateTime CratedDate { get; set; }

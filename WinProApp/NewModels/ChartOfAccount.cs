@@ -12,5 +12,6 @@ namespace WinProApp.NewModels
         public bool IsDetail { get; set; }
         public string? PaccountCode { get; set; }
         public int AccountLevel { get; set; }
+        public string? BranchName { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace WinProApp.NewModels
         public DateTime OpenAt { get; set; }
         public DateTime? CloseAt { get; set; }
         public bool Closed { get; set; }
+        public string? BranchName { get; set; }
     }
 }

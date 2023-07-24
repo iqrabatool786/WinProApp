@@ -9,5 +9,6 @@ namespace WinProApp.NewModels
         public decimal? FamilyId { get; set; }
         public string? AccountName { get; set; }
         public string? Accounttype { get; set; }
+        public string? BranchName { get; set; }
     }
 }

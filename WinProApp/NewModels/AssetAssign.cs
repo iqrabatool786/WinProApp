@@ -9,6 +9,7 @@ namespace WinProApp.NewModels
         public long AssetId { get; set; }
         public string? AssignTo { get; set; }
         public bool? Status { get; set; }
+        public string? BranchName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }

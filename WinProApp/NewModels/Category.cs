@@ -9,5 +9,6 @@ namespace WinProApp.NewModels
         public string NameEng { get; set; } = null!;
         public string? NameArabic { get; set; }
         public int ParentCategoryId { get; set; }
+        public string? BranchName { get; set; }
     }
 }

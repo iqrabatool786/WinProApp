@@ -9,6 +9,7 @@ namespace WinProApp.NewModels
         public string? Description { get; set; }
         public decimal? Percentage { get; set; }
         public bool Status { get; set; }
+        public string? BranchName { get; set; }
         public DateTime? VatDate { get; set; }
     }
 }

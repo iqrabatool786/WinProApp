@@ -15,5 +15,6 @@ namespace WinProApp.NewModels
         public string? Acc { get; set; }
         public string? Vatno { get; set; }
         public string? Crno { get; set; }
+        public string? BranchName { get; set; }
     }
 }

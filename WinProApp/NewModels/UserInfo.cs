@@ -17,6 +17,7 @@ namespace WinProApp.NewModels
         public string? Allowsupplierdelete { get; set; }
         public string? Status { get; set; }
         public string? Usercolor { get; set; }
+        public string? BranchName { get; set; }
         public bool? Finance { get; set; }
         public bool? Purchase { get; set; }
         public bool? Warehouse { get; set; }

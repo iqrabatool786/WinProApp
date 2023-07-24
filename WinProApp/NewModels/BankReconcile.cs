@@ -10,6 +10,7 @@ namespace WinProApp.NewModels
         public DateTime? Date { get; set; }
         public string? Description { get; set; }
         public decimal? Debit { get; set; }
+        public string? BranchName { get; set; }
         public decimal? Credit { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }

@@ -12,6 +12,7 @@ namespace WinProApp.NewModels
         public string? Productname { get; set; }
         public string? Decsrive { get; set; }
         public double? Total { get; set; }
+        public string? BranchName { get; set; }
         public double? Costprice { get; set; }
         public double? TotalCost { get; set; }
     }

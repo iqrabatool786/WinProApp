@@ -27,5 +27,6 @@ namespace WinProApp.NewModels
         public DateTime? Createdate { get; set; }
         public int? Storeid { get; set; }
         public string? Statuss { get; set; }
+        public string? BranchName { get; set; }
     }
 }

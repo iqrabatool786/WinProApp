@@ -13,6 +13,7 @@ namespace WinProApp.NewModels
         public decimal? Total { get; set; }
         public decimal? Costprice { get; set; }
         public double? TotalCost { get; set; }
+        public string? BranchName { get; set; }
         public double? Storeid { get; set; }
         public double? Freeqty { get; set; }
         public double? Freeprice { get; set; }

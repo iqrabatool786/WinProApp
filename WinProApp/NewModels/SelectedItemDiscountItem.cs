@@ -9,5 +9,6 @@ namespace WinProApp.NewModels
         public long SelectedItemDiscountId { get; set; }
         public long ProductId { get; set; }
         public string Barcode { get; set; } = null!;
+        public string? BranchName { get; set; }
     }
 }

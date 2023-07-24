@@ -15,5 +15,6 @@ namespace WinProApp.NewModels
         public string? StoreId { get; set; }
         public string? PerticuterName { get; set; }
         public string? Refarance { get; set; }
+        public string? BranchName { get; set; }
     }
 }

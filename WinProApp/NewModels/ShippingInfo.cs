@@ -23,5 +23,6 @@ namespace WinProApp.NewModels
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public string? BranchName { get; set; }
     }
 }

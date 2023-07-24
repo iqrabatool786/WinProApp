@@ -23,5 +23,6 @@ namespace WinProApp.NewModels
         public string? Image { get; set; }
         public double? Usaleprice { get; set; }
         public double? Unitcost { get; set; }
+        public string? BranchName { get; set; }
     }
 }

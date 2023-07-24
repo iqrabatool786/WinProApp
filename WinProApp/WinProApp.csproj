@@ -64,7 +64,6 @@
 
   <ItemGroup>
     <Folder Include="DataModels\DataBase\Configuration\" />
-    <Folder Include="NewModels\" />
     <Folder Include="wwwroot\Docs\Products\" />
     <Folder Include="wwwroot\Docs\Suppliers\" />
     <Folder Include="wwwroot\Docs\Upload\" />

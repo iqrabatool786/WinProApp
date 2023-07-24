@@ -22,6 +22,7 @@ namespace WinProApp.NewModels
         public string? Crdocument { get; set; }
         public string? TaxDocument { get; set; }
         public string? OtherDocument { get; set; }
+        public string? BranchName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CratedDate { get; set; }
         public string? UpdatedBy { get; set; }

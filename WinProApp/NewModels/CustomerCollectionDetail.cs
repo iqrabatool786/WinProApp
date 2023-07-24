@@ -10,5 +10,6 @@ namespace WinProApp.NewModels
         public string? PaymentType { get; set; }
         public string? PaymentDesc { get; set; }
         public decimal? Amount { get; set; }
+        public string? BranchName { get; set; }
     }
 }
